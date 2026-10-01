@@ -60,7 +60,9 @@ test("saving a display name updates the header avatar", async ({ page }) => {
 
   await expect(avatar).toHaveText("M");
 
-  await page.getByLabel("Display Name").fill("Zoe");
+  await page
+    .getByRole("textbox", { name: "Display Name", exact: true })
+    .fill("Zoe");
   await page.getByRole("button", { name: "Save display name" }).click();
 
   await expect(page.getByText("Display name saved.")).toBeVisible();

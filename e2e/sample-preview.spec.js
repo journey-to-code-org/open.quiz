@@ -35,7 +35,9 @@ test("a guest can explore the first installed lesson without signing in", async 
   );
   await expect(page.getByText("This is a sample of a lesson.")).toBeVisible();
   await expect(
-    page.getByText(/Hi, I'm Nova|Let's follow one idea/),
+    page.getByRole("heading", {
+      name: /A place to learn|Four parts working together/,
+    }),
   ).toBeVisible();
   await expect(page.locator('img[alt="Nova"], img[alt="Kit"]')).toHaveCount(1);
 });
