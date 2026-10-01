@@ -39,6 +39,8 @@
   "scripts": {
     "setup": "npm i && npm --prefix backend i && npm --prefix frontend i && ./setup.sh",
     "dev": "dotenv -e .env -- npm-run-all --parallel --race -l development:backend development:frontend",
+    "dev:sprout": "dotenv -e instances/sprout/settings.env -e instances/sprout/.env -e .env -- npm-run-all --parallel --race -l development:backend development:frontend",
+    "instance:seed:sprout": "dotenv -e instances/sprout/settings.env -e instances/sprout/.env -e .env -- node backend/scripts/importLessonModule.js shared/content/examples/finance-literacy/budgeting.json",
     "development:backend": "npm --prefix backend run dev",
     "development:frontend": "npm --prefix frontend run dev",
     "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",

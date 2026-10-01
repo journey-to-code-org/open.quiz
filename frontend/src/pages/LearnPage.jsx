@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Link,
   Navigate,
@@ -10,10 +10,13 @@ import {
 import { useAuthContext } from "../context/AuthContext";
 import useLessonContent from "../hooks/useLessonContent";
 import { ROUTES } from "../app/router/routes";
+import { loadContentPackage } from "../contentPackages";
 import { normalizeLearnData, selectRandomLesson } from "../features/learn/normalizeLesson";
 import LearnFlow from "../features/learn/LearnFlow/LearnFlow.component";
 import Card from "../shared/Card/Card.component";
 import Skeleton from "../shared/Skeleton/Skeleton.component";
+
+const configuredPackageId = import.meta.env.VITE_CONTENT_PACKAGE?.trim();
 
 export default function LearnPage() {
   const { isAuthenticated, isHydrating, csrfToken, refreshProfile } = useAuthContext();
@@ -21,9 +24,27 @@ export default function LearnPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const setCurrentModuleResources = useOutletContext();
+  const [contentPackage, setContentPackage] = useState(null);
 
   const selectedMicroLessonId = location.state?.microLessonId;
   const isSamplePreview = searchParams.get("sample") === "true";
+
+  useEffect(() => {
+    let isActive = true;
+    if (!configuredPackageId) return undefined;
+
+    void loadContentPackage(configuredPackageId)
+      .then((loadedPackage) => {
+        if (isActive) setContentPackage(loadedPackage);
+      })
+      .catch(() => {
+        if (isActive) setContentPackage(null);
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const {
     moduleData: fetchedModuleData,
@@ -119,6 +140,9 @@ export default function LearnPage() {
         <LearnFlow
           key={`${learnData.moduleId}:${learnData.id}`}
           learnData={sampleLearnData}
+          blockRenderers={contentPackage?.lessonBlockRenderers}
+          characterImages={contentPackage?.characterImages}
+          guideImage={contentPackage?.guideImage}
           isReadOnly
         />
       </>
@@ -129,6 +153,9 @@ export default function LearnPage() {
     <LearnFlow
       key={`${learnData.moduleId}:${learnData.id}:${selectedMicroLessonId ?? "resume"}`}
       learnData={learnData}
+      blockRenderers={contentPackage?.lessonBlockRenderers}
+      characterImages={contentPackage?.characterImages}
+      guideImage={contentPackage?.guideImage}
       savedProgress={progress}
       selectedMicroLessonId={selectedMicroLessonId}
       csrfToken={csrfToken}

@@ -59,6 +59,7 @@ function getSubmissionScore(submission) {
 
 export default function LearnFlow({
   learnData,
+  blockRenderers,
   characterImages,
   guideImage,
   savedProgress = null,
@@ -530,6 +531,7 @@ export default function LearnFlow({
               eyebrow={`Lesson ${stepIndex + 1} of ${lessonSteps.length} • Step ${chunkIndex + 1} of ${Math.max(chunks.length, 1)}`}
               content={currentChunk ? [currentChunk] : []}
               module={learnData.module}
+              blockRenderers={blockRenderers}
               characterImage={character.image}
               characterAlt={character.alt}
               bubbleText={
