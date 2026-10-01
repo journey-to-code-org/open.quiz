@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.1.0] - 2026-10-01
+
+### Added
+
+- Added an opt-in weekly XP leaderboard with a dashboard top-20 list and a separate current-rank summary.
+- Added weekly XP rollups, leaderboard history, and an opt-in profile setting.
+
+### Changed
+
+- Set leaderboard weeks to reset Mondays at 00:00 UTC and documented the schedule.
+- Centralized XP awards in UTC daily totals to enforce the daily cap and support weekly rankings.
+
+### Fixed
+
+- Kept leaderboard responses private by returning display names, avatars, ranks, XP totals, and a current-user marker without user IDs or email addresses.
+
+---
+
 ## [1.0.4] - 2026-10-01
 
 ### Added
