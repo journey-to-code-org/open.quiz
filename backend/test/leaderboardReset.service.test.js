@@ -73,4 +73,38 @@ describe("leaderboard reset service", () => {
     expect(session.withTransaction).toHaveBeenCalledTimes(1);
     expect(session.endSession).toHaveBeenCalledTimes(1);
   });
+
+  it("retries without a transaction when MongoDB is standalone", async () => {
+    const transactionError = Object.assign(
+      new Error("Transaction numbers are only allowed on a replica set member or mongos"),
+      { code: 20, codeName: "IllegalOperation" },
+    );
+    const session = {
+      withTransaction: jest.fn((operation) => operation()),
+      endSession: jest.fn(),
+    };
+    jest.spyOn(mongoose, "startSession").mockResolvedValue(session);
+    const rollup = jest
+      .spyOn(weeklyLeaderboardService, "rollupLeaderboardWeek")
+      .mockResolvedValue({});
+    const aggregate = jest.spyOn(WeeklyLeaderboard, "aggregate");
+    aggregate
+      .mockReturnValueOnce({ session: jest.fn().mockRejectedValue(transactionError) })
+      .mockReturnValueOnce(Promise.resolve([]));
+    const archive = jest.spyOn(LeaderboardHistory, "bulkWrite").mockResolvedValue({});
+    const remove = jest.spyOn(WeeklyLeaderboard, "deleteMany").mockResolvedValue({});
+
+    const result = await rotatePreviousLeaderboardWeek({
+      date: "2026-09-14T00:00:00.000Z",
+    });
+
+    const weekStart = new Date("2026-09-07T00:00:00.000Z");
+    expect(rollup).toHaveBeenNthCalledWith(1, { date: weekStart, session });
+    expect(rollup).toHaveBeenNthCalledWith(2, { date: weekStart });
+    expect(aggregate).toHaveBeenCalledTimes(2);
+    expect(archive).not.toHaveBeenCalled();
+    expect(remove).toHaveBeenCalledWith({ week_start: weekStart }, {});
+    expect(result).toMatchObject({ weekStart, learnersArchived: 0 });
+    expect(session.endSession).toHaveBeenCalledTimes(1);
+  });
 });
