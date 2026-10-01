@@ -2,6 +2,7 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").trim().replace(/\
 const AUTH_BASE_PATH = `${API_BASE_URL}/api/v1/auth`;
 const USERS_BASE_PATH = `${API_BASE_URL}/api/v1/users`;
 const DASHBOARD_BASE_PATH = `${API_BASE_URL}/api/v1/dashboard`;
+const LEADERBOARD_BASE_PATH = `${API_BASE_URL}/api/v1/leaderboard`;
 const DASHBOARD_CACHE_KEY_PREFIX = "openquiz.dashboard.";
 const LESSONS_BASE_PATH = `${API_BASE_URL}/api/v1/lessons`;
 const QUIZZES_BASE_PATH = `${API_BASE_URL}/api/v1/quizzes`;
@@ -201,6 +202,12 @@ export const getDashboard = () =>
     method: "GET",
     basePath: DASHBOARD_BASE_PATH,
     cache: "no-store",
+  });
+
+export const getLeaderboard = () =>
+  apiRequest("", {
+    method: "GET",
+    basePath: LEADERBOARD_BASE_PATH,
   });
 
 export const getProfile = () =>

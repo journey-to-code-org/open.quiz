@@ -37,6 +37,7 @@ describe("ProfilePage", () => {
       email: "maya@example.com",
       goals: "Build a monthly budget",
       notifications: true,
+      leaderboard_opt_in: false,
       xp: 125,
       streak: 3,
       avatar_url: null,
@@ -93,16 +94,21 @@ describe("ProfilePage", () => {
     expect(screen.getByDisplayValue("Pay off credit card debt")).toBeInTheDocument();
 
     const notifications = screen.getByRole("checkbox", { name: /Learning notifications/i });
+    const leaderboard = screen.getByRole("checkbox", { name: /Join the weekly leaderboard/i });
+    expect(leaderboard).not.toBeChecked();
     await user.click(notifications);
+    await user.click(leaderboard);
     await user.click(screen.getByRole("button", { name: "Save preferences" }));
     await waitFor(() => {
       expect(updateProfile).toHaveBeenLastCalledWith({
         notifications: false,
+        leaderboard_opt_in: true,
         csrfToken: "csrf-token",
       });
     });
     expect(await screen.findByRole("status")).toHaveTextContent("Preferences saved.");
     expect(notifications).not.toBeChecked();
+    expect(leaderboard).toBeChecked();
     expect(getProfile).toHaveBeenCalledTimes(4);
   });
 

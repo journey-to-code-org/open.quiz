@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const XpEvent = require("../models/XpEvent.model");
+const DailyXpTotal = require("../models/DailyXpTotal.model");
 const UserProgress = require("../models/UserProgress.model");
-const User = require("../models/User.model");
 
 const getUserXpTotal = async (userId) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -32,32 +31,14 @@ async function getXpEarnedToday(userId) {
     return 0;
   }
 
-  const user = await User.findById(userId).select("timezone");
-  const timezone = user?.timezone || "UTC";
-
-  // Current date in the user's timezone.
   const now = new Date();
-  const formatter = new Intl.DateTimeFormat("en-CA", {
-    timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  const dateString = formatter.format(now);
-  const startOfDay = new Date(`${dateString}T00:00:00`);
-  const endOfDay = new Date(`${dateString}T23:59:59.999`);
+  const dayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const dailyTotal = await DailyXpTotal.findOne({
+    user_id: new mongoose.Types.ObjectId(userId),
+    day_start: dayStart,
+  }).select("xp_total");
 
-  const xpEvents = await XpEvent.find({
-    user_id: userId,
-    createdAt: {
-      $gte: startOfDay,
-      $lte: endOfDay,
-    },
-  }).select("amount");
-
-  const totalXpToday = xpEvents.reduce((total, event) => total + event.amount, 0);
-
-  return totalXpToday;
+  return dailyTotal?.xp_total ?? 0;
 }
 
 module.exports = { getUserXpTotal, getXpEarnedToday };

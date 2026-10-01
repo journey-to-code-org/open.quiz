@@ -1,19 +1,19 @@
 const { describe, it, expect, beforeEach } = require("@jest/globals");
 const User = require("../src/models/User.model");
 const UserProgress = require("../src/models/UserProgress.model");
+const { awardXp } = require("../src/services/xpAward.service");
 const {
   updateOnboardingProgress,
   resetOnboardingProgress,
   toggleOnboardingWorkflow,
 } = require("../src/controllers/onboarding.controller");
-const XpEvent = require("../src/models/XpEvent.model");
 
 jest.mock("../src/models/User.model");
 jest.mock("../src/models/UserProgress.model");
-jest.mock("../src/models/XpEvent.model");
 jest.mock("../src/utils/content", () => ({
   getDefaultModule: jest.fn().mockResolvedValue({ id: "example-module" }),
 }));
+jest.mock("../src/services/xpAward.service", () => ({ awardXp: jest.fn() }));
 
 jest.mock("../src/validation/userValidation.js", () => ({
   updateOnboardingProgressSchema: {
@@ -72,6 +72,10 @@ describe("onboarding xp awarded", () => {
     UserProgress.findOneAndUpdate.mockResolvedValue({
       xp: 50,
     });
+    awardXp.mockResolvedValue({
+      duplicate: false,
+      event: { awarded_xp: 50 },
+    });
 
     await updateOnboardingProgress(req, res, next);
 
@@ -87,12 +91,12 @@ describe("onboarding xp awarded", () => {
     expect(user.onboarding.xp_awarded).toBe(true);
     expect(user.save).toHaveBeenCalled();
 
-    expect(XpEvent.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        event_type: "onboarding_complete",
-        amount: 50,
-      }),
-    );
+    expect(awardXp).toHaveBeenCalledWith({
+      userId: "user123",
+      eventType: "onboarding_complete",
+      sourceKey: "onboarding:v1",
+      requestedXp: 50,
+    });
   });
 
   it("does not reward skipped tours", async () => {
@@ -113,7 +117,7 @@ describe("onboarding xp awarded", () => {
     await updateOnboardingProgress(req, res, next);
     expect(next).not.toHaveBeenCalled();
     expect(user.onboarding.is_completed).toBe(true);
-    expect(XpEvent.create).not.toHaveBeenCalled();
+    expect(awardXp).not.toHaveBeenCalled();
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({ xpAwarded: 0, rewards: expect.objectContaining({ xp: [] }) }),
     );
@@ -159,6 +163,6 @@ describe("onboarding xp awarded", () => {
 
     expect(UserProgress.findOneAndUpdate).not.toHaveBeenCalled();
 
-    expect(XpEvent.create).not.toHaveBeenCalled();
+    expect(awardXp).not.toHaveBeenCalled();
   });
 });

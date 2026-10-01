@@ -16,6 +16,8 @@ POST   /api/v1/users/reset-password
 GET    /api/v1/dashboard
 POST   /api/v1/dashboard/events
 
+GET    /api/v1/leaderboard
+
 GET    /api/v1/quizzes/progress
 GET    /api/v1/quizzes/attempts
 POST   /api/v1/quizzes/check
@@ -86,6 +88,13 @@ invalidate a session.
 `POST /api/v1/profile/avatar` supports a JSON `avatar_url` only. The URL must use HTTP or HTTPS;
 send `null` or an empty string to return to the initials-based avatar. File uploads are not part
 of this endpoint.
+
+## Weekly Leaderboard
+
+`GET /api/v1/leaderboard` requires authentication and returns the current UTC leaderboard week,
+the top 20 opted-in learners, and the current learner's entry separately. An opted-out learner
+receives empty rankings. Public entries contain only an internal user ID, display name, avatar URL,
+weekly XP, and rank; email addresses are never included.
 
 ## Lesson Content
 

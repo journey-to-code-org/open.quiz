@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === "production" && !process.env.JWT_SECRET) {
 const { setServers } = require("node:dns");
 const app = require("./src/app");
 const connectMongo = require("./src/config/db.mongo.js");
+const { startLeaderboardScheduler } = require("./src/jobs/leaderboardScheduler.js");
 
 const PORT = process.env.PORT || 8080;
 
@@ -29,6 +30,8 @@ const startServer = async () => {
     console.error("Failed to connect to MongoDB:", err.message);
     process.exit(1);
   });
+
+  startLeaderboardScheduler();
 
   app.listen(PORT, () => {
     console.log(`open.quiz API listening on http://localhost:${PORT}`);

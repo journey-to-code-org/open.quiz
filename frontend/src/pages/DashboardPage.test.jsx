@@ -44,6 +44,19 @@ vi.mock("../hooks/useDashboardData", () => ({
   }),
 }));
 
+vi.mock("../hooks/useLeaderboardData", () => ({
+  default: () => ({
+    leaderboard: {
+      optedIn: true,
+      entries: [],
+      currentUser: null,
+    },
+    isLoading: false,
+    error: "",
+    refresh: vi.fn(),
+  }),
+}));
+
 describe("DashboardPage", () => {
   it("keeps the recommendation, overall progress, and unit marker visible", () => {
     render(
@@ -60,5 +73,7 @@ describe("DashboardPage", () => {
     expect(screen.getByText("Overall progress")).toBeInTheDocument();
     expect(screen.getByText("1 of 4 lessons complete")).toBeInTheDocument();
     expect(screen.getByText("B")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Weekly leaderboard" })).toBeInTheDocument();
+    expect(screen.getByText(/No XP rankings yet/)).toBeInTheDocument();
   });
 });

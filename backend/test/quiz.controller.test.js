@@ -1,12 +1,12 @@
 const { describe, it, expect, beforeEach } = require("@jest/globals");
 const QuizAttempt = require("../src/models/QuizAttempt.model");
 const UserProgress = require("../src/models/UserProgress.model");
+const { awardXp } = require("../src/services/xpAward.service");
 const { submitQuiz } = require("../src/controllers/quiz.controller");
-const XpEvent = require("../src/models/XpEvent.model");
 
 jest.mock("../src/models/QuizAttempt.model");
 jest.mock("../src/models/UserProgress.model");
-jest.mock("../src/models/XpEvent.model");
+jest.mock("../src/services/xpAward.service", () => ({ awardXp: jest.fn() }));
 jest.mock("../src/utils/content", () => ({
   getModule: jest.fn().mockResolvedValue(require("./fixtures/budgetingModule.json")),
 }));
@@ -68,6 +68,9 @@ describe("quiz XP awards", () => {
     UserProgress.findOne.mockResolvedValue({
       completed_micro_lessons: [],
     });
+    awardXp
+      .mockResolvedValueOnce({ duplicate: false, event: { awarded_xp: 10 } })
+      .mockResolvedValueOnce({ duplicate: false, event: { awarded_xp: 20 } });
 
     UserProgress.findOneAndUpdate.mockResolvedValue({
       completed_micro_lessons: ["1.2.1", "1.2.2", "1.2.3"],
@@ -84,12 +87,12 @@ describe("quiz XP awards", () => {
 
     expect(lessonUpdateCall.$addToSet.completed_lessons).toBe("1.2");
 
-    expect(XpEvent.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        event_type: "lesson_complete",
-        amount: 20,
-      }),
-    );
+    expect(awardXp).toHaveBeenLastCalledWith({
+      userId: "user123",
+      eventType: "lesson_complete",
+      sourceKey: "lesson_complete:cashFlow:1.2",
+      requestedXp: 20,
+    });
   });
 
   it("marks the lesson complete when only its final quiz micro-lesson is passed", async () => {
@@ -104,6 +107,9 @@ describe("quiz XP awards", () => {
       .mockResolvedValueOnce(null)
       .mockResolvedValueOnce(null);
     UserProgress.findOne.mockResolvedValue({ completed_micro_lessons: [] });
+    awardXp
+      .mockResolvedValueOnce({ duplicate: false, event: { awarded_xp: 10 } })
+      .mockResolvedValueOnce({ duplicate: false, event: { awarded_xp: 20 } });
     UserProgress.findOneAndUpdate.mockResolvedValue({
       completed_micro_lessons: ["1.2.3"],
       completed_lessons: [],
@@ -131,6 +137,7 @@ describe("quiz XP awards", () => {
       completed_micro_lessons: [],
       completed_lessons: [],
     });
+    awardXp.mockResolvedValueOnce({ duplicate: false, event: { awarded_xp: 10 } });
 
     await submitQuiz(req, res, next);
 
@@ -138,12 +145,12 @@ describe("quiz XP awards", () => {
 
     expect(updateCall.$inc.xp).toBe(10);
 
-    expect(XpEvent.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        event_type: "quiz_pass",
-        amount: 10,
-      }),
-    );
+    expect(awardXp).toHaveBeenCalledWith({
+      userId: "user123",
+      eventType: "quiz_pass",
+      sourceKey: "quiz_pass:1.2.3",
+      requestedXp: 10,
+    });
   });
 
   it("does not award XP on second successful pass", async () => {
@@ -169,7 +176,7 @@ describe("quiz XP awards", () => {
 
     expect(updateCall.$inc?.xp ?? 0).toBe(0);
 
-    expect(XpEvent.create).not.toHaveBeenCalled();
+    expect(awardXp).not.toHaveBeenCalled();
   });
 
   it("awards only perfect score XP when the user previously passed but has never earned a perfect score", async () => {
@@ -196,6 +203,7 @@ describe("quiz XP awards", () => {
       completed_micro_lessons: [],
       completed_lessons: [],
     });
+    awardXp.mockResolvedValueOnce({ duplicate: false, event: { awarded_xp: 5 } });
 
     await submitQuiz(req, res, next);
 
@@ -203,12 +211,12 @@ describe("quiz XP awards", () => {
 
     expect(updateCall.$inc?.xp).toBe(5);
 
-    expect(XpEvent.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        event_type: "quiz_perfect",
-        amount: 5,
-      }),
-    );
+    expect(awardXp).toHaveBeenCalledWith({
+      userId: "user123",
+      eventType: "quiz_perfect",
+      sourceKey: "quiz_perfect:1.2.3",
+      requestedXp: 5,
+    });
   });
 
   it("does not award perfect score xp twice", async () => {
@@ -242,6 +250,6 @@ describe("quiz XP awards", () => {
 
     expect(updateCall.$inc?.xp ?? 0).toBe(0);
 
-    expect(XpEvent.create).not.toHaveBeenCalled();
+    expect(awardXp).not.toHaveBeenCalled();
   });
 });

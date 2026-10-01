@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useAuthContext } from "../context/AuthContext";
 import DashboardHero from "../features/dashboard/DashboardHero/DashboardHero.component";
+import LeaderboardCard from "../features/dashboard/LeaderboardCard/LeaderboardCard.component";
 import RecentActivityCard from "../features/dashboard/RecentActivityCard/RecentActivityCard.component";
 import UnitProgressRow from "../features/dashboard/UnitProgressRow/UnitProgressRow.component";
 import Button from "../shared/Button/Button.component";
@@ -9,6 +10,7 @@ import Skeleton from "../shared/Skeleton/Skeleton.component";
 import { ROUTES } from "../app/router/routes";
 
 import useDashboardData from "../hooks/useDashboardData";
+import useLeaderboardData from "../hooks/useLeaderboardData";
 
 function DashboardSkeleton() {
   return (
@@ -27,6 +29,10 @@ function DashboardSkeleton() {
 export default function DashboardPage() {
   const { user, isAuthenticated } = useAuthContext();
   const { dashboard, isLoading, error } = useDashboardData({
+    userId: user?.id,
+    isAuthenticated,
+  });
+  const { leaderboard } = useLeaderboardData({
     userId: user?.id,
     isAuthenticated,
   });
@@ -69,6 +75,7 @@ export default function DashboardPage() {
           xp={xp?.total ?? 0}
           badges={badges}
         />
+        <LeaderboardCard leaderboard={leaderboard} />
         <EmptyState
           icon="🌱"
           title="Content coming soon"
@@ -94,6 +101,8 @@ export default function DashboardPage() {
         xp={xp?.total ?? 0}
         badges={badges}
       />
+
+      <LeaderboardCard leaderboard={leaderboard} />
 
       {hasNoProgress ? (
         <EmptyState
