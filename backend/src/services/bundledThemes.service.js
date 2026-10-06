@@ -151,6 +151,14 @@ async function ensureBundledThemes() {
             { $set: { [`theme.${section}`]: pkg.theme[section] } },
           );
         }
+        // Newer releases can add color tokens; fill only the ones the install does not have.
+        for (const [token, value] of Object.entries(pkg.theme.tokens || {})) {
+          if (Object.hasOwn(installed.theme.tokens || {}, token)) continue;
+          await OpenQuizPackage.updateOne(
+            { packageId: pkg.package.id, [`theme.tokens.${token}`]: { $exists: false } },
+            { $set: { [`theme.tokens.${token}`]: value } },
+          );
+        }
       }
       if (pkg.package.id === "sprout") await repairSproutBeaver(pkg, installed);
       await repairMissingThemeSlots(pkg, installed);

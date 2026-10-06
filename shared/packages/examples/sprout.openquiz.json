@@ -3,7 +3,7 @@
   "package": {
     "id": "sprout",
     "name": "Sprout",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "description": "Historical Sprout visual identity using artwork recovered from repository history.",
     "author": "open.quiz contributors",
     "homepage": null
@@ -34,6 +34,14 @@
       "learningPathText": "#195d50",
       "learningPathHeading": "#1a6b58",
       "learningPathLine": "#263e39",
+      "learningPathMuted": "#3f6b60",
+      "learningPathLabel": "#195d50",
+      "learningPathDivider": "#9fd1c3",
+      "learningPathFooterSurface": "#d4f7ef",
+      "learningPathFooterBorder": "#a7dccd",
+      "learningPathNodeCompleted": "#f2fcfa",
+      "learningPathNodeCurrent": "#18816a",
+      "learningPathNodeBorder": "#9fd1c3",
       "fontHeading": "\"Poppins\", sans-serif",
       "fontBody": "\"Inter\", sans-serif",
       "radiusSm": "4px",

@@ -60,6 +60,25 @@ The content section uses the application's existing `LessonModule` documents unc
 
 V1 allows a fixed token vocabulary: primary/hover/alternate/accent/success colors; heading, foreground, on-primary, surface, and focus colors; learning-path colors; illustrated progress colors; heading/body font stacks and bounded heading/body font sizes; and small/medium/large/pill radii. Colors must be 3- or 6-digit hexadecimal values. Font stacks are constrained strings; remote font loading and CSS directives are not supported. Font sizes are limited to 8–96 px or 0.5–6 rem. Radii use `px` or `rem` values.
 
+The learning-path page has its own color tokens, and every color on that page can be themed:
+
+| Token                       | Used for                                                  | Default when omitted |
+| --------------------------- | --------------------------------------------------------- | -------------------- |
+| `learningPathSurface`       | Page background                                           | `#f1f5fa`            |
+| `learningPathHeading`       | Module title, section heading, footer text                | `#23446f`            |
+| `learningPathText`          | Body text                                                 | `#334760`            |
+| `learningPathMuted`         | Secondary text and lesson durations                       | `#53657a`            |
+| `learningPathLabel`         | Step titles under each node                               | `#344b6a`            |
+| `learningPathDivider`       | Lines beside the section heading                          | `#98a6b8`            |
+| `learningPathLine`          | Trail between steps                                       | `#34475f`            |
+| `learningPathNodeCompleted` | Completed step fill (text uses `heading`)                 | `surfaceApp`         |
+| `learningPathNodeCurrent`   | Current and locked step fill; locked steps are grayed out | `primary`            |
+| `learningPathNodeBorder`    | Completed step outline and status badge outline           | `#b4c7c2`            |
+| `learningPathFooterSurface` | Sticky footer bar                                         | `#e0e8f2`            |
+| `learningPathFooterBorder`  | Footer top border                                         | `#c0cddd`            |
+
+The footer button uses `primary`/`primaryHover`, and the hero card's decorative circle uses `primaryAlt`. The admin preview renders the same step component as the learning-path page, so it shows these colors exactly.
+
 Image assets support PNG, JPEG, and WebP. SVG is intentionally not supported. Each decoded image is limited to 4 MB, all decoded package assets together to 12 MB, package JSON to 16 MB, and theme avatars to 20. The MIME type is checked against the actual file signature. Assets are stored through the existing `ContentAsset` collection and served by immutable asset IDs.
 
 ### App Name And Landing Page

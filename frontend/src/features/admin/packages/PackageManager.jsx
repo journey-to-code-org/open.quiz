@@ -31,7 +31,7 @@ function inspectPackage(packageData) {
     throw new Error("Package must include a theme or content.");
   for (const [name, value] of Object.entries(packageData.theme?.tokens || {})) {
     if (
-      /^(primary|primaryHover|primaryAlt|accent|success|progressStart|progressEnd|progressNearStart|progressNearEnd|progressCompleteStart|progressCompleteEnd|heading|foreground|onPrimary|surfaceApp|surfaceRaised|surfaceInset|surfaceInput|focus|learningPathSurface|learningPathText|learningPathHeading|learningPathLine)$/.test(
+      /^(primary|primaryHover|primaryAlt|accent|success|progressStart|progressEnd|progressNearStart|progressNearEnd|progressCompleteStart|progressCompleteEnd|heading|foreground|onPrimary|surfaceApp|surfaceRaised|surfaceInset|surfaceInput|focus|learningPathSurface|learningPathText|learningPathHeading|learningPathLine|learningPathMuted|learningPathLabel|learningPathDivider|learningPathFooterSurface|learningPathFooterBorder|learningPathNodeCompleted|learningPathNodeCurrent|learningPathNodeBorder)$/.test(
         name,
       )
     ) {

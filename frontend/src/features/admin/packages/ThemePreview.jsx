@@ -1,7 +1,10 @@
+import { useEffect, useRef, useState } from "react";
 import ProgressBar from "../../../shared/ProgressBar/ProgressBar.component";
 import LessonGuideCharacter from "../../learn/LessonGuideCharacter/LessonGuideCharacter.component";
 import LearningPathTrail from "../../learn/LearningPathTrail/LearningPathTrail.component";
 import AnswerMark from "../../learn/Quiz/AnswerMark/AnswerMark.component";
+import LearningPathNode from "../../learn/LearningPathNode/LearningPathNode.component";
+import { DEFAULT_THEME_TOKENS } from "./themeBuilder";
 
 const previewProperties = {
   primary: "--preview-primary",
@@ -20,9 +23,13 @@ const colorProperties = {
   primaryHover: "--color-primary-hover",
   primaryAlt: "--color-primary-alt",
   accent: "--color-accent",
+  success: "--color-success",
   heading: "--color-heading",
   foreground: "--color-foreground",
   onPrimary: "--color-on-primary",
+  surfaceApp: "--color-surface-app",
+  surfaceRaised: "--color-surface-raised",
+  surfaceInset: "--color-surface-inset",
   progressStart: "--color-progress-start",
   progressEnd: "--color-progress-end",
   progressNearStart: "--color-progress-near-start",
@@ -33,61 +40,129 @@ const colorProperties = {
   fontBody: "--font-body",
 };
 
-const TRAIL_NODES = [
-  { x: 60, y: 34 },
-  { x: 190, y: 104 },
-  { x: 60, y: 174 },
+const PATH_WIDTH = 288;
+const NODE_SPACING = 140;
+const NODE_RADIUS = 36;
+const TRAIL_GAP = 45;
+const PREVIEW_STEPS = [
+  { status: "completed", title: "Meet the basics", left: 0.5 },
+  { status: "current", title: "Practice together", left: 0.7 },
+  { status: "locked", title: "Try it yourself", left: 0.3 },
 ];
 
-function PreviewTrail({ trail, decorationImage, tokens }) {
-  const segments = TRAIL_NODES.slice(0, -1).map((start, index) => {
-    const end = TRAIL_NODES[index + 1];
+function learningPathVariables(tokens) {
+  const values = {
+    "--color-learning-path-surface": tokens.learningPathSurface,
+    "--color-learning-path-text": tokens.learningPathText,
+    "--color-learning-path-heading": tokens.learningPathHeading,
+    "--color-learning-path-muted": tokens.learningPathMuted,
+    "--color-learning-path-label": tokens.learningPathLabel,
+    "--color-learning-path-divider": tokens.learningPathDivider,
+    "--color-learning-path-line": tokens.learningPathLine,
+    "--color-learning-path-footer-surface": tokens.learningPathFooterSurface,
+    "--color-learning-path-footer-border": tokens.learningPathFooterBorder,
+    "--color-learning-path-node-completed": tokens.learningPathNodeCompleted || tokens.surfaceApp,
+    "--color-learning-path-node-current": tokens.learningPathNodeCurrent || tokens.primary,
+    "--color-learning-path-node-border": tokens.learningPathNodeBorder,
+    "--color-learning-path-button": tokens.primary,
+    "--color-learning-path-button-hover": tokens.primaryHover,
+  };
+  return Object.fromEntries(Object.entries(values).filter(([, value]) => value));
+}
+
+/** Mirrors LearningPathPage with the same node component and color tokens. */
+function PreviewLearningPath({ trail, decorationImage, tokens }) {
+  const centers = PREVIEW_STEPS.map((step, index) => ({
+    x: step.left * PATH_WIDTH,
+    y: index * NODE_SPACING + NODE_RADIUS,
+  }));
+  const segments = centers.slice(0, -1).map((start, index) => {
+    const end = centers[index + 1];
     const length = Math.hypot(end.x - start.x, end.y - start.y);
-    const padding = 30;
     const ux = (end.x - start.x) / length;
     const uy = (end.y - start.y) / length;
     return {
       key: `segment-${index}`,
       points: {
-        x1: start.x + ux * padding,
-        y1: start.y + uy * padding,
-        x2: end.x - ux * padding,
-        y2: end.y - uy * padding,
+        x1: start.x + ux * TRAIL_GAP,
+        y1: start.y + uy * TRAIL_GAP,
+        x2: end.x - ux * TRAIL_GAP,
+        y2: end.y - uy * TRAIL_GAP,
       },
     };
   });
-  const surface = tokens.learningPathSurface || "#f1f5fa";
+  const height = PREVIEW_STEPS.length * NODE_SPACING + 24;
+  const frameRef = useRef(null);
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame || typeof ResizeObserver === "undefined") return undefined;
+    // Shrink the fixed-size path to fit narrow columns instead of clipping it.
+    const observer = new ResizeObserver(([entry]) => {
+      const width = entry.contentRect.width;
+      if (width > 0) setScale(Math.min(1, width / PATH_WIDTH));
+    });
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, []);
   return (
     <div
-      className="relative mx-auto h-52 w-64 rounded-md"
-      style={{ backgroundColor: surface }}
-      aria-label="Learning path trail preview"
+      className="overflow-hidden rounded-md bg-learning-path-surface text-learning-path-text"
+      style={learningPathVariables(tokens)}
+      aria-label="Learning path preview"
     >
-      <LearningPathTrail
-        segments={segments}
-        width={256}
-        height={208}
-        style={trail?.style || "dashed"}
-        decorationCount={trail?.decorationCount ?? null}
-        decorationImage={decorationImage}
-        lineColor={tokens.learningPathLine || "#34475f"}
-        surfaceColor={surface}
-        className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-      />
-      {TRAIL_NODES.map((node, index) => (
-        <span
-          key={`${node.x}-${node.y}`}
-          className="absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-sm font-bold"
+      <div className="px-3 pt-4">
+        <div className="rounded-2xl border border-primary/20 bg-surface-raised/70 px-3 py-3 text-center">
+          <p className="text-[0.6rem] font-bold uppercase tracking-[0.2em] text-primary">
+            Learning path
+          </p>
+          <p className="font-heading text-lg font-bold text-learning-path-heading">Module title</p>
+          <p className="text-xs text-learning-path-muted">Secondary text</p>
+        </div>
+        <div className="mt-3 flex items-center gap-2">
+          <div className="h-px flex-1 bg-learning-path-divider" />
+          <span className="text-sm font-semibold text-learning-path-heading">Steps</span>
+          <div className="h-px flex-1 bg-learning-path-divider" />
+        </div>
+      </div>
+      <div ref={frameRef} className="mt-3 px-1" style={{ height: height * scale }}>
+        <div
+          className="relative left-1/2 origin-top"
           style={{
-            left: node.x,
-            top: node.y,
-            backgroundColor: index === 1 ? "#f1ab2d" : "#eac66e",
-            borderColor: index === 1 ? "#000000" : "#384b66",
+            width: PATH_WIDTH,
+            height,
+            transform: `translateX(-50%) scale(${scale})`,
           }}
         >
-          {index + 1}
+          <LearningPathTrail
+            segments={segments}
+            width={PATH_WIDTH}
+            height={height}
+            style={trail?.style || "dashed"}
+            decorationCount={trail?.decorationCount ?? null}
+            decorationImage={decorationImage}
+            className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+          />
+          {PREVIEW_STEPS.map((step, index) => (
+            <LearningPathNode
+              key={step.title}
+              node={{ microLessonId: `preview-${index}`, microLessonTitle: step.title }}
+              status={step.status}
+              stepNumber={index + 1}
+              style={{
+                left: `${step.left * 100}%`,
+                top: index * NODE_SPACING,
+                transform: "translateX(-50%)",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center justify-end border-t border-learning-path-footer-border bg-learning-path-footer-surface px-3 py-2">
+        <span className="inline-block rounded-lg bg-learning-path-button px-4 py-1.5 text-sm font-semibold text-on-primary">
+          Continue
         </span>
-      ))}
+      </div>
     </div>
   );
 }
@@ -98,7 +173,7 @@ function PreviewTrail({ trail, decorationImage, tokens }) {
  */
 export default function ThemePreview({
   name,
-  tokens = {},
+  tokens: themeTokens = {},
   trail,
   logo = null,
   progressBar = null,
@@ -109,12 +184,23 @@ export default function ThemePreview({
   guideAvatar = null,
   guideName = "",
 }) {
+  // Missing tokens fall back to the built-in defaults, which is what activation would show.
+  const tokens = {
+    ...DEFAULT_THEME_TOKENS,
+    ...themeTokens,
+    learningPathNodeCompleted:
+      themeTokens.learningPathNodeCompleted ||
+      themeTokens.surfaceApp ||
+      DEFAULT_THEME_TOKENS.learningPathNodeCompleted,
+    learningPathNodeCurrent:
+      themeTokens.learningPathNodeCurrent ||
+      themeTokens.primary ||
+      DEFAULT_THEME_TOKENS.learningPathNodeCurrent,
+  };
   const style = {};
   for (const [token, property] of Object.entries(previewProperties)) {
     if (typeof tokens[token] === "string") style[property] = tokens[token];
   }
-  if (tokens.success) style["--color-success"] = tokens.success;
-  if (tokens.success) style["--color-success"] = tokens.success;
   for (const [token, property] of Object.entries(colorProperties)) {
     if (typeof tokens[token] === "string") style[property] = tokens[token];
   }
@@ -171,7 +257,7 @@ export default function ThemePreview({
               </span>
             </div>
           </div>
-          <PreviewTrail trail={trail} decorationImage={trailDecoration} tokens={tokens} />
+          <PreviewLearningPath trail={trail} decorationImage={trailDecoration} tokens={tokens} />
         </div>
         <LessonGuideCharacter
           imageSrc={guideAvatar}

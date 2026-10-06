@@ -34,6 +34,8 @@ test("learners can view glossary resources without changing their lesson state",
 
   const lesson = page.locator("#main-content");
   await expect(lesson.getByText("This is a sample of a lesson.")).toBeVisible();
+  // Let async theme and asset requests settle so the baseline text is stable.
+  await page.waitForLoadState("networkidle");
   const lessonState = await lesson.innerText();
   const opener = page.getByRole("button", {
     name: "Open glossary and references",

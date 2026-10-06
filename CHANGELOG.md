@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.3.1] - 2026-10-06
+
+### Added
+
+- Added learning-path color tokens for secondary text, step titles, divider lines, completed steps, current and upcoming steps, step outlines, the footer bar, and the footer border. The theme customizer, built-in palettes, package schema, and theme docs include them.
+- The bundled Sprout (v1.5.0) and Learning Garden (v1.2.0) themes ship green values for the new tokens. Existing installs get any missing tokens filled in at startup without overwriting admin edits.
+
+### Fixed
+
+- Fixed the admin theme preview showing yellow learning-path steps that did not match the live page and could not be changed. The preview now renders the same step component and colors as the learning-path page, and scales to fit narrow columns.
+- Removed unused hard-coded yellow step colors. The learning-path hero card now follows the theme's highlight and card colors.
+- Fixed an intermittent glossary end-to-end failure by waiting for page requests to settle before recording the lesson baseline.
+
+---
+
 ## [1.3.0] - 2026-10-06
 
 ### Added

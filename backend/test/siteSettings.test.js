@@ -131,6 +131,21 @@ describe("site settings", () => {
     expect(sprout.theme.landing.hero).toBeDefined();
   });
 
+  test("bundled themes backfill new color tokens without overwriting admin edits", async () => {
+    await OpenQuizPackage.updateOne(
+      { packageId: "sprout" },
+      {
+        $unset: { "theme.tokens.learningPathNodeCurrent": 1, "theme.tokens.learningPathMuted": 1 },
+        $set: { "theme.tokens.learningPathFooterSurface": "#123456" },
+      },
+    );
+    await ensureBundledThemes();
+    const sprout = await OpenQuizPackage.findOne({ packageId: "sprout" }).lean();
+    expect(sprout.theme.tokens.learningPathNodeCurrent).toBe("#18816a");
+    expect(sprout.theme.tokens.learningPathMuted).toBe("#3f6b60");
+    expect(sprout.theme.tokens.learningPathFooterSurface).toBe("#123456");
+  });
+
   test("exports carry site branding and round-trip through import", async () => {
     await patch(`${ADMIN}/packages/sprout/activate`);
     await patch(`${ADMIN}/site-settings`, { appName: "Exported Name", landing });

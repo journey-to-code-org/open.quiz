@@ -10,18 +10,15 @@
   --color-progress-near-end: var(--instance-progress-near-end, #ffdd4f);
   --color-progress-complete-start: var(--instance-progress-complete-start, #ea6fee);
   --color-progress-complete-end: var(--instance-progress-complete-end, #c989f7);
-  --color-circle-completed: #eac66e;
-  --color-circle-current: #f1ab2d;
-  --color-circle-disabled: #eac66e;
-  --color-circle-border: var(--instance-circle-border, #384b66);
-  --color-circle-border-current: #000000;
-  --color-circle-text: #000000;
-  --color-circle-hover-completed: #e3bd58;
-  --color-circle-hover-current: #ef9f0f;
-  --color-circle-shadow-completed: rgba(37, 62, 96, 0.12);
-  --color-circle-shadow: rgba(0, 0, 0, 0.16);
-  --shadow-circle-completed: 0 10px 18px var(--color-circle-shadow-completed);
-  --shadow-circle-current: 0 12px 20px var(--color-circle-shadow);
+  --color-learning-path-node-completed: var(
+    --instance-learning-path-node-completed,
+    var(--instance-surface-app, #f5f7fa)
+  );
+  --color-learning-path-node-current: var(
+    --instance-learning-path-node-current,
+    var(--instance-primary, #315f9e)
+  );
+  --color-learning-path-node-border: var(--instance-learning-path-node-border, #b4c7c2);
   --shadow-quiz: 0 8px 16px rgba(36, 74, 125, 0.2);
   --shadow-quiz-secondary: 0 6px 12px rgba(6, 30, 25, 0.08);
   --color-learning-path-surface: var(--instance-learning-path-surface, #f1f5fa);
