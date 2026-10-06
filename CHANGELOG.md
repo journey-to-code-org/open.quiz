@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.2.1] - 2026-10-06
+
+### Added
+
+- Added a Render Blueprint quick-start to the README and detailed deployment instructions covering MongoDB connectivity, required secrets, and manual Web Service settings.
+
+### Changed
+
+- Documented the single-service deployment flow: install backend runtime and frontend build dependencies, build Vite into `frontend/dist`, and start Express to serve the frontend and API from the same origin.
+- Clarified that the Blueprint does not provision MongoDB or prompt for secrets, and that the service must be redeployed after configuring its required environment variables.
+- Refreshed dependency lockfiles following an npm audit pass, including backend development dependency changes to Jest `^25.0.0` and nodemon `^1.14.10`.
+
+---
+
 ## [1.2.0] - 2026-10-01
 
 ### Added
