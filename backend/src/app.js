@@ -13,6 +13,7 @@ const errorHandlerMiddleware = require("./middleware/errorHandler");
 const notFoundMiddleware = require("./middleware/notFound");
 const { apiLimiter } = require("./middleware/rateLimiter");
 const requireAdmin = require("./middleware/requireAdmin");
+const { createSiteShellHandlers } = require("./services/siteShell.service");
 
 // Route imports
 const healthRoutes = require("./routes/health.routes");
@@ -97,7 +98,9 @@ app.use("/api/v1/onboarding", onboardingRoutes);
 app.use("/api/v1/admin", jwtMiddleware, requireAdmin, adminRoutes);
 const frontendBuildPath = path.resolve(__dirname, "../../frontend/dist");
 if (process.env.NODE_ENV === "production" && fs.existsSync(frontendBuildPath)) {
-  app.use(express.static(frontendBuildPath));
+  const siteShell = createSiteShellHandlers(frontendBuildPath);
+  app.get("/site.webmanifest", siteShell.sendManifest);
+  app.use(express.static(frontendBuildPath, { index: false }));
   app.get(/.*/, (req, res, next) => {
     if (
       req.path === "/api" ||
@@ -108,7 +111,7 @@ if (process.env.NODE_ENV === "production" && fs.existsSync(frontendBuildPath)) {
       return next();
     }
 
-    return res.sendFile(path.join(frontendBuildPath, "index.html"));
+    return siteShell.sendIndex(req, res, next);
   });
 } else if (process.env.NODE_ENV !== "production") {
   app.get("/", (req, res) => {

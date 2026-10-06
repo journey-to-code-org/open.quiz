@@ -21,9 +21,12 @@ describe("open.quiz package validation", () => {
     const result = validateOpenQuizPackage(packageData);
 
     expect(result.manifest).toMatchObject({
-      includes: { theme: true, content: false },
-      counts: { assets: 4, avatars: 2, modules: 0 },
+      includes: { theme: true, content: true },
+      counts: { assets: 8, avatars: 3, modules: 1 },
     });
+    expect(result.theme.assets.progressBar).toBe("progress.flower");
+    expect(result.theme.assets.progressFrame).toBe("progress.frame");
+    expect(result.theme.tokens.progressStart).toBe("#ffbf1f");
   });
 
   test("accepts a theme package without content and calculates a manifest", () => {
@@ -33,6 +36,26 @@ describe("open.quiz package validation", () => {
       includes: { theme: true, content: false },
       counts: { assets: 0, avatars: 0, modules: 0, lessons: 0, knowledgeChecks: 0 },
     });
+  });
+
+  test("validates progress color tokens and separate frame and marker slots", () => {
+    const result = validateOpenQuizPackage(
+      makePackage({
+        theme: {
+          tokens: { progressStart: "#ffbf1f", progressCompleteEnd: "#c989f7" },
+          assets: { progressBar: "marker", progressFrame: "marker" },
+        },
+        assets: [{ key: "marker", filename: "marker.png", mimeType: "image/png", data: pngData }],
+      }),
+    );
+    expect(result.theme.assets).toEqual({ progressBar: "marker", progressFrame: "marker" });
+    expect(() =>
+      validateOpenQuizPackage(
+        makePackage({
+          theme: { tokens: { progressStart: "url(evil)" } },
+        }),
+      ),
+    ).toThrow(/hex color/);
   });
 
   test("accepts minimal package metadata and content-only packages", () => {

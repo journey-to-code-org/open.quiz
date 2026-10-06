@@ -26,6 +26,10 @@ jest.mock("../src/config/passport.js", () => ({
 }));
 
 const passport = require("../src/config/passport.js");
+jest.mock("../src/services/adminBootstrap.service", () => ({
+  bootstrapLoginAdmin: jest.fn().mockResolvedValue(undefined),
+}));
+
 const app = require("../src/app");
 const {
   completeOAuthLogin,
@@ -227,7 +231,7 @@ describe("OAuth authentication", () => {
     expect(passport.authenticate).not.toHaveBeenCalled();
   });
 
-  it("uses the same verified-account rule as password login", () => {
+  it("uses the same verified-account rule as password login", async () => {
     const user = {
       _id: "oauth-user-id",
       role: "learner",
@@ -245,7 +249,7 @@ describe("OAuth authentication", () => {
       app: { emit: jest.fn() },
     };
 
-    expect(completeOAuthLogin(request, response)).toBe(result);
+    expect(await completeOAuthLogin(request, response)).toBe(result);
     expect(response.redirect).toHaveBeenCalledWith(
       "http://localhost:5173/login?error=oauth_failed",
     );

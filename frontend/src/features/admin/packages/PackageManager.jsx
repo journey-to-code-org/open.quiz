@@ -5,24 +5,18 @@ import {
   activateDefaultAdminTheme,
   deleteAdminPackage,
   downloadAdminPackage,
+  getAdminSiteSettings,
+  downloadAdminSiteExport,
   getAdminPackages,
   inspectAdminPackage,
   importAdminPackage,
+  installAdminPackageContent,
 } from "../../../services/api";
 import Button from "../../../shared/Button/Button.component";
 import Card from "../../../shared/Card/Card.component";
-
-const previewProperties = {
-  primary: "--preview-primary",
-  primaryHover: "--preview-primary-hover",
-  accent: "--preview-accent",
-  heading: "--preview-heading",
-  foreground: "--preview-foreground",
-  surfaceApp: "--preview-surface",
-  surfaceRaised: "--preview-raised",
-  fontHeading: "--preview-font-heading",
-  fontBody: "--preview-font-body",
-};
+import ThemePreview from "./ThemePreview";
+import SiteSettingsEditor from "./SiteSettingsEditor";
+import ThemeCustomizer from "./ThemeCustomizer";
 
 function inspectPackage(packageData) {
   if (
@@ -37,7 +31,7 @@ function inspectPackage(packageData) {
     throw new Error("Package must include a theme or content.");
   for (const [name, value] of Object.entries(packageData.theme?.tokens || {})) {
     if (
-      /^(primary|primaryHover|primaryAlt|accent|success|heading|foreground|onPrimary|surfaceApp|surfaceRaised|surfaceInset|surfaceInput|focus|learningPathSurface|learningPathText|learningPathHeading|learningPathLine)$/.test(
+      /^(primary|primaryHover|primaryAlt|accent|success|progressStart|progressEnd|progressNearStart|progressNearEnd|progressCompleteStart|progressCompleteEnd|heading|foreground|onPrimary|surfaceApp|surfaceRaised|surfaceInset|surfaceInput|focus|learningPathSurface|learningPathText|learningPathHeading|learningPathLine)$/.test(
         name,
       )
     ) {
@@ -107,69 +101,39 @@ function getAsset(packageData, assetKey) {
   return /^(?:data:image\/(?:png|jpeg|webp);base64,)/i.test(asset?.data || "") ? asset.data : null;
 }
 
-function ThemePreview({ inspected }) {
+function InspectedThemePreview({ inspected }) {
   const theme = inspected?.packageData.theme;
   if (!theme) return null;
-  const previewStyle = Object.fromEntries(
-    Object.entries(previewProperties)
-      .filter(([token]) => typeof theme.tokens?.[token] === "string")
-      .map(([token, property]) => [property, theme.tokens[token]]),
-  );
-  const logoKey = theme.assets?.logo;
-  const logo = logoKey ? getAsset(inspected.packageData, logoKey) : null;
   const guide = theme.assets?.avatars?.[0];
-  const avatar = guide ? getAsset(inspected.packageData, guide.assetKey) : null;
+  const asset = (key) => (key ? getAsset(inspected.packageData, key) : null);
   return (
-    <div className="space-y-3 rounded-md border border-neutral-200 p-4" aria-label="Theme preview">
-      <div className="flex items-center gap-3">
-        {logo ? <img src={logo} alt="" className="h-10 max-w-32 object-contain" /> : null}
-        <h3 className="font-heading text-lg font-bold text-heading">
-          {inspected.packageData.package.name}
-        </h3>
-      </div>
-      <div
-        className="grid gap-3 rounded-md bg-[var(--preview-surface,#f5f7fa)] p-4 sm:grid-cols-2"
-        style={previewStyle}
-      >
-        <div className="space-y-2">
-          <h4
-            className="font-bold text-[var(--preview-heading,#213c60)]"
-            style={{ fontFamily: "var(--preview-font-heading, inherit)" }}
-          >
-            A short lesson
-          </h4>
-          <p
-            className="text-sm text-[var(--preview-foreground,#263244)]"
-            style={{ fontFamily: "var(--preview-font-body, inherit)" }}
-          >
-            Practice one idea at a time.
-          </p>
-          <button
-            type="button"
-            className="rounded-md bg-[var(--preview-primary,#315f9e)] px-3 py-2 text-sm font-semibold text-white"
-          >
-            Continue
-          </button>
-        </div>
-        <div className="flex items-center gap-3 rounded-md bg-[var(--preview-raised,#fff)] p-3">
-          {avatar ? (
-            <img src={avatar} alt="" className="h-12 w-12 rounded-full object-cover" />
-          ) : null}
-          <span className="text-sm text-[var(--preview-accent,#d8795f)]">
-            {guide?.name || "Progress"}
-          </span>
-        </div>
-      </div>
-    </div>
+    <ThemePreview
+      name={inspected.packageData.package.name}
+      tokens={theme.tokens || {}}
+      trail={theme.trail}
+      logo={asset(theme.assets?.logo)}
+      progressBar={asset(theme.assets?.progressBar)}
+      progressFrame={asset(theme.assets?.progressFrame)}
+      trailDecoration={asset(theme.assets?.trailDecoration)}
+      answerCorrect={asset(theme.assets?.answerCorrect)}
+      answerIncorrect={asset(theme.assets?.answerIncorrect)}
+      guideAvatar={asset(guide?.assetKey)}
+      guideName={guide?.name}
+    />
   );
 }
-
-export default function PackageManager({ csrfToken, modules = [] }) {
+export default function PackageManager({ csrfToken, modules = [], onModulesChanged }) {
   const [packages, setPackages] = useState([]);
   const [activePackageId, setActivePackageId] = useState(null);
   const [inspected, setInspected] = useState(null);
   const [selectedMode, setSelectedMode] = useState("all");
   const [selectedModuleIds, setSelectedModuleIds] = useState({});
+  const [includeBundledLessons, setIncludeBundledLessons] = useState({});
+  const [skipSiteContent, setSkipSiteContent] = useState({});
+  const [includeSiteInExport, setIncludeSiteInExport] = useState(false);
+  const [siteSettings, setSiteSettings] = useState(null);
+  const [siteSettingsVersion, setSiteSettingsVersion] = useState(0);
+  const [siteSettingsError, setSiteSettingsError] = useState("");
   const [fileError, setFileError] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -178,6 +142,16 @@ export default function PackageManager({ csrfToken, modules = [] }) {
     const packagePayload = await getAdminPackages();
     setPackages(packagePayload.packages || []);
     setActivePackageId(packagePayload.activePackageId || null);
+  }
+
+  async function refreshSiteSettings() {
+    try {
+      setSiteSettings(await getAdminSiteSettings());
+      setSiteSettingsVersion((version) => version + 1);
+      setSiteSettingsError("");
+    } catch (error) {
+      setSiteSettingsError(error.message);
+    }
   }
 
   useEffect(() => {
@@ -190,6 +164,15 @@ export default function PackageManager({ csrfToken, modules = [] }) {
       })
       .catch((error) => {
         if (active) setFileError(error.message);
+      });
+    getAdminSiteSettings()
+      .then((settings) => {
+        if (!active) return;
+        setSiteSettings(settings);
+        setSiteSettingsVersion((version) => version + 1);
+      })
+      .catch((error) => {
+        if (active) setSiteSettingsError(error.message);
       });
     return () => {
       active = false;
@@ -237,6 +220,7 @@ export default function PackageManager({ csrfToken, modules = [] }) {
         : "";
       setMessage(`Package installed. The active theme was not changed.${skipped}`);
       await refreshPackages();
+      await onModulesChanged?.();
     } catch (error) {
       setFileError(error.message);
     } finally {
@@ -248,9 +232,9 @@ export default function PackageManager({ csrfToken, modules = [] }) {
     setBusy(true);
     setFileError("");
     try {
-      await action();
+      const result = await action();
       await refreshPackages();
-      setMessage(successMessage);
+      setMessage(typeof successMessage === "function" ? successMessage(result) : successMessage);
     } catch (error) {
       setFileError(error.message);
     } finally {
@@ -258,10 +242,40 @@ export default function PackageManager({ csrfToken, modules = [] }) {
     }
   }
 
-  async function activateTheme(packageId) {
-    await activateAdminPackage({ packageId, csrfToken });
+  async function activateTheme(installed) {
+    const packageId = installed.packageId;
+    const includeContent = Boolean(
+      installed.bundledContent &&
+      !installed.bundledContent.installed &&
+      includeBundledLessons[packageId],
+    );
+    const applySiteContent = !skipSiteContent[packageId];
+    const result = await activateAdminPackage({
+      packageId,
+      includeContent,
+      applySiteContent,
+      csrfToken,
+    });
     setActivePackageId(packageId);
     await applyInstanceTheme();
+    await refreshSiteSettings();
+    if (includeContent) await onModulesChanged?.();
+    return result;
+  }
+
+  async function installBundledLessons(packageId) {
+    const result = await installAdminPackageContent({ packageId, csrfToken });
+    await onModulesChanged?.();
+    return result;
+  }
+
+  function lessonInstallSummary(result) {
+    if (!result?.importedModules && !result?.skippedModules) return "";
+    const imported = result.importedModules?.length || 0;
+    const skipped = result.skippedModules?.length
+      ? ` Skipped existing module IDs: ${result.skippedModules.join(", ")}.`
+      : "";
+    return ` Installed ${imported} lesson module${imported === 1 ? "" : "s"}.${skipped}`;
   }
 
   async function restoreDefaults() {
@@ -276,7 +290,12 @@ export default function PackageManager({ csrfToken, modules = [] }) {
       installed.importedModuleIds ||
       []
     ).filter((id) => installed.importedModuleIds?.includes(id));
-    await downloadAdminPackage({ packageId: installed.packageId, mode, moduleIds: selected });
+    await downloadAdminPackage({
+      packageId: installed.packageId,
+      mode,
+      moduleIds: selected,
+      includeSite: includeSiteInExport && mode !== "content",
+    });
   }
 
   return (
@@ -286,6 +305,19 @@ export default function PackageManager({ csrfToken, modules = [] }) {
           <h2 className="font-heading text-h3 font-bold text-heading">Appearance and packages</h2>
           <p className="text-sm text-foreground">
             Runtime branding and reusable learning experiences.
+          </p>
+          <p className="text-sm text-foreground">
+            Use transparent PNG/WebP artwork: square progress markers (256 px), character images
+            (352 px or larger), and an optional transparent progress frame (900 x 147 px). Avatar
+            keys match lesson character IDs; use guide for the default character.{" "}
+            <a
+              href="https://github.com/journey-to-code-org/open.quiz/blob/development/docs/themes.md#image-slots-and-authoring-specifications"
+              className="text-primary underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Image specifications and package schema
+            </a>
           </p>
         </div>
         <Button
@@ -310,10 +342,34 @@ export default function PackageManager({ csrfToken, modules = [] }) {
         </p>
       ) : null}
 
-      <section className="space-y-3" aria-labelledby="installed-packages-heading">
+      {siteSettings ? (
+        <SiteSettingsEditor
+          key={siteSettingsVersion}
+          csrfToken={csrfToken}
+          settings={siteSettings}
+          onSaved={(saved) => setSiteSettings(saved)}
+        />
+      ) : siteSettingsError ? (
+        <p className="text-sm text-danger">
+          Site name and landing page settings could not be loaded: {siteSettingsError}
+        </p>
+      ) : null}
+
+      <section
+        className="space-y-3 border-t border-neutral-200 pt-4"
+        aria-labelledby="installed-packages-heading"
+      >
         <h3 id="installed-packages-heading" className="font-semibold text-heading">
           Installed packages
         </h3>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={includeSiteInExport}
+            onChange={(event) => setIncludeSiteInExport(event.target.checked)}
+          />
+          Include this site&apos;s app name and landing page when exporting a theme
+        </label>
         {packages.length ? (
           packages.map((installed) => {
             const includesTheme = installed.installedSections?.includes("theme");
@@ -345,8 +401,9 @@ export default function PackageManager({ csrfToken, modules = [] }) {
                         disabled={busy}
                         onClick={() =>
                           void runPackageAction(
-                            () => activateTheme(installed.packageId),
-                            `${installed.name} activated.`,
+                            () => activateTheme(installed),
+                            (result) =>
+                              `${installed.name} activated.${lessonInstallSummary(result)}`,
                           )
                         }
                       >
@@ -427,6 +484,71 @@ export default function PackageManager({ csrfToken, modules = [] }) {
                 ) : null}
                 {activePackageId === installed.packageId ? (
                   <p className="text-sm font-semibold text-success">Active theme</p>
+                ) : null}
+                {includesTheme &&
+                activePackageId !== installed.packageId &&
+                (installed.themePreview?.appName || installed.themePreview?.landing) ? (
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={!skipSiteContent[installed.packageId]}
+                      onChange={(event) =>
+                        setSkipSiteContent((current) => ({
+                          ...current,
+                          [installed.packageId]: !event.target.checked,
+                        }))
+                      }
+                    />
+                    Use this theme&apos;s{" "}
+                    {[
+                      installed.themePreview.appName
+                        ? `app name (\u201C${installed.themePreview.appName}\u201D)`
+                        : null,
+                      installed.themePreview.landing ? "landing page" : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" and ")}{" "}
+                    when activating
+                  </label>
+                ) : null}
+                {installed.bundledContent && !installed.bundledContent.installed ? (
+                  <div className="flex flex-wrap items-center gap-3 text-sm">
+                    {activePackageId === installed.packageId ? (
+                      <Button
+                        variant="secondary"
+                        disabled={busy}
+                        onClick={() =>
+                          void runPackageAction(
+                            () => installBundledLessons(installed.packageId),
+                            (result) =>
+                              `${installed.name} lessons added.${lessonInstallSummary(result)}`,
+                          )
+                        }
+                      >
+                        Install {installed.name} lessons
+                      </Button>
+                    ) : (
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(includeBundledLessons[installed.packageId])}
+                          onChange={(event) =>
+                            setIncludeBundledLessons((current) => ({
+                              ...current,
+                              [installed.packageId]: event.target.checked,
+                            }))
+                          }
+                        />
+                        Also install {installed.name} lessons when activating
+                      </label>
+                    )}
+                    <span className="text-foreground">
+                      {installed.bundledContent.modules
+                        .map((module) => `${module.title} (${module.lessonCount} lessons)`)
+                        .join(", ")}{" "}
+                      — editable under Lesson modules once installed.
+                    </span>
+                  </div>
                 ) : null}
                 {packageModules.length ? (
                   <fieldset className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
@@ -533,7 +655,7 @@ export default function PackageManager({ csrfToken, modules = [] }) {
                 {inspected.server.conflicts.map((item) => item.id).join(", ")}.
               </p>
             ) : null}
-            <ThemePreview inspected={inspected} />
+            <InspectedThemePreview inspected={inspected} />
             <fieldset className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
               <legend className="mb-2 font-semibold text-heading">Install scope</legend>
               {inspected.packageData.theme && inspected.packageData.content ? (
@@ -575,6 +697,36 @@ export default function PackageManager({ csrfToken, modules = [] }) {
             </Button>
           </div>
         ) : null}
+      </section>
+
+      <ThemeCustomizer
+        csrfToken={csrfToken}
+        packages={packages}
+        siteSettings={siteSettings}
+        onSaved={async () => {
+          await refreshPackages();
+        }}
+      />
+
+      <section
+        className="space-y-3 border-t border-neutral-200 pt-4"
+        aria-labelledby="site-export-heading"
+      >
+        <h3 id="site-export-heading" className="font-semibold text-heading">
+          Export everything
+        </h3>
+        <p className="text-sm text-foreground">
+          Download one .openquiz.json file containing the active theme (with its artwork and
+          avatars) and every lesson module on this site. Import it on another open.quiz instance to
+          copy the whole learning experience. Accounts, progress, and secrets are never included.
+        </p>
+        <Button
+          variant="secondary"
+          disabled={busy}
+          onClick={() => void runPackageAction(downloadAdminSiteExport, "Site export downloaded.")}
+        >
+          Export entire site
+        </Button>
       </section>
     </Card>
   );

@@ -3,6 +3,7 @@ import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import LearnPage from "./LearnPage";
 import useLessonContent from "../hooks/useLessonContent";
+import { loadContentPackage } from "../contentPackages";
 
 const mockAuth = {
   isAuthenticated: false,
@@ -17,6 +18,10 @@ vi.mock("../context/AuthContext", () => ({
 // Mock the lesson hook so the page does not need to load real lesson data.
 vi.mock("../hooks/useLessonContent", () => ({
   default: vi.fn(),
+}));
+
+vi.mock("../contentPackages", () => ({
+  loadContentPackage: vi.fn(),
 }));
 
 describe("learn page", () => {
@@ -61,6 +66,49 @@ describe("learn page", () => {
     );
 
     expect(screen.getByText("This is a sample of a lesson.")).toBeInTheDocument();
+  });
+
+  it("loads bundled instructional renderers and avatars from module metadata without environment configuration", async () => {
+    vi.stubEnv("VITE_CONTENT_PACKAGE", "");
+    loadContentPackage.mockResolvedValue({
+      characterImages: { nova: "/nova.svg" },
+      lessonBlockRenderers: { characterIntro: ({ content }) => <p>{content.text}</p> },
+    });
+    useLessonContent.mockReturnValue({
+      moduleData: {
+        id: "openQuizIntroduction",
+        title: "Welcome to open.quiz",
+        metadata: { packageId: "openquiz-introduction" },
+        characters: [{ characterId: "nova", name: "Nova" }],
+        lessons: [{ id: "1.1" }],
+      },
+      lessonData: {
+        id: "1.1",
+        title: "Meet your learning platform",
+        microLessons: [
+          {
+            id: "1.1.1",
+            title: "A place to learn",
+            microLessonContent: [
+              { type: "characterIntro", characterId: "nova", text: "Meet Nova!" },
+            ],
+          },
+        ],
+      },
+      progress: null,
+      isLoading: false,
+      error: "",
+    });
+    render(
+      <MemoryRouter initialEntries={["/learn/openQuizIntroduction/1.1?sample=true"]}>
+        <Routes>
+          <Route path="/learn/:moduleId/:lessonId" element={<LearnPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("img", { name: "Nova" })).toHaveAttribute("src", "/nova.svg");
+    expect(screen.getByText("Meet Nova!")).toBeVisible();
+    expect(loadContentPackage).toHaveBeenCalledWith("openquiz-introduction");
   });
 
   it("redirects unauthenticated visitors to the login page before a lesson loads", async () => {

@@ -102,6 +102,35 @@ cp backend/.env.example backend/.env
 `backend/.env` is ignored by Git. Keep all OAuth client secrets in that local file or in
 the deployment platform's secret store.
 
+## First Sign-In And Built-In Themes
+
+On an installation without an existing administrator or bootstrap record, the first
+successful sign-in becomes the administrator. Password sign-in requires email verification;
+Google and GitHub use the same administrator bootstrap after a successful OAuth callback.
+Registration alone does not reserve administrator access. Concurrent first sign-ins claim
+one database-backed bootstrap record, so only one account is promoted. Existing administrators
+and previously claimed bootstrap records are preserved.
+
+Complete your own initial sign-in before sharing a new installation publicly: the first
+eligible person to sign in receives site-wide administrative privileges.
+
+After connecting to MongoDB, server startup installs the bundled **Learning Garden** and
+**Sprout** themes if they are missing. They appear under **Admin > Appearance and packages**
+without a manual upload. Startup also installs the **Welcome to open.quiz** instructional
+module, so a fresh installation has lessons, quizzes, glossary entries, and Nova/Kit guides
+ready to explore. The module's metadata loads its bundled character artwork and renderers;
+`VITE_CONTENT_PACKAGE` is not required for these lessons. Existing modules with the same ID
+are left unchanged.
+
+Startup does not activate the bundled themes, change existing branding, or install
+the Sprout finance curriculum. The administrator can activate either theme or restore default
+branding; theme changes apply to the entire site, not individual users.
+
+Sprout's character artwork, including the beaver, is also available in the administrator
+avatar library without activating Sprout. Restarting the server repairs a missing beaver
+entry in an older Sprout installation. See [theme authoring and image specifications](themes.md)
+for custom packages.
+
 ## Social Sign-In Setup
 
 Google and GitHub sign-in are optional. A provider cannot complete sign-in until both its

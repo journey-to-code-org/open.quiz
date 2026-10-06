@@ -340,9 +340,27 @@ export const inspectAdminPackage = ({ file, csrfToken }) => {
   });
 };
 
-export const activateAdminPackage = ({ packageId, csrfToken }) =>
-  apiRequest(`/packages/${encodeURIComponent(packageId)}/activate`, {
+export const activateAdminPackage = ({
+  packageId,
+  includeContent = false,
+  applySiteContent = true,
+  csrfToken,
+}) => {
+  const body = {
+    ...(includeContent ? { includeContent: true } : {}),
+    ...(applySiteContent ? {} : { applySiteContent: false }),
+  };
+  return apiRequest(`/packages/${encodeURIComponent(packageId)}/activate`, {
     method: "PATCH",
+    csrfToken,
+    body: Object.keys(body).length ? body : undefined,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export const installAdminPackageContent = ({ packageId, csrfToken }) =>
+  apiRequest(`/packages/${encodeURIComponent(packageId)}/content`, {
+    method: "POST",
     csrfToken,
     basePath: ADMIN_BASE_PATH,
   });
@@ -361,26 +379,60 @@ export const deleteAdminPackage = ({ packageId, csrfToken }) =>
     basePath: ADMIN_BASE_PATH,
   });
 
-export async function downloadAdminPackage({ packageId, mode, moduleIds = [] }) {
+export async function downloadAdminPackage({
+  packageId,
+  mode,
+  moduleIds = [],
+  includeSite = false,
+}) {
   const query = new URLSearchParams({ mode });
   if (mode !== "theme") query.set("moduleIds", moduleIds.join(","));
-  const response = await fetch(
+  if (includeSite) query.set("includeSite", "true");
+  await downloadFile(
     `${ADMIN_BASE_PATH}/packages/${encodeURIComponent(packageId)}/export?${query}`,
-    { credentials: "include" },
+    `${packageId}.openquiz.json`,
+    "Package export failed.",
   );
+}
+
+export const downloadAdminSiteExport = () =>
+  downloadFile(`${ADMIN_BASE_PATH}/site-export`, "openquiz-site.openquiz.json", "Export failed.");
+
+export const getAdminSiteSettings = () =>
+  apiRequest("/site-settings", { method: "GET", basePath: ADMIN_BASE_PATH });
+
+export const updateAdminSiteSettings = ({ appName, landing, csrfToken }) => {
+  const body = {};
+  if (appName !== undefined) body.appName = appName?.trim() ? appName.trim() : null;
+  if (landing !== undefined) body.landing = landing;
+  return apiRequest("/site-settings", {
+    method: "PATCH",
+    csrfToken,
+    body,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export function saveBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+async function downloadFile(url, fallbackFilename, failureMessage) {
+  const response = await fetch(url, { credentials: "include" });
   if (!response.ok) {
     const payload = response.headers.get("content-type")?.includes("application/json")
       ? await response.json()
       : null;
-    throw new Error(payload?.message || "Package export failed.");
+    throw new Error(payload?.message || failureMessage);
   }
-  const blob = await response.blob();
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${packageId}.openquiz.json`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+  const disposition = response.headers.get("content-disposition") || "";
+  const filename = /filename="([^"]+)"/.exec(disposition)?.[1] || fallbackFilename;
+  saveBlob(await response.blob(), filename);
 }
 
 export const uploadAdminAvatar = ({ file, csrfToken }) => {

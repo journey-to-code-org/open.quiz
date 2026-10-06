@@ -3,7 +3,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router";
 import { useAuthContext } from "../context/AuthContext";
-import { APP_NAME, ROUTES } from "../app/router/routes";
+import { ROUTES } from "../app/router/routes";
+import { useAppName } from "../app/instanceAssets";
 import { registerSchema } from "../features/auth/schemas";
 import { getPasswordHelperText } from "../features/auth/passwordHelperText";
 import { pickPlaceholderIdentity } from "../features/auth/placeholderIdentities";
@@ -29,6 +30,7 @@ export function AuthTermsNotice({ action = "signing up" }) {
 }
 
 export default function RegisterPage() {
+  const appName = useAppName();
   const { register: registerUser } = useAuthContext();
   const [isRegistered, setIsRegistered] = useState(false);
   const [verificationUrl, setVerificationUrl] = useState(null);
@@ -107,7 +109,7 @@ export default function RegisterPage() {
     <div className="mx-auto max-w-2xl py-8">
       <Card>
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">Create account</p>
-        <h1 className="mt-1 font-heading text-h2 font-bold text-heading">Join {APP_NAME}</h1>
+        <h1 className="mt-1 font-heading text-h2 font-bold text-heading">Join {appName}</h1>
         <p className="mt-2 text-small text-neutral-700">
           Create an account to save your progress and keep a record of your lessons.
         </p>

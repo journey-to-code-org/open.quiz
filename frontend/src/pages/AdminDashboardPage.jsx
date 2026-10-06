@@ -355,7 +355,7 @@ export default function AdminDashboardPage() {
         <p className="max-w-2xl text-foreground">Manage users and lesson content.</p>
       </header>
 
-      <PackageManager csrfToken={csrfToken} modules={modules} />
+      <PackageManager csrfToken={csrfToken} modules={modules} onModulesChanged={refreshModules} />
 
       {state.error ? (
         <p role="alert" className="text-danger">

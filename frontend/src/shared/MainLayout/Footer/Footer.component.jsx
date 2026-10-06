@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router";
-import { APP_NAME } from "../../../app/router/routes";
+import { useAppName } from "../../../app/instanceAssets";
 import GlossaryModal from "../../../features/learn/GlossaryModal/GlossaryModal.component.jsx";
 import glossaryIcon from "../../../assets/glossary_icon.svg";
 
@@ -18,6 +18,7 @@ export default function Footer({ glossary = [], worksCited = [] }) {
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
   const [copyrightYear] = useState(() => new Date().getFullYear());
   const location = useLocation();
+  const appName = useAppName();
 
   const showGlossary = /^\/learn\/[^/]+\/[^/]+/.test(location.pathname);
   const glossaryList = Array.isArray(glossary) ? glossary : [];
@@ -79,7 +80,7 @@ export default function Footer({ glossary = [], worksCited = [] }) {
         )}
 
         <p className="text-xs text-neutral-400">
-          &copy; {copyrightYear} {APP_NAME}
+          &copy; {copyrightYear} {appName}
         </p>
       </div>
     </footer>

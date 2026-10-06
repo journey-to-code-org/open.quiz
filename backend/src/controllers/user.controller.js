@@ -3,7 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const { sendVerificationEmail } = require("../utils/sendEmail");
 //User is capitalized because it represents a model which is a collection of items for the database
 const User = require("../models/User.model.js");
-const AdminBootstrap = require("../models/AdminBootstrap.model.js");
+const { bootstrapLoginAdmin } = require("../services/adminBootstrap.service");
 const { hashPassword, comparePassword } = require("../utils/password.js");
 const { clearSessionCookie, issueSession } = require("../utils/session");
 const { isWithinReactivationGracePeriod, reactivateAccount } = require("../utils/accountDeletion");
@@ -88,15 +88,6 @@ const register = async (req, res, next) => {
       verification_token_expires_at: tokenExpiresAt,
     });
 
-    const bootstrapRecord = await AdminBootstrap.findOneAndUpdate(
-      { key: "first-user-admin" },
-      { $setOnInsert: { key: "first-user-admin", user_id: newUser._id } },
-      { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
-    );
-    if (String(bootstrapRecord.user_id) === String(newUser._id)) {
-      newUser.role = "admin";
-      await newUser.save();
-    }
     const verifyUrl = `${CLIENT_URL}/verify?token=${verificationToken}`;
 
     const emailDelivery = await sendVerificationEmail(
@@ -217,6 +208,7 @@ const login = async (req, res, next) => {
         .status(authenticationFailure.status)
         .json({ message: authenticationFailure.message });
     }
+    await bootstrapLoginAdmin(user);
     const motivation = await getLearningMotivation(user._id);
     const csrfToken = issueSession(res, user, { remember });
     req.app.emit?.("login_success", {

@@ -60,6 +60,9 @@ test("admin previews, installs, activates, reloads, and restores a package theme
   await page.route("**/api/v1/admin/assets/avatars", (route) =>
     route.fulfill({ json: { assets: [] } }),
   );
+  await page.route("**/api/v1/admin/site-settings", (route) =>
+    route.fulfill({ json: { appName: null, landing: null } }),
+  );
   await page.route("**/api/v1/admin/packages", (route) =>
     route.fulfill({
       json: {
@@ -173,7 +176,7 @@ test("admin previews, installs, activates, reloads, and restores a package theme
   await expect(page.getByRole("status")).toContainText(
     "active theme was not changed",
   );
-  await page.getByRole("button", { name: "Activate" }).click();
+  await page.getByRole("button", { name: "Activate", exact: true }).click();
   await expect
     .poll(() =>
       page.evaluate(() =>

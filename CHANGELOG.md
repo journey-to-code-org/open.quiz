@@ -9,6 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.3.0] - 2026-10-06
+
+### Added
+
+- Added a site-wide app name, configurable in the admin panel. It is used in the page title, header, footer, image alt text, server-rendered `index.html` metadata, and the web app manifest. `VITE_APP_NAME` is now only a fallback.
+- Added a customizable landing page (hero, benefits, how it works, and FAQ) with an admin editor that can reorder, add, remove, and reset items. The landing page can optionally show the theme's avatars in the hero.
+- Theme packages can now carry `theme.appName` and `theme.landing`. When activating a theme, admins can choose whether to apply its app name and landing page. Exports can include the current site's name and landing page (`includeSite`).
+- Bundled the Learning Garden and Sprout themes as installed but inactive packages, so admins can switch to them without finding the package files. The Sprout package (v1.4.0) ships its own app name and landing page.
+- Added a checkbox and button to install the Sprout lessons when activating the Sprout theme, so they can be configured like any other lessons.
+- Added a full site export and import, plus a theme customizer that builds a portable theme package from the admin panel.
+- Added a themeable learning-path trail (for example, vine or dashed) and themeable answer marks: Sprout uses its check and X images, and other themes use accessible built-in badges.
+
+### Changed
+
+- The first verified user to sign in becomes the administrator, including users who sign in with GitHub or Google OAuth.
+- Restored the original Sprout presentation for the home, learning-path, and lesson screens.
+- Made the progress-bar marker (for example, Sprout's flower) larger so it reads clearly against the bar.
+- In production, lessons no longer show missing guide-character images. In development they still appear broken, so missing assets are easy to spot.
+- If the site settings fail to load in the admin package manager, the error is shown on its own and package uploads keep working.
+- Documented the app name, landing page, and site settings API in the theme and API guides and the package schema.
+
+### Fixed
+
+- Fixed the missing beaver avatar in the Sprout avatar library.
+- Restored Jest 30 and nodemon 3 in the backend after an `npm audit fix --force` downgrade broke the test suite.
+- Updated stale backend, end-to-end, and smoke-test expectations to match the current theme API and accessible answer marks.
+
+---
+
 ## [1.2.2] - 2026-10-06
 
 ### Fixed

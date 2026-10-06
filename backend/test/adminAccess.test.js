@@ -199,7 +199,7 @@ describe("admin access boundary", () => {
     expect(await User.exists({ _id: target._id })).toBeNull();
   });
 
-  test("makes the first registered user an admin", async () => {
+  test("makes the first successful login an admin, not an unverified registration", async () => {
     const response = await request(app).post("/api/v1/users/register").send({
       name: "First Admin",
       email: "first-admin@example.com",
@@ -209,9 +209,24 @@ describe("admin access boundary", () => {
     });
 
     expect(response.status).toBe(201);
-    expect(response.body.user.role).toBe("admin");
+    expect(response.body.user.role).toBe("learner");
     const user = await User.findOne({ email: "first-admin@example.com" });
-    expect(user.role).toBe("admin");
+    expect(user.role).toBe("learner");
+    const unverified = await request(app).post("/api/v1/users/login").send({
+      email: user.email,
+      password: "P@ssword123!",
+    });
+    expect(unverified.status).toBe(403);
+    user.email_verified_at = new Date();
+    await user.save();
+    const login = await request(app).post("/api/v1/users/login").send({
+      email: user.email,
+      password: "P@ssword123!",
+    });
+    expect(login.status).toBe(200);
+    expect(login.body.user.role).toBe("admin");
+    const persisted = await User.findById(user._id);
+    expect(persisted.role).toBe("admin");
   });
 
   test("manages modules and nested lessons through admin APIs", async () => {

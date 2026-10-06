@@ -3,7 +3,7 @@
   "package": {
     "id": "learning-garden",
     "name": "Learning Garden",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A simple green visual identity for testing portable themes.",
     "author": "open.quiz contributors",
     "homepage": null
@@ -31,6 +31,10 @@
       "radiusLg": "12px",
       "radiusPill": "9999px"
     },
+    "trail": {
+      "style": "dotted",
+      "decorationCount": 0
+    },
     "assets": {
       "logo": null,
       "favicon": null,
@@ -39,5 +43,18 @@
       "avatars": []
     }
   },
-  "assets": []
+  "assets": [],
+  "manifest": {
+    "includes": {
+      "theme": true,
+      "content": false
+    },
+    "counts": {
+      "assets": 0,
+      "avatars": 0,
+      "modules": 0,
+      "lessons": 0,
+      "knowledgeChecks": 0
+    }
+  }
 }

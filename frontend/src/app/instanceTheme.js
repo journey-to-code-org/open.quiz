@@ -23,6 +23,12 @@ const tokenProperties = {
   primaryAlt: "--instance-primary-alt",
   accent: "--instance-accent",
   success: "--instance-success",
+  progressStart: "--instance-progress-start",
+  progressEnd: "--instance-progress-end",
+  progressNearStart: "--instance-progress-near-start",
+  progressNearEnd: "--instance-progress-near-end",
+  progressCompleteStart: "--instance-progress-complete-start",
+  progressCompleteEnd: "--instance-progress-complete-end",
   heading: "--instance-heading",
   foreground: "--instance-foreground",
   onPrimary: "--instance-on-primary",
@@ -54,7 +60,30 @@ const defaultFaviconUrl =
     ? null
     : document.querySelector('link[rel="icon"]')?.getAttribute("href") || null;
 let runtimeTheme = null;
+let runtimeAppName = null;
+let runtimeLanding = null;
 export const INSTANCE_THEME_UPDATED_EVENT = "openquiz:theme-updated";
+export const DEFAULT_APP_NAME = import.meta.env.VITE_APP_NAME?.trim() || "open.quiz";
+
+export function normalizeAppName(value) {
+  if (typeof value !== "string") return null;
+  const name = value.trim().replace(/\s+/g, " ");
+  return name && name.length <= 60 ? name : null;
+}
+
+export function getAppName() {
+  return runtimeAppName || DEFAULT_APP_NAME;
+}
+
+export function getRuntimeLanding() {
+  return runtimeLanding;
+}
+
+export function setRuntimeSiteSettings({ appName, landing } = {}) {
+  runtimeAppName = normalizeAppName(appName);
+  runtimeLanding = landing && typeof landing === "object" ? landing : null;
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(INSTANCE_THEME_UPDATED_EVENT));
+}
 
 function setFavicon(url) {
   if (!url) return;
@@ -91,6 +120,9 @@ export async function applyInstanceTheme() {
     });
     if (!response.ok) return;
     const payload = await response.json();
+    runtimeAppName = normalizeAppName(payload?.appName);
+    runtimeLanding =
+      payload?.landing && typeof payload.landing === "object" ? payload.landing : null;
     const candidate = payload?.theme;
     if (!candidate || typeof candidate !== "object") return;
     for (const [name, property] of Object.entries(tokenProperties)) {
@@ -105,6 +137,10 @@ export async function applyInstanceTheme() {
       favicon: resolveRuntimeAssetUrl(sourceAssets.favicon),
       hero: resolveRuntimeAssetUrl(sourceAssets.hero),
       progressBar: resolveRuntimeAssetUrl(sourceAssets.progressBar),
+      progressFrame: resolveRuntimeAssetUrl(sourceAssets.progressFrame),
+      trailDecoration: resolveRuntimeAssetUrl(sourceAssets.trailDecoration),
+      answerCorrect: resolveRuntimeAssetUrl(sourceAssets.answerCorrect),
+      answerIncorrect: resolveRuntimeAssetUrl(sourceAssets.answerIncorrect),
       avatars: Object.fromEntries(
         Object.entries(sourceAssets.avatars || {}).map(([key, avatar]) => [
           key,
@@ -116,6 +152,7 @@ export async function applyInstanceTheme() {
       id: typeof candidate.id === "string" ? candidate.id : null,
       name: typeof candidate.name === "string" ? candidate.name : null,
       version: typeof candidate.version === "string" ? candidate.version : null,
+      trail: normalizeTrail(candidate.trail),
       assets,
     };
     if (assets.favicon) setFavicon(assets.favicon);
@@ -126,6 +163,17 @@ export async function applyInstanceTheme() {
       window.dispatchEvent(new Event(INSTANCE_THEME_UPDATED_EVENT));
     }
   }
+}
+
+export const TRAIL_STYLES = ["vine", "dashed", "dotted", "solid", "double"];
+export const DEFAULT_TRAIL = Object.freeze({ style: "dashed", decorationCount: null });
+
+export function normalizeTrail(trail) {
+  const style = TRAIL_STYLES.includes(trail?.style) ? trail.style : DEFAULT_TRAIL.style;
+  const count = Number.isInteger(trail?.decorationCount)
+    ? Math.min(Math.max(trail.decorationCount, 0), 3)
+    : null;
+  return { style, decorationCount: count };
 }
 
 export function getRuntimeTheme() {

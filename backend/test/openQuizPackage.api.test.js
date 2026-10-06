@@ -35,6 +35,8 @@ const packageJson = ({ id = "sprout-demo", includeContent = true } = {}) => ({
     tokens: { primary: "#18816a", heading: "#105647" },
     assets: {
       logo: "brand.logo",
+      progressFrame: "brand.logo",
+      progressBar: "avatar.guide",
       avatars: [{ key: "guide", name: "Guide", assetKey: "avatar.guide" }],
     },
   },
@@ -97,7 +99,7 @@ describe("open.quiz package API", () => {
   test("exposes a default public theme and restricts import to admins", async () => {
     const publicResponse = await request(app).get("/api/v1/theme");
     expect(publicResponse.status).toBe(200);
-    expect(publicResponse.body).toEqual({ theme: null });
+    expect(publicResponse.body).toEqual({ theme: null, appName: null, landing: null });
 
     const learner = await createUser("learner");
     const denied = await request(app)
@@ -205,6 +207,10 @@ describe("open.quiz package API", () => {
       tokens: { primary: "#18816a", heading: "#105647" },
     });
     expect(publicTheme.body.theme.assets.logo).toMatch(/^\/api\/v1\/assets\//);
+    expect(publicTheme.body.theme.assets.progressFrame).toBe(publicTheme.body.theme.assets.logo);
+    expect(publicTheme.body.theme.assets.progressBar).toBe(
+      publicTheme.body.theme.assets.avatars.guide.url,
+    );
 
     const exported = await request(app)
       .get("/api/v1/admin/packages/sprout-demo/export?mode=all")

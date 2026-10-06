@@ -24,27 +24,10 @@ export default function LearnPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const setCurrentModuleResources = useOutletContext();
-  const [contentPackage, setContentPackage] = useState(null);
+  const [loadedContentPackage, setLoadedContentPackage] = useState(null);
 
   const selectedMicroLessonId = location.state?.microLessonId;
   const isSamplePreview = searchParams.get("sample") === "true";
-
-  useEffect(() => {
-    let isActive = true;
-    if (!configuredPackageId) return undefined;
-
-    void loadContentPackage(configuredPackageId)
-      .then((loadedPackage) => {
-        if (isActive) setContentPackage(loadedPackage);
-      })
-      .catch(() => {
-        if (isActive) setContentPackage(null);
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
 
   const {
     moduleData: fetchedModuleData,
@@ -58,6 +41,29 @@ export default function LearnPage() {
     enabled: isAuthenticated || isSamplePreview,
     isPublic: !isAuthenticated && isSamplePreview,
   });
+  const contentPackageId = configuredPackageId || fetchedModuleData?.metadata?.packageId;
+  const contentPackage =
+    loadedContentPackage && loadedContentPackage.id === contentPackageId
+      ? loadedContentPackage.data
+      : null;
+
+  useEffect(() => {
+    let isActive = true;
+    if (!contentPackageId) return undefined;
+
+    void loadContentPackage(contentPackageId)
+      .then((loadedPackage) => {
+        if (isActive) setLoadedContentPackage({ id: contentPackageId, data: loadedPackage });
+      })
+      .catch((error) => {
+        console.error(`Failed to load content package ${contentPackageId}:`, error);
+        if (isActive) setLoadedContentPackage(null);
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [contentPackageId]);
 
   const learnData = useMemo(
     () =>

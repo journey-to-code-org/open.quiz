@@ -6,9 +6,13 @@ const {
   activatePackage,
   deletePackage,
   exportPackage,
+  exportSite,
+  getSiteSettings,
   inspectPackage,
   importPackage,
+  installPackageContent,
   listPackages,
+  updateSiteSettings,
 } = require("../controllers/openQuizPackage.controller");
 const { listAvatarAssets, uploadAvatarAsset } = require("../controllers/contentAsset.controller");
 const {
@@ -77,8 +81,12 @@ router.get("/packages", listPackages);
 router.post("/packages/inspect", handlePackageUpload, inspectPackage);
 router.post("/packages/import", handlePackageUpload, importPackage);
 router.post("/packages/default/activate", activateDefaultTheme);
+router.get("/site-export", exportSite);
+router.get("/site-settings", getSiteSettings);
+router.patch("/site-settings", updateSiteSettings);
 router.get("/packages/:packageId/export", exportPackage);
 router.patch("/packages/:packageId/activate", activatePackage);
+router.post("/packages/:packageId/content", installPackageContent);
 router.delete("/packages/:packageId", deletePackage);
 
 module.exports = router;

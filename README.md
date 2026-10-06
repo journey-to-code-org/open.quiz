@@ -7,8 +7,9 @@ the core authentication, assessment, and progress services.
 ## Project Areas
 
 - **Core:** accounts, roles, lesson delivery, quiz scoring, and progress.
-- **Content:** create modules in the admin area or import a package. Example curricula live under
-  `shared/content/examples` and are not installed automatically.
+- **Content:** create modules in the admin area or import a package. The open.quiz instructional
+  module is installed automatically; other example curricula under `shared/content/examples`
+  remain opt-in.
 - **Presentation:** the frontend accepts instance-level app-name and theme CSS overrides.
 - **Portable experiences:** administrators can import and export `.openquiz.json` packages containing a runtime theme and optional canonical lesson modules. See [portable package documentation](docs/themes.md).
 
@@ -121,6 +122,13 @@ npm run dev
 
 - Frontend runs on: http://localhost:5173
 - Backend runs on: http://localhost:8080
+
+The first successful password, Google, or GitHub sign-in initializes administrator access
+on a fresh installation. Complete your own initial sign-in before opening it to the public.
+Learning Garden and Sprout are preinstalled as inactive themes; an administrator can choose
+one in **Appearance and packages** without finding or uploading a package. The open.quiz
+instructional lessons are installed automatically for new learners to explore. See
+[initial setup details](docs/development-setup.md#first-sign-in-and-built-in-themes).
 
 Before opening a pull request, run the full check:
 

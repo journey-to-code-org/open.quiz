@@ -1,13 +1,14 @@
 import Card from "../shared/Card/Card.component";
-import { APP_NAME } from "../app/router/routes";
+import { useAppName } from "../app/instanceAssets";
 
 export default function PrivacyPage() {
+  const appName = useAppName();
   return (
     <div className="mx-auto max-w-3xl py-8">
       <Card className="flex flex-col gap-4">
         <h1 className="font-heading text-h2 font-bold text-heading">Privacy Policy</h1>
         <p className="text-body leading-normal text-foreground">
-          {APP_NAME} is a learning platform. This Privacy Policy describes what data the service
+          {appName} is a learning platform. This Privacy Policy describes what data the service
           collects and how it is used.
         </p>
         <h2 className="font-heading text-h4 font-bold text-heading">What we collect</h2>

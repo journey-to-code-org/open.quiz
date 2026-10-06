@@ -6,12 +6,29 @@ const MAX_TOTAL_ASSET_BYTES = 12 * 1024 * 1024;
 const MAX_PACKAGE_BYTES = 16 * 1024 * 1024;
 const MAX_AVATARS = 20;
 const MAX_ASSETS = 64;
+const TRAIL_STYLES = ["vine", "dashed", "dotted", "solid", "double"];
+const THEME_ASSET_SLOTS = [
+  "logo",
+  "favicon",
+  "hero",
+  "progressBar",
+  "progressFrame",
+  "trailDecoration",
+  "answerCorrect",
+  "answerIncorrect",
+];
 const ALLOWED_TOKEN_NAMES = new Set([
   "primary",
   "primaryHover",
   "primaryAlt",
   "accent",
   "success",
+  "progressStart",
+  "progressEnd",
+  "progressNearStart",
+  "progressNearEnd",
+  "progressCompleteStart",
+  "progressCompleteEnd",
   "heading",
   "foreground",
   "onPrimary",
@@ -132,6 +149,111 @@ function validateTokens(tokens) {
       validateColor(value, name);
     }
   }
+}
+
+function validateTrail(trail) {
+  if (!trail || typeof trail !== "object" || Array.isArray(trail))
+    fail("Theme trail must be an object.");
+  for (const [name, value] of Object.entries(trail)) {
+    if (name === "style") {
+      if (!TRAIL_STYLES.includes(value))
+        fail(`Theme trail style must be one of: ${TRAIL_STYLES.join(", ")}.`);
+    } else if (name === "decorationCount") {
+      if (!Number.isInteger(value) || value < 0 || value > 3)
+        fail("Theme trail decorationCount must be an integer from 0 to 3.");
+    } else {
+      fail(`Unrecognized theme trail setting: ${name}.`);
+    }
+  }
+}
+
+const MAX_APP_NAME_LENGTH = 60;
+
+const LANDING_LIST_LIMITS = { benefits: 6, steps: 6, faq: 10 };
+const LANDING_ITEM_FIELDS = {
+  benefits: { icon: 8, title: 80, body: 600 },
+  steps: { title: 80, body: 600 },
+  faq: { question: 200, answer: 1200 },
+};
+
+function landingText(value, label, maxLength, { optional = false } = {}) {
+  if (value === undefined && optional) return undefined;
+  if (typeof value !== "string") fail(`Landing page ${label} must be text.`);
+  const text = value.trim();
+  if ((!text && !optional) || text.length > maxLength)
+    fail(`Landing page ${label} must be between 1 and ${maxLength} characters.`);
+  // eslint-disable-next-line no-control-regex
+  if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(text))
+    fail(`Landing page ${label} cannot contain control characters.`);
+  return text || undefined;
+}
+
+function normalizeLanding(landing) {
+  if (!landing || typeof landing !== "object" || Array.isArray(landing))
+    fail("Landing page settings must be an object.");
+  const normalized = {};
+  for (const key of Object.keys(landing)) {
+    if (!["hero", ...Object.keys(LANDING_LIST_LIMITS)].includes(key))
+      fail(`Unrecognized landing page section: ${key}.`);
+  }
+  if (landing.hero !== undefined) {
+    const hero = landing.hero;
+    if (!hero || typeof hero !== "object" || Array.isArray(hero))
+      fail("Landing page hero must be an object.");
+    for (const key of Object.keys(hero)) {
+      if (!["heading", "body", "showAvatars"].includes(key))
+        fail(`Unrecognized landing page hero field: ${key}.`);
+    }
+    if (hero.showAvatars !== undefined && typeof hero.showAvatars !== "boolean")
+      fail("Landing page hero showAvatars must be true or false.");
+    normalized.hero = {
+      heading: landingText(hero.heading, "hero heading", 120),
+      body: landingText(hero.body, "hero text", 500),
+      ...(hero.showAvatars !== undefined ? { showAvatars: hero.showAvatars } : {}),
+    };
+  }
+  for (const [section, limit] of Object.entries(LANDING_LIST_LIMITS)) {
+    if (landing[section] === undefined) continue;
+    const value = landing[section];
+    if (!value || typeof value !== "object" || Array.isArray(value))
+      fail(`Landing page ${section} must be an object.`);
+    for (const key of Object.keys(value)) {
+      if (!["heading", "items"].includes(key))
+        fail(`Unrecognized landing page ${section} field: ${key}.`);
+    }
+    if (!Array.isArray(value.items) || value.items.length > limit)
+      fail(`Landing page ${section} needs a list of at most ${limit} items.`);
+    const fields = LANDING_ITEM_FIELDS[section];
+    normalized[section] = {
+      heading: landingText(value.heading, `${section} heading`, 120),
+      items: value.items.map((item, index) => {
+        if (!item || typeof item !== "object" || Array.isArray(item))
+          fail(`Landing page ${section} item ${index + 1} must be an object.`);
+        for (const key of Object.keys(item)) {
+          if (!fields[key]) fail(`Unrecognized landing page ${section} item field: ${key}.`);
+        }
+        return Object.fromEntries(
+          Object.entries(fields)
+            .map(([field, max]) => [
+              field,
+              landingText(item[field], `${section} ${field}`, max, { optional: field === "icon" }),
+            ])
+            .filter(([, text]) => text !== undefined),
+        );
+      }),
+    };
+  }
+  return normalized;
+}
+
+function normalizeAppName(value) {
+  if (typeof value !== "string") fail("App name must be text.");
+  const name = value.trim().replace(/\s+/g, " ");
+  if (!name || name.length > MAX_APP_NAME_LENGTH)
+    fail(`App name must be between 1 and ${MAX_APP_NAME_LENGTH} characters.`);
+  // eslint-disable-next-line no-control-regex
+  if (/[\u0000-\u001f\u007f]/.test(name)) fail("App name cannot contain control characters.");
+  return name;
 }
 
 function decodePackageAsset(asset, keys) {
@@ -350,6 +472,13 @@ function validateOpenQuizPackage(input) {
     if (!pkg.theme || typeof pkg.theme !== "object" || Array.isArray(pkg.theme))
       fail("theme must be an object.");
     if (pkg.theme.tokens !== undefined) validateTokens(pkg.theme.tokens);
+    if (pkg.theme.trail !== undefined) validateTrail(pkg.theme.trail);
+    if (pkg.theme.appName !== undefined) pkg.theme.appName = normalizeAppName(pkg.theme.appName);
+    if (pkg.theme.landing !== undefined) pkg.theme.landing = normalizeLanding(pkg.theme.landing);
+    for (const key of Object.keys(pkg.theme)) {
+      if (!["tokens", "assets", "trail", "appName", "landing"].includes(key))
+        fail(`Unrecognized theme section: ${key}.`);
+    }
   }
   const assets = pkg.assets ?? [];
   if (!Array.isArray(assets)) fail("assets must be an array.");
@@ -375,8 +504,7 @@ function validateOpenQuizPackage(input) {
     if (slot === "avatars") continue;
     if (assetKey !== null && !assetKeys.has(assetKey))
       fail(`Theme asset ${slot} references an unknown package asset.`);
-    if (!["logo", "favicon", "hero", "progressBar"].includes(slot))
-      fail(`Unrecognized theme asset slot: ${slot}.`);
+    if (!THEME_ASSET_SLOTS.includes(slot)) fail(`Unrecognized theme asset slot: ${slot}.`);
   }
   const contentCounts = hasContent
     ? inspectModules(pkg.content?.modules)
@@ -414,10 +542,15 @@ function validateOpenQuizPackage(input) {
 }
 
 module.exports = {
+  MAX_APP_NAME_LENGTH,
   MAX_ASSET_BYTES,
   MAX_ASSETS,
   MAX_PACKAGE_BYTES,
   MAX_TOTAL_ASSET_BYTES,
   PACKAGE_SCHEMA_VERSION,
+  THEME_ASSET_SLOTS,
+  TRAIL_STYLES,
+  normalizeAppName,
+  normalizeLanding,
   validateOpenQuizPackage,
 };

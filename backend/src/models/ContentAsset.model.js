@@ -25,6 +25,8 @@ const contentAssetSchema = new mongoose.Schema(
         "theme-favicon",
         "theme-hero",
         "theme-progress",
+        "theme-trail",
+        "theme-feedback",
         "package-content",
       ],
       default: "avatar",
@@ -37,8 +39,11 @@ const contentAssetSchema = new mongoose.Schema(
     uploaded_by: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: function () {
+        return !this.systemProvided;
+      },
     },
+    systemProvided: { type: Boolean, default: false },
     source_package_id: {
       type: String,
       default: null,

@@ -1,8 +1,8 @@
-import { APP_NAME } from "../../app/router/routes";
+import { useAppName } from "../../app/instanceAssets";
 
 const STEP_CONTENT = {
   0: {
-    title: `Welcome to ${APP_NAME}!`,
+    title: "Welcome to {appName}!",
     text: "Your email has been successfully verified! This is your dashboard where you can see your achievements.Let's kick things off with a quick tour. Click 'Next Step' to hop straight over to your profile manager layout.",
   },
   1: {
@@ -28,7 +28,11 @@ export default function OnboardingOverlay({
   onStart,
   onSkip,
 }) {
-  const tourContent = STEP_CONTENT[currentStep] || {};
+  const appName = useAppName();
+  const stepContent = STEP_CONTENT[currentStep];
+  const tourContent = stepContent
+    ? { ...stepContent, title: stepContent.title.replace("{appName}", appName) }
+    : {};
   //render floating step popup if step is active and matches the current route
   const showTourPopup = currentStep !== null && activePage === pageName && !hasCompleted;
 

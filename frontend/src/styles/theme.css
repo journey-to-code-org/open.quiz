@@ -4,6 +4,12 @@
   --color-primary-hover: var(--instance-primary-hover, #244a7d);
   --color-primary-alt: var(--instance-primary-alt, #e8b34c);
   --color-accent: var(--instance-accent, #d8795f);
+  --color-progress-start: var(--instance-progress-start, #ffbf1f);
+  --color-progress-end: var(--instance-progress-end, #ffd254);
+  --color-progress-near-start: var(--instance-progress-near-start, #ffc618);
+  --color-progress-near-end: var(--instance-progress-near-end, #ffdd4f);
+  --color-progress-complete-start: var(--instance-progress-complete-start, #ea6fee);
+  --color-progress-complete-end: var(--instance-progress-complete-end, #c989f7);
   --color-circle-completed: #eac66e;
   --color-circle-current: #f1ab2d;
   --color-circle-disabled: #eac66e;

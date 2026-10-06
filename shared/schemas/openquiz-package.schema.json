@@ -36,6 +36,12 @@
             "primaryAlt": { "$ref": "#/$defs/color" },
             "accent": { "$ref": "#/$defs/color" },
             "success": { "$ref": "#/$defs/color" },
+            "progressStart": { "$ref": "#/$defs/color" },
+            "progressEnd": { "$ref": "#/$defs/color" },
+            "progressNearStart": { "$ref": "#/$defs/color" },
+            "progressNearEnd": { "$ref": "#/$defs/color" },
+            "progressCompleteStart": { "$ref": "#/$defs/color" },
+            "progressCompleteEnd": { "$ref": "#/$defs/color" },
             "heading": { "$ref": "#/$defs/color" },
             "foreground": { "$ref": "#/$defs/color" },
             "onPrimary": { "$ref": "#/$defs/color" },
@@ -64,15 +70,136 @@
           },
           "additionalProperties": false
         },
+        "trail": {
+          "type": "object",
+          "description": "Learning path connectors between lesson nodes. vine is Sprout's leafy trail; dashed is the open.quiz default. Line color comes from the learningPathLine token.",
+          "properties": {
+            "style": {
+              "enum": ["vine", "dashed", "dotted", "solid", "double"]
+            },
+            "decorationCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3,
+              "description": "Decorations drawn along each connector: built-in leaves for vine, or the trailDecoration image when supplied."
+            }
+          },
+          "additionalProperties": false
+        },
+        "appName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Site name applied on activation (browser title, header, footer, alt text, manifest)."
+        },
+        "landing": {
+          "type": "object",
+          "description": "Plain-text landing page copy applied on activation. Omitted sections use defaults; an empty items list hides a section.",
+          "properties": {
+            "hero": {
+              "type": "object",
+              "properties": {
+                "heading": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "body": { "type": "string", "minLength": 1, "maxLength": 500 },
+                "showAvatars": { "type": "boolean" }
+              },
+              "required": ["heading", "body"],
+              "additionalProperties": false
+            },
+            "benefits": {
+              "$ref": "#/$defs/landingList",
+              "properties": {
+                "items": {
+                  "maxItems": 6,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "icon": { "type": "string", "maxLength": 8 },
+                      "title": { "type": "string", "maxLength": 80 },
+                      "body": { "type": "string", "maxLength": 600 }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            },
+            "steps": {
+              "$ref": "#/$defs/landingList",
+              "properties": {
+                "items": {
+                  "maxItems": 6,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": { "type": "string", "maxLength": 80 },
+                      "body": { "type": "string", "maxLength": 600 }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            },
+            "faq": {
+              "$ref": "#/$defs/landingList",
+              "properties": {
+                "items": {
+                  "maxItems": 10,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "question": { "type": "string", "maxLength": 200 },
+                      "answer": { "type": "string", "maxLength": 1200 }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
         "assets": {
           "type": "object",
           "properties": {
-            "logo": { "$ref": "#/$defs/assetKeyOrNull" },
-            "favicon": { "$ref": "#/$defs/assetKeyOrNull" },
-            "hero": { "$ref": "#/$defs/assetKeyOrNull" },
-            "progressBar": { "$ref": "#/$defs/assetKeyOrNull" },
+            "logo": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Header wordmark. Recommend transparent PNG/WebP, 512x216, displayed at 112-144 px wide without cropping."
+            },
+            "favicon": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Browser icon. Recommend a square 64x64 or 128x128 image."
+            },
+            "hero": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Homepage illustration. Recommend 1200x800 with the subject centered; not a lesson character."
+            },
+            "progressBar": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Moving illustrated progress marker, not the full bar. Recommend a transparent square PNG/WebP at 256x256."
+            },
+            "progressFrame": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Optional progress-bar outline. Recommend transparent PNG/WebP, 900x147 (6.1:1), with a transparent center so the animated gradient shows through. Null uses the built-in outline."
+            },
+            "trailDecoration": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Optional learning path decoration repeated along each connector (for example a leaf, footprint, or star). Recommend a transparent square PNG/WebP at 128x128, drawn at about 28 CSS px and rotated to follow the trail."
+            },
+            "answerCorrect": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Mark shown beside a correctly answered quiz choice. Recommend a transparent square PNG/WebP at 128x128, drawn at 40-48 CSS px. Null uses the built-in check badge."
+            },
+            "answerIncorrect": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Mark shown beside an incorrectly answered quiz choice. Recommend a transparent square PNG/WebP at 128x128, drawn at 40-48 CSS px. Null uses the built-in cross badge."
+            },
             "avatars": {
               "type": "array",
+              "description": "Lesson/quiz character artwork, keyed by content characterId. Recommend transparent square PNG/WebP at 352x352 or larger. The reserved key guide supplies the default lesson guide. Images are contained, not cropped.",
               "maxItems": 20,
               "items": {
                 "type": "object",
@@ -130,8 +257,16 @@
       "additionalProperties": true
     }
   },
-  "oneOf": [{ "required": ["theme"] }, { "required": ["content"] }],
+  "anyOf": [{ "required": ["theme"] }, { "required": ["content"] }],
   "$defs": {
+    "landingList": {
+      "type": "object",
+      "properties": {
+        "heading": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "items": { "type": "array" }
+      },
+      "required": ["heading", "items"]
+    },
     "color": {
       "type": "string",
       "pattern": "^#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?$"

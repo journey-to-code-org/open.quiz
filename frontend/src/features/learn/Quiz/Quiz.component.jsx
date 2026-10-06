@@ -1,6 +1,7 @@
 import { useId } from "react";
 import Card from "../../../shared/Card/Card.component";
 import LessonGuideCharacter from "../LessonGuideCharacter/LessonGuideCharacter.component";
+import AnswerMark from "./AnswerMark/AnswerMark.component";
 import ExpandableWhy from "./ExpandableWhy/ExpandableWhy.component";
 import { getEncouragingPhrase, getEncouragingWord } from "./encouragingCopy";
 
@@ -57,20 +58,15 @@ function QuizComponent({
           const isCorrectChoice = reviewAnswer?.correctChoiceIds?.includes(choice.id);
           const variant =
             reviewAnswer && isSelected ? (reviewAnswer.isCorrect ? "success" : "danger") : "choice";
-          const selectedIcon = reviewAnswer
-            ? isSelected && isCorrectChoice
-              ? rightAnswerIcon
-              : isSelected
-                ? wrongAnswerIcon
-                : null
-            : null;
+          const selectedMark =
+            reviewAnswer && isSelected ? (isCorrectChoice ? "correct" : "incorrect") : null;
 
           return (
             <div key={choice.id} className="relative">
-              {selectedIcon ? (
-                <img
-                  src={selectedIcon}
-                  alt={reviewAnswer.isCorrect ? "Correct answer" : "Incorrect answer"}
+              {selectedMark ? (
+                <AnswerMark
+                  correct={selectedMark === "correct"}
+                  imageSrc={selectedMark === "correct" ? rightAnswerIcon : wrongAnswerIcon}
                   className="pointer-events-none absolute -left-6 top-1/2 h-10 w-10 -translate-y-1/2 sm:-left-7 sm:h-12 sm:w-12"
                 />
               ) : null}

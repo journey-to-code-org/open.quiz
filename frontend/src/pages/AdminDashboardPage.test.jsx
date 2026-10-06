@@ -7,6 +7,7 @@ import {
   approveDeleteAccount,
   getAdminAvatarAssets,
   getAdminPackages,
+  getAdminSiteSettings,
   getAdminModules,
   getAdminUsers,
   getPendingDeleteAccount,
@@ -30,6 +31,8 @@ vi.mock("../services/api", () => ({
   downloadAdminPackage: vi.fn(),
   getAdminAvatarAssets: vi.fn(),
   getAdminPackages: vi.fn(),
+  getAdminSiteSettings: vi.fn(),
+  updateAdminSiteSettings: vi.fn(),
   inspectAdminPackage: vi.fn(),
   getAdminModules: vi.fn(),
   getAdminUsers: vi.fn(),
@@ -69,6 +72,7 @@ describe("AdminDashboardPage", () => {
     });
     getAdminModules.mockResolvedValue({ modules: [] });
     getAdminPackages.mockResolvedValue({ packages: [], activePackageId: null });
+    getAdminSiteSettings.mockResolvedValue({ appName: null, landing: null });
     getAdminAvatarAssets.mockResolvedValue({ assets: [] });
     getPendingDeleteAccount.mockResolvedValue({
       users: [

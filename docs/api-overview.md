@@ -37,6 +37,22 @@ PATCH  /api/v1/lessons/progress
 PATCH  /api/v1/lessons/progress/restart
 ```
 
+## Theme And Site Settings
+
+```text
+GET    /api/v1/theme                         public: { theme, appName, landing }
+GET    /api/v1/admin/site-settings           { appName, landing }
+PATCH  /api/v1/admin/site-settings           partial: { appName?, landing? }; null resets
+PATCH  /api/v1/admin/packages/:id/activate   { includeContent?, applySiteContent? }
+GET    /api/v1/admin/packages/:id/export?mode=theme|content|all&includeSite=true
+GET    /api/v1/admin/site-export
+```
+
+`applySiteContent` defaults to `true`: activating a theme that carries `appName` or
+`landing` copies them into the site settings. `includeSite=true` embeds the site's current
+name and landing page in an exported theme. Limits are listed in
+[themes.md](themes.md#app-name-and-landing-page).
+
 ## OAuth Browser Routes
 
 ```text
@@ -98,6 +114,8 @@ weekly XP, and rank; email addresses are never included.
 
 ## Lesson Content
 
-Lesson modules are loaded from the instance database. An empty database has no implicit curriculum;
-an administrator must create or import a module before learners can access lessons. Example
-curricula are kept under `shared/content/examples` and are not loaded automatically.
+Lesson modules are loaded from the instance database. Server startup installs the bundled
+`openQuizIntroduction` instructional module if it is missing, so a fresh installation has
+orientation lessons available immediately. Existing modules are not overwritten. Administrators
+can create or import additional modules; other example curricula under `shared/content/examples`
+are opt-in.

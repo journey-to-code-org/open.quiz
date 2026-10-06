@@ -5,7 +5,16 @@ const LessonModule = require("../models/LessonModule.model");
 const OpenQuizPackage = require("../models/OpenQuizPackage.model");
 const ThemeConfiguration = require("../models/ThemeConfiguration.model");
 const { clearModuleCache } = require("../utils/content");
-const { validateOpenQuizPackage } = require("../services/openQuizPackage");
+const {
+  THEME_ASSET_SLOTS,
+  normalizeAppName,
+  normalizeLanding,
+  validateOpenQuizPackage,
+} = require("../services/openQuizPackage");
+const {
+  bundledContentSummary,
+  installBundledContent,
+} = require("../services/bundledThemes.service");
 
 const assetUrl = (assetId) => `/api/v1/assets/${encodeURIComponent(assetId)}`;
 const deepCopy = (value) => JSON.parse(JSON.stringify(value));
@@ -52,7 +61,7 @@ function toPublicTheme(installedPackage) {
   );
   const themeAssets = installedPackage.theme.assets || {};
   const assets = {};
-  for (const slot of ["logo", "favicon", "hero", "progressBar"]) {
+  for (const slot of THEME_ASSET_SLOTS) {
     assets[slot] = themeAssets[slot] ? assetUrls.get(themeAssets[slot]) || null : null;
   }
   assets.avatars = Object.fromEntries(
@@ -67,6 +76,7 @@ function toPublicTheme(installedPackage) {
       name: installedPackage.name,
       version: installedPackage.version,
       tokens: installedPackage.theme.tokens || {},
+      trail: installedPackage.theme.trail || {},
       assets,
     },
   };
@@ -75,12 +85,57 @@ function toPublicTheme(installedPackage) {
 exports.getPublicTheme = async (_req, res, next) => {
   try {
     const active = await ThemeConfiguration.findOne({ key: "active" }).lean();
-    if (!active?.activePackageId) return res.status(StatusCodes.OK).json({ theme: null });
+    const site = { appName: active?.appName || null, landing: active?.landing || null };
+    if (!active?.activePackageId) return res.status(StatusCodes.OK).json({ theme: null, ...site });
     const installedPackage = await OpenQuizPackage.findOne({
       packageId: active.activePackageId,
     }).lean();
-    return res.status(StatusCodes.OK).json(toPublicTheme(installedPackage));
+    return res.status(StatusCodes.OK).json({ ...toPublicTheme(installedPackage), ...site });
   } catch (error) {
+    return next(error);
+  }
+};
+
+exports.getSiteSettings = async (_req, res, next) => {
+  try {
+    const active = await ThemeConfiguration.findOne({ key: "active" }).lean();
+    return res
+      .status(StatusCodes.OK)
+      .json({ appName: active?.appName || null, landing: active?.landing || null });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+exports.updateSiteSettings = async (req, res, next) => {
+  try {
+    const update = {};
+    if (req.body && Object.hasOwn(req.body, "appName")) {
+      const requested = req.body.appName;
+      update.appName =
+        requested === null || (typeof requested === "string" && !requested.trim())
+          ? null
+          : normalizeAppName(requested);
+    }
+    if (req.body && Object.hasOwn(req.body, "landing")) {
+      update.landing = req.body.landing === null ? null : normalizeLanding(req.body.landing);
+    }
+    if (!Object.keys(update).length)
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Provide an app name or landing page settings to update." });
+    const configuration = await ThemeConfiguration.findOneAndUpdate(
+      { key: "active" },
+      { $set: update },
+      { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
+    ).lean();
+    return res.status(StatusCodes.OK).json({
+      appName: configuration.appName || null,
+      landing: configuration.landing || null,
+    });
+  } catch (error) {
+    if (error.status === StatusCodes.BAD_REQUEST)
+      return res.status(error.status).json({ message: error.message });
     return next(error);
   }
 };
@@ -90,7 +145,7 @@ exports.listPackages = async (_req, res, next) => {
     const [packages, active] = await Promise.all([
       OpenQuizPackage.find({})
         .select(
-          "packageId name version schemaVersion description author manifest installedSections importedModuleIds theme assets createdAt",
+          "packageId name version schemaVersion description author manifest installedSections importedModuleIds theme assets systemProvided createdAt",
         )
         .sort({ name: 1 })
         .lean(),
@@ -101,7 +156,14 @@ exports.listPackages = async (_req, res, next) => {
       packages: packages.map((item) => ({
         ...item,
         isActive: item.packageId === active?.activePackageId,
-        themePreview: toPublicTheme(item).theme,
+        themePreview: item.theme
+          ? {
+              ...toPublicTheme(item).theme,
+              appName: item.theme.appName || null,
+              landing: item.theme.landing || null,
+            }
+          : null,
+        bundledContent: bundledContentSummary(item),
       })),
     });
   } catch (error) {
@@ -202,6 +264,10 @@ exports.importPackage = async (req, res, next) => {
         favicon: "theme-favicon",
         hero: "theme-hero",
         progressBar: "theme-progress",
+        progressFrame: "theme-progress",
+        trailDecoration: "theme-trail",
+        answerCorrect: "theme-feedback",
+        answerIncorrect: "theme-feedback",
       };
       const stored = await ContentAsset.create({
         asset_id: randomUUID(),
@@ -278,13 +344,42 @@ exports.activatePackage = async (req, res, next) => {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "Installed theme package not found." });
-    await ThemeConfiguration.findOneAndUpdate(
+    const content =
+      req.body?.includeContent === true
+        ? await installBundledContent(installedPackage.packageId)
+        : null;
+    const update = { activePackageId: installedPackage.packageId };
+    if (req.body?.applySiteContent !== false) {
+      if (installedPackage.theme.appName) update.appName = installedPackage.theme.appName;
+      if (installedPackage.theme.landing) update.landing = installedPackage.theme.landing;
+    }
+    const configuration = await ThemeConfiguration.findOneAndUpdate(
       { key: "active" },
-      { $set: { activePackageId: installedPackage.packageId } },
+      { $set: update },
       { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
     );
-    return res.status(StatusCodes.OK).json({ activePackageId: installedPackage.packageId });
+    return res.status(StatusCodes.OK).json({
+      activePackageId: installedPackage.packageId,
+      appName: configuration?.appName || null,
+      landingApplied: Boolean(update.landing),
+      ...(content || {}),
+    });
   } catch (error) {
+    if (error.status === StatusCodes.BAD_REQUEST)
+      return res.status(error.status).json({ message: error.message });
+    return next(error);
+  }
+};
+
+exports.installPackageContent = async (req, res, next) => {
+  try {
+    if (!(await OpenQuizPackage.exists({ packageId: req.params.packageId })))
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Installed package not found." });
+    const result = await installBundledContent(req.params.packageId);
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    if (error.status === StatusCodes.BAD_REQUEST)
+      return res.status(error.status).json({ message: error.message });
     return next(error);
   }
 };
@@ -311,6 +406,81 @@ function packageAssetData(asset, storedAssets) {
     mimeType: databaseAsset.mime_type,
     data: `data:${databaseAsset.mime_type};base64,${databaseAsset.data.toString("base64")}`,
   };
+}
+
+const IMAGE_PATH_PATTERN = /^\/api\/v1\/assets\/([^/?#]+)$/;
+
+async function toPortableModules(modules, assetsById, { strict }) {
+  const additionalAssets = new Map();
+  const portableModules = [];
+  const unportable = (character, message) => {
+    if (strict) throw new Error(`Character ${character.characterId || ""} ${message}`);
+    delete character.imagePath;
+  };
+  for (const module of modules) {
+    const portableModule = deepCopy(module);
+    delete portableModule._id;
+    delete portableModule.__v;
+    for (const character of portableModule.characters || []) {
+      if (!character.imagePath) continue;
+      const match = IMAGE_PATH_PATTERN.exec(character.imagePath);
+      if (!match) {
+        unportable(character, "has an image path that cannot be exported portably.");
+        continue;
+      }
+      const assetId = decodeURIComponent(match[1]);
+      let reference = assetsById.get(assetId);
+      if (!reference) {
+        if (!(await ContentAsset.exists({ asset_id: assetId }))) {
+          unportable(character, "refers to an image that no longer exists.");
+          continue;
+        }
+        const key = `content.avatar.${module.id}.${character.characterId || "character"}`
+          .replace(/[^a-zA-Z0-9._-]/g, "-")
+          .slice(0, 80);
+        reference = { key, assetId };
+        additionalAssets.set(key, reference);
+        assetsById.set(assetId, reference);
+      }
+      character.assetKey = reference.key;
+      delete character.imagePath;
+    }
+    portableModules.push(portableModule);
+  }
+  return { modules: portableModules, additionalAssets };
+}
+
+async function sendPortablePackage(res, exportPackage, references, filename) {
+  const usedKeys = new Set();
+  for (const [slot, key] of Object.entries(exportPackage.theme?.assets || {})) {
+    if (slot === "avatars") for (const avatar of key || []) usedKeys.add(avatar.assetKey);
+    else if (key) usedKeys.add(key);
+  }
+  const visit = (value) => {
+    if (!value || typeof value !== "object") return;
+    if (value.assetKey) usedKeys.add(value.assetKey);
+    for (const nested of Object.values(value)) visit(nested);
+  };
+  visit(exportPackage.content);
+  const seenKeys = new Set();
+  const assetReferences = references.filter((asset) => {
+    if (!usedKeys.has(asset.key) || seenKeys.has(asset.key)) return false;
+    seenKeys.add(asset.key);
+    return true;
+  });
+  const storedAssets = new Map(
+    (
+      await ContentAsset.find({
+        asset_id: { $in: assetReferences.map((asset) => asset.assetId) },
+      }).lean()
+    ).map((asset) => [asset.asset_id, asset]),
+  );
+  exportPackage.assets = assetReferences.map((asset) => packageAssetData(asset, storedAssets));
+  const portable = { ...validateOpenQuizPackage(exportPackage) };
+  delete portable._assetBuffers;
+  res.set("Content-Type", "application/json; charset=utf-8");
+  res.set("Content-Disposition", `attachment; filename="${filename}"`);
+  return res.status(StatusCodes.OK).send(JSON.stringify(portable, null, 2));
 }
 
 exports.exportPackage = async (req, res, next) => {
@@ -340,8 +510,15 @@ exports.exportPackage = async (req, res, next) => {
       },
       assets: [],
     };
-    if (includeTheme) exportPackage.theme = deepCopy(installedPackage.theme);
-    const additionalAssets = new Map();
+    if (includeTheme) {
+      exportPackage.theme = deepCopy(installedPackage.theme);
+      if (req.query.includeSite === "true") {
+        const site = await ThemeConfiguration.findOne({ key: "active" }).lean();
+        if (site?.appName) exportPackage.theme.appName = site.appName;
+        if (site?.landing) exportPackage.theme.landing = deepCopy(site.landing);
+      }
+    }
+    let additionalAssets = new Map();
     if (includeContent) {
       const requestedIds =
         req.query.moduleIds !== undefined
@@ -353,82 +530,73 @@ exports.exportPackage = async (req, res, next) => {
         .select("-__v")
         .lean();
       const assetsById = new Map(installedPackage.assets.map((asset) => [asset.assetId, asset]));
-      for (const module of modules) {
-        for (const character of module.characters || []) {
-          if (!character.imagePath) continue;
-          const match = /^\/api\/v1\/assets\/([^/?#]+)$/.exec(character.imagePath);
-          if (!match)
-            throw new Error(
-              `Character ${character.characterId || ""} has an image path that cannot be exported portably.`,
-            );
-          const assetId = decodeURIComponent(match[1]);
-          if (assetsById.has(assetId)) continue;
-          const assetExists = await ContentAsset.exists({ asset_id: assetId });
-          if (!assetExists)
-            throw new Error(
-              `Character ${character.characterId || ""} refers to an image that no longer exists.`,
-            );
-          const assetKey = `content.avatar.${module.id}.${character.characterId || "character"}`
-            .replace(/[^a-zA-Z0-9._-]/g, "-")
-            .slice(0, 80);
-          const portableAsset = { key: assetKey, assetId };
-          additionalAssets.set(assetKey, portableAsset);
-          assetsById.set(assetId, portableAsset);
-        }
-      }
-      exportPackage.content = {
-        modules: modules.map((module) => {
-          const portableModule = deepCopy(module);
-          delete portableModule._id;
-          for (const character of portableModule.characters || []) {
-            if (!character.imagePath) continue;
-            const match = /^\/api\/v1\/assets\/([^/?#]+)$/.exec(character.imagePath);
-            const assetId = decodeURIComponent(match[1]);
-            const saved = assetsById.get(assetId);
-            character.assetKey = saved.key;
-            delete character.imagePath;
-          }
-          return portableModule;
-        }),
-      };
+      const portable = await toPortableModules(modules, assetsById, { strict: true });
+      additionalAssets = portable.additionalAssets;
+      exportPackage.content = { modules: portable.modules };
     }
-    const usedKeys = new Set();
-    if (includeTheme) {
-      for (const [slot, key] of Object.entries(exportPackage.theme.assets || {})) {
-        if (slot === "avatars") for (const avatar of key || []) usedKeys.add(avatar.assetKey);
-        else if (key) usedKeys.add(key);
-      }
-    }
-    if (includeContent) {
-      const visit = (value) => {
-        if (!value || typeof value !== "object") return;
-        if (value.assetKey) usedKeys.add(value.assetKey);
-        for (const nested of Object.values(value)) visit(nested);
-      };
-      visit(exportPackage.content);
-    }
-    const assetReferences = [
-      ...installedPackage.assets.filter((asset) => usedKeys.has(asset.key)),
-      ...[...additionalAssets.values()].filter((asset) => usedKeys.has(asset.key)),
-    ];
-    const storedAssets = new Map(
-      (
-        await ContentAsset.find({
-          asset_id: { $in: assetReferences.map((asset) => asset.assetId) },
-        }).lean()
-      ).map((asset) => [asset.asset_id, asset]),
+    return await sendPortablePackage(
+      res,
+      exportPackage,
+      [...installedPackage.assets, ...additionalAssets.values()],
+      `${installedPackage.packageId}.openquiz.json`,
     );
-    exportPackage.assets = assetReferences.map((asset) => packageAssetData(asset, storedAssets));
-    const validated = validateOpenQuizPackage(exportPackage);
-    const portable = { ...validated };
-    delete portable._assetBuffers;
-    res.set("Content-Type", "application/json; charset=utf-8");
-    res.set(
-      "Content-Disposition",
-      `attachment; filename="${installedPackage.packageId}.openquiz.json"`,
-    );
-    return res.status(StatusCodes.OK).send(JSON.stringify(portable, null, 2));
   } catch (error) {
+    return next(error);
+  }
+};
+
+exports.exportSite = async (_req, res, next) => {
+  try {
+    const active = await ThemeConfiguration.findOne({ key: "active" }).lean();
+    const themePackage = active?.activePackageId
+      ? await OpenQuizPackage.findOne({ packageId: active.activePackageId }).lean()
+      : null;
+    const modules = await LessonModule.find({}).select("-__v").sort({ id: 1 }).lean();
+    const hasSiteBranding = Boolean(active?.appName || active?.landing);
+    if (!themePackage?.theme && !modules.length && !hasSiteBranding)
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: "There is no active theme or lesson content to export yet.",
+      });
+    const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "");
+    const siteName = active?.appName || "open.quiz";
+    const exportPackage = {
+      schemaVersion: 1,
+      package: {
+        id: `openquiz-site-${stamp}`,
+        name: `${siteName} site export ${new Date().toISOString().slice(0, 10)}`,
+        version: "1.0.0",
+        description: themePackage?.theme
+          ? `Active theme (${themePackage.name}) and all lesson modules.`
+          : "All lesson modules.",
+        homepage: null,
+      },
+      assets: [],
+    };
+    const themeAssets = themePackage?.theme ? themePackage.assets || [] : [];
+    if (themePackage?.theme) {
+      exportPackage.theme = deepCopy(themePackage.theme);
+      if (active?.appName) exportPackage.theme.appName = active.appName;
+      else delete exportPackage.theme.appName;
+      if (active?.landing) exportPackage.theme.landing = deepCopy(active.landing);
+      else delete exportPackage.theme.landing;
+    } else if (hasSiteBranding) {
+      exportPackage.theme = {
+        ...(active.appName ? { appName: active.appName } : {}),
+        ...(active.landing ? { landing: deepCopy(active.landing) } : {}),
+      };
+    }
+    const assetsById = new Map(themeAssets.map((asset) => [asset.assetId, asset]));
+    const portable = await toPortableModules(modules, assetsById, { strict: false });
+    if (portable.modules.length) exportPackage.content = { modules: portable.modules };
+    return await sendPortablePackage(
+      res,
+      exportPackage,
+      [...themeAssets, ...portable.additionalAssets.values()],
+      `${exportPackage.package.id}.openquiz.json`,
+    );
+  } catch (error) {
+    if (error.status === StatusCodes.BAD_REQUEST)
+      return res.status(error.status).json({ message: error.message });
     return next(error);
   }
 };

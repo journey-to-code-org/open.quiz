@@ -1,6 +1,6 @@
 {
   "name": "open.quiz",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "private": true,
   "description": "Open Quiz is a full-stack quiz platform featuring guided learning paths, interactive quizzes, and progress tracking, built with React, Node.js, and Express.",
   "keywords": [

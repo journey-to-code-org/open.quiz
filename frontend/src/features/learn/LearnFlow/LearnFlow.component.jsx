@@ -24,24 +24,37 @@ import QuizReview from "../Quiz/QuizReview/QuizReview.component";
 import Button from "../../../shared/Button/Button.component";
 import Card from "../../../shared/Card/Card.component";
 import ProgressBar from "../../../shared/ProgressBar/ProgressBar.component";
+import { useInstanceAssets } from "../../../app/instanceAssets";
 import LessonComponent from "../Lesson/Lesson.component";
 import LessonControlPanel from "./LessonControlPanel/LessonControlPanel.component";
 
-import rightAnswerIcon from "../../../assets/right_answer.svg";
-import wrongAnswerIcon from "../../../assets/wrong_answer.svg";
-
-function resolveCharacter(characterId, characterImages = {}, guideImage, characters = []) {
+function resolveCharacter(
+  characterId,
+  characterImages = {},
+  guideImage,
+  characters = [],
+  avatars = {},
+) {
   if (!characterId) {
     return {
-      image: guideImage,
-      alt: "Lesson guide",
+      image: avatars.guide?.url || guideImage,
+      alt: avatars.guide?.name || "Lesson guide",
     };
   }
 
   const character = characters.find((item) => item.characterId === characterId);
   return {
-    image: resolveAssetUrl(characterImages[characterId] ?? character?.imagePath ?? guideImage),
-    alt: character?.name ?? characterId.charAt(0).toUpperCase() + characterId.slice(1),
+    image: resolveAssetUrl(
+      avatars[characterId]?.url ??
+        characterImages[characterId] ??
+        character?.imagePath ??
+        avatars.guide?.url ??
+        guideImage,
+    ),
+    alt:
+      avatars[characterId]?.name ??
+      character?.name ??
+      characterId.charAt(0).toUpperCase() + characterId.slice(1),
   };
 }
 
@@ -70,6 +83,7 @@ export default function LearnFlow({
   isReadOnly = false,
   refreshProfile,
 }) {
+  const { avatars, answerCorrect, answerIncorrect } = useInstanceAssets();
   const { lessonSteps } = learnData;
   const selectedStepIndex = lessonSteps.findIndex((step) => step.id === selectedMicroLessonId);
   const initialStepIndex =
@@ -166,10 +180,12 @@ export default function LearnFlow({
     totalUnits === 0 ? 0 : Math.round(((isComplete ? totalUnits : currentUnit) / totalUnits) * 100);
 
   const character = resolveCharacter(
-    quiz.currentQuestion?.characterId ?? currentChunk?.characterId ?? currentStep?.characterId,
+    (phase === "quiz" ? quiz.currentQuestion?.characterId : currentChunk?.characterId) ??
+      currentStep?.characterId,
     characterImages,
     guideImage,
     learnData.module?.characters,
+    avatars,
   );
 
   const isFirstChunk = stepIndex === 0 && chunkIndex === 0;
@@ -362,8 +378,8 @@ export default function LearnFlow({
         <QuizReview
           attempts={completedAttempts}
           onDone={() => setIsReviewing(false)}
-          rightAnswerIcon={rightAnswerIcon}
-          wrongAnswerIcon={wrongAnswerIcon}
+          rightAnswerIcon={answerCorrect}
+          wrongAnswerIcon={answerIncorrect}
         />
       </>
     );
@@ -475,8 +491,8 @@ export default function LearnFlow({
               selectedChoiceIds={quiz.selectedChoiceIds}
               reviewAnswer={quiz.review}
               onChange={(choiceIds) => quiz.selectChoice(quiz.currentQuestion.id, choiceIds)}
-              rightAnswerIcon={rightAnswerIcon}
-              wrongAnswerIcon={wrongAnswerIcon}
+              rightAnswerIcon={answerCorrect}
+              wrongAnswerIcon={answerIncorrect}
               characterImage={character.image}
               characterAlt={character.alt}
             />

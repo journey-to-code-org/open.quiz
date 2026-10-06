@@ -23,6 +23,8 @@ describe("runtime instance theme", () => {
             tokens: { primary: "#18816a", fontBody: '"Poppins", sans-serif', unknown: "url(evil)" },
             assets: {
               logo: "/api/v1/assets/logo",
+              progressBar: "/api/v1/assets/marker",
+              progressFrame: "/api/v1/assets/frame",
               avatars: { guide: { url: "/api/v1/assets/guide" } },
             },
           },
@@ -38,6 +40,8 @@ describe("runtime instance theme", () => {
     );
     expect(document.documentElement.style.getPropertyValue("--instance-unknown")).toBe("");
     expect(getRuntimeTheme().assets.logo).toBe("/api/v1/assets/logo");
+    expect(getRuntimeTheme().assets.progressBar).toBe("/api/v1/assets/marker");
+    expect(getRuntimeTheme().assets.progressFrame).toBe("/api/v1/assets/frame");
     expect(getRuntimeTheme().assets.avatars.guide.url).toBe("/api/v1/assets/guide");
     expect(resolveRuntimeAssetUrl("/api/v1/assets/logo", "https://api.example.test")).toBe(
       "https://api.example.test/api/v1/assets/logo",

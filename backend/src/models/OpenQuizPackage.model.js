@@ -14,7 +14,14 @@ const openQuizPackageSchema = new mongoose.Schema(
     installedSections: { type: [String], default: [] },
     importedModuleIds: { type: [String], default: [] },
     manifest: { type: mongoose.Schema.Types.Mixed, required: true },
-    installedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    installedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: function () {
+        return !this.systemProvided;
+      },
+    },
+    systemProvided: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
