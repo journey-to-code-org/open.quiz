@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.2.2] - 2026-10-06
+
+### Fixed
+
+- Fixed shared-file sync pull requests between `docs` and `development` failing when the `documentation` or `changelog` labels are missing. The workflow now creates missing labels before creating or updating a pull request, preserves existing labels, and requests the required `issues: write` permission.
+
+### Changed
+
+- Documented shared-file synchronization, automatic label creation, and the required GitHub Actions permissions.
+
+---
+
 ## [1.2.1] - 2026-10-06
 
 ### Added
