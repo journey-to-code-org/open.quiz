@@ -93,6 +93,25 @@ folder and file breakdown.
 
 ## ⚙️ Setup & Installation
 
+### Deploy to Render with a Blueprint
+
+open.quiz includes a [Render Blueprint](render.yaml) for easy deployment as a single Node.js
+Web Service. No separate frontend hosting service is needed: Render installs dependencies,
+builds the Vite frontend, and starts Express, which serves both the frontend and API.
+
+1. Fork this repository if you want your own deployment and connect it to your Render account.
+2. In the Render dashboard, choose **New > Blueprint**, select the repository and branch,
+   and deploy using the included `render.yaml`.
+3. In the created service's **Environment** settings, add `MONGO_URI` and `JWT_SECRET`,
+   plus any email or OAuth credentials you use, then redeploy.
+
+The Blueprint does not provision MongoDB or prompt for these secrets. Have a production MongoDB
+database ready and allow connections from your Render service. The application cannot start
+successfully until its required environment variables are configured.
+
+See [Render deployment instructions](docs/development-setup.md#render-deployment) for details,
+manual service settings, and OAuth configuration.
+
 ### Quick Start
 
 ```bash

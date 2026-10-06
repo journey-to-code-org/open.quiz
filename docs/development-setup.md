@@ -141,9 +141,50 @@ A failed or cancelled attempt returns to the login page with a safe OAuth error 
 
 ### Render Deployment
 
-The Render Blueprint in `render.yaml` installs the backend runtime dependencies, builds the
-Vite frontend, and starts the Express server. In production, Express serves the built frontend
-and API from the same Render URL. Vite remains the local development server.
+open.quiz can be deployed easily using the included [Render Blueprint](../render.yaml). It
+creates one Node.js Web Service, installs the backend runtime dependencies and frontend build
+dependencies, builds the Vite frontend into `frontend/dist`, and starts the Express server.
+In production, Express serves the built frontend and API from the same Render URL, including
+frontend routes opened directly or refreshed in the browser. No separate frontend hosting
+service is required. Vite remains the local development server.
+
+#### Deploy using the Blueprint
+
+1. Have a production MongoDB database ready, such as a MongoDB Atlas database. Configure its
+   network access to allow connections from your Render service.
+2. Fork this repository if you want your own deployment, then connect the repository to Render.
+3. In the Render dashboard, choose **New > Blueprint** and select the repository and branch.
+4. Review and deploy the service defined in the repository-root `render.yaml`.
+5. Open the created service's **Environment** settings and add `MONGO_URI`, `JWT_SECRET`,
+   and any email or OAuth credentials you use. Save the settings and redeploy.
+6. Once the deployment succeeds, open the service URL to load the frontend and check `/health`
+   for the server health response.
+
+The current Blueprint sets `NODE_ENV=production`, but does not provision MongoDB or prompt for
+secrets. Its initial deployment cannot start successfully until you configure the required
+environment variables and MongoDB connectivity.
+
+#### Manual Web Service settings
+
+If you create a Web Service manually instead of using the Blueprint, use these same settings:
+
+| Setting | Value |
+| --- | --- |
+| Runtime | Node |
+| Root Directory | Leave blank (repository root) |
+| Node version | 24, matching `.nvmrc` |
+| Build Command | `npm ci --omit=dev --prefix backend && npm ci --include=dev --prefix frontend && npm run build` |
+| Start Command | `npm run start:backend` |
+| Health Check Path | `/health` |
+| Environment | `NODE_ENV=production`, plus the required secrets below |
+
+The frontend install explicitly includes development dependencies because Vite and its plugins
+are needed during the build. The root build and start scripts do not require installing the
+root development tooling. Express uses Render's supplied `PORT`; you do not need to set it.
+Leave `VITE_API_BASE_URL` unset for this single-service deployment so browser API requests use
+the same origin.
+
+#### Environment and OAuth
 
 Set the required backend secrets and configuration in the Render service environment, including
 `MONGO_URI`, `JWT_SECRET`, and any email or OAuth credentials. `CLIENT_URL` and `API_URL`
