@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useAuthContext } from "../context/AuthContext";
 import { ROUTES } from "../app/router/routes";
-import { APP_HERO_IMAGE_URL } from "../app/instanceAssets";
+import { useInstanceAssets } from "../app/instanceAssets";
 import { loadContentPackage } from "../contentPackages";
 import { getPublicLessonModules } from "../services/api";
 import Button from "../shared/Button/Button.component";
@@ -10,6 +10,7 @@ import Card from "../shared/Card/Card.component";
 
 export default function HomePage() {
   const { isAuthenticated } = useAuthContext();
+  const { hero: heroImageUrl } = useInstanceAssets();
   const [sampleLessonPath, setSampleLessonPath] = useState(null);
   const [lessonCharacters, setLessonCharacters] = useState([]);
 
@@ -110,10 +111,10 @@ export default function HomePage() {
             </div>
           ) : null}
         </div>
-        {APP_HERO_IMAGE_URL ? (
+        {heroImageUrl ? (
           <div className="mt-8 flex w-full justify-center lg:mt-0 lg:w-2/5">
             <img
-              src={APP_HERO_IMAGE_URL}
+              src={heroImageUrl}
               alt=""
               className="aspect-[4/3] max-h-80 w-full max-w-md object-contain"
             />

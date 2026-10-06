@@ -314,6 +314,75 @@ export const getAdminModules = () =>
 export const getAdminAvatarAssets = () =>
   apiRequest("/assets/avatars", { method: "GET", basePath: ADMIN_BASE_PATH });
 
+export const getAdminPackages = () =>
+  apiRequest("/packages", { method: "GET", basePath: ADMIN_BASE_PATH });
+
+export const importAdminPackage = ({ file, mode, csrfToken }) => {
+  const body = new FormData();
+  body.append("file", file);
+  body.append("mode", mode);
+  return apiRequest("/packages/import", {
+    method: "POST",
+    csrfToken,
+    body,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export const inspectAdminPackage = ({ file, csrfToken }) => {
+  const body = new FormData();
+  body.append("file", file);
+  return apiRequest("/packages/inspect", {
+    method: "POST",
+    csrfToken,
+    body,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export const activateAdminPackage = ({ packageId, csrfToken }) =>
+  apiRequest(`/packages/${encodeURIComponent(packageId)}/activate`, {
+    method: "PATCH",
+    csrfToken,
+    basePath: ADMIN_BASE_PATH,
+  });
+
+export const activateDefaultAdminTheme = (csrfToken) =>
+  apiRequest("/packages/default/activate", {
+    method: "POST",
+    csrfToken,
+    basePath: ADMIN_BASE_PATH,
+  });
+
+export const deleteAdminPackage = ({ packageId, csrfToken }) =>
+  apiRequest(`/packages/${encodeURIComponent(packageId)}`, {
+    method: "DELETE",
+    csrfToken,
+    basePath: ADMIN_BASE_PATH,
+  });
+
+export async function downloadAdminPackage({ packageId, mode, moduleIds = [] }) {
+  const query = new URLSearchParams({ mode });
+  if (mode !== "theme") query.set("moduleIds", moduleIds.join(","));
+  const response = await fetch(
+    `${ADMIN_BASE_PATH}/packages/${encodeURIComponent(packageId)}/export?${query}`,
+    { credentials: "include" },
+  );
+  if (!response.ok) {
+    const payload = response.headers.get("content-type")?.includes("application/json")
+      ? await response.json()
+      : null;
+    throw new Error(payload?.message || "Package export failed.");
+  }
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `${packageId}.openquiz.json`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 export const uploadAdminAvatar = ({ file, csrfToken }) => {
   const body = new FormData();
   body.append("file", file);

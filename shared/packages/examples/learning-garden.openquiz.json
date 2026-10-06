@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "id": "learning-garden",
+    "name": "Learning Garden",
+    "version": "1.0.0",
+    "description": "A simple green visual identity for testing portable themes.",
+    "author": "open.quiz contributors",
+    "homepage": null
+  },
+  "theme": {
+    "tokens": {
+      "primary": "#18816a",
+      "primaryHover": "#105647",
+      "primaryAlt": "#41e3c0",
+      "accent": "#54dec0",
+      "success": "#18816a",
+      "heading": "#105647",
+      "foreground": "#061e19",
+      "surfaceApp": "#f2fcfa",
+      "surfaceRaised": "#eafbf7",
+      "surfaceInset": "#d4f7ef",
+      "learningPathSurface": "#f2fcfa",
+      "learningPathText": "#061e19",
+      "learningPathHeading": "#105647",
+      "learningPathLine": "#18816a",
+      "fontHeading": "\"Poppins\", sans-serif",
+      "fontBody": "\"Inter\", sans-serif",
+      "radiusSm": "4px",
+      "radiusMd": "8px",
+      "radiusLg": "12px",
+      "radiusPill": "9999px"
+    },
+    "assets": {
+      "logo": null,
+      "favicon": null,
+      "hero": null,
+      "progressBar": null,
+      "avatars": []
+    }
+  },
+  "assets": []
+}

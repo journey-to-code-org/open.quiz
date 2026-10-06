@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.2.0] - 2026-10-01
+
+### Added
+
+- Added administrator-managed portable `.openquiz.json` packages with optional themes, embedded image assets, avatars, and canonical lesson/module content.
+- Added runtime theme loading and explicit activation, theme previews, scoped package imports, export, and default-brand restoration.
+- Added package manifests, asset-key portability, content conflict reporting, and package format documentation/schema.
+
+### Changed
+
+- Runtime branding now overrides environment-based instance defaults while preserving them as the fallback.
+- Persistent content assets now support theme and package-specific image kinds.
+
+### Security
+
+- Package themes accept allowlisted design tokens and signature-checked PNG, JPEG, or WebP assets only; executable code, raw CSS, and private operational data are rejected.
+
+---
+
 ## [1.1.0] - 2026-10-01
 
 ### Added

@@ -6,6 +6,7 @@ import { useAuthContext } from "../context/AuthContext";
 import {
   approveDeleteAccount,
   getAdminAvatarAssets,
+  getAdminPackages,
   getAdminModules,
   getAdminUsers,
   getPendingDeleteAccount,
@@ -25,12 +26,19 @@ vi.mock("../services/api", () => ({
   createAdminModule: vi.fn(),
   deleteAdminLesson: vi.fn(),
   deleteAdminModule: vi.fn(),
+  deleteAdminPackage: vi.fn(),
+  downloadAdminPackage: vi.fn(),
   getAdminAvatarAssets: vi.fn(),
+  getAdminPackages: vi.fn(),
+  inspectAdminPackage: vi.fn(),
   getAdminModules: vi.fn(),
   getAdminUsers: vi.fn(),
   getPendingDeleteAccount: vi.fn(),
   hardDeleteAdminUser: vi.fn(),
   importAdminLessonModule: vi.fn(),
+  importAdminPackage: vi.fn(),
+  activateAdminPackage: vi.fn(),
+  activateDefaultAdminTheme: vi.fn(),
   rejectDeleteAccount: vi.fn(),
   resetAdminUserProgress: vi.fn(),
   seedAdminRandomUsers: vi.fn(),
@@ -60,6 +68,7 @@ describe("AdminDashboardPage", () => {
       ],
     });
     getAdminModules.mockResolvedValue({ modules: [] });
+    getAdminPackages.mockResolvedValue({ packages: [], activePackageId: null });
     getAdminAvatarAssets.mockResolvedValue({ assets: [] });
     getPendingDeleteAccount.mockResolvedValue({
       users: [

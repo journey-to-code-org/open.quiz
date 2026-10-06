@@ -19,7 +19,14 @@ const contentAssetSchema = new mongoose.Schema(
     },
     kind: {
       type: String,
-      enum: ["avatar"],
+      enum: [
+        "avatar",
+        "theme-logo",
+        "theme-favicon",
+        "theme-hero",
+        "theme-progress",
+        "package-content",
+      ],
       default: "avatar",
       required: true,
     },
@@ -31,6 +38,14 @@ const contentAssetSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    source_package_id: {
+      type: String,
+      default: null,
+    },
+    package_asset_key: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true },

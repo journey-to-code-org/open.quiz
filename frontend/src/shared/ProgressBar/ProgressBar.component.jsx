@@ -1,4 +1,5 @@
 import progressBarFrame from "../../assets/progress-bar.svg";
+import { useInstanceAssets } from "../../app/instanceAssets";
 
 // Colors used by the standard progress bars
 const toneStyles = {
@@ -48,6 +49,7 @@ export default function ProgressBar({
   imageClassName = "",
   className = "",
 }) {
+  const progressArtwork = useInstanceAssets().progressBar || progressBarFrame;
   // Make sure min, max, and value are valid numbers
   const safeMin = Number.isFinite(min) ? min : 0;
 
@@ -104,7 +106,7 @@ export default function ProgressBar({
 
                 {/* Progress bar frame */}
                 <img
-                  src={progressBarFrame}
+                  src={progressArtwork}
                   alt=""
                   aria-hidden="true"
                   className={`relative mx-auto w-full ${imageClassName}`.trim()}

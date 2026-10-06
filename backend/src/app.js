@@ -29,6 +29,7 @@ const profileRoutes = require("./routes/profile.routes");
 const quizRoutes = require("./routes/quiz.routes");
 const quizPublicRoutes = require("./routes/quizPublic.routes");
 const onboardingRoutes = require("./routes/onboarding.routes");
+const themeRoutes = require("./routes/theme.routes");
 
 // Create Express app
 const app = express();
@@ -85,6 +86,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/lessons", lessonImportRoutes);
 app.use("/api/v1/lessons", lessonPublicRoutes);
 app.use("/api/v1/assets", contentAssetRoutes);
+app.use("/api/v1/theme", themeRoutes);
 app.use("/api/v1/lessons", jwtMiddleware, lessonRoutes);
 app.use("/api/v1/dashboard", jwtMiddleware, dashboardRoutes);
 app.use("/api/v1/leaderboard", jwtMiddleware, leaderboardRoutes);

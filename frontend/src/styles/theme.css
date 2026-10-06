@@ -81,25 +81,25 @@
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Fonts sizes */
-  --text-h1: 2.25rem;
+  --text-h1: var(--instance-font-size-h1, 2.25rem);
   --text-h1--line-height: 1.2;
 
-  --text-h2: 1.875rem;
+  --text-h2: var(--instance-font-size-h2, 1.875rem);
   --text-h2--line-height: 1.2;
 
-  --text-h3: 1.5rem;
+  --text-h3: var(--instance-font-size-h3, 1.5rem);
   --text-h3--line-height: 1.2;
 
-  --text-h4: 1.25rem;
+  --text-h4: var(--instance-font-size-h4, 1.25rem);
   --text-h4--line-height: 1.2;
 
-  --text-body: 1rem;
+  --text-body: var(--instance-font-size-body, 1rem);
   --text-body--line-height: 1.5;
 
-  --text-small: 0.875rem;
+  --text-small: var(--instance-font-size-small, 0.875rem);
   --text-small--line-height: 1.5;
 
-  --text-caption: 0.75rem;
+  --text-caption: var(--instance-font-size-caption, 0.75rem);
   --text-caption--line-height: 1.5;
 
   /* Fonts weights */

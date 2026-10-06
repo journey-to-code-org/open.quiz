@@ -20,7 +20,7 @@ const assetUrl = (assetId) => `/api/v1/assets/${encodeURIComponent(assetId)}`;
 exports.listAvatarAssets = async (_req, res, next) => {
   try {
     const assets = await ContentAsset.find({ kind: "avatar" })
-      .select("asset_id name mime_type createdAt")
+      .select("asset_id name mime_type createdAt source_package_id package_asset_key")
       .sort({ createdAt: -1 })
       .lean();
 
@@ -30,6 +30,8 @@ exports.listAvatarAssets = async (_req, res, next) => {
         name: asset.name,
         mimeType: asset.mime_type,
         url: assetUrl(asset.asset_id),
+        sourcePackageId: asset.source_package_id || null,
+        packageAssetKey: asset.package_asset_key || null,
       })),
     });
   } catch (error) {

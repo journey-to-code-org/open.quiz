@@ -21,7 +21,8 @@ core.
 
 ## Brand Assets
 
-The preset points its logo and favicon to `/instance-assets/openquiz-brand.svg`. Put an alternate
-logo, favicon, or homepage graphic under `frontend/public/instance-assets` and set
-`VITE_APP_LOGO_URL`, `VITE_APP_FAVICON_URL`, or `VITE_APP_HERO_IMAGE_URL` in `settings.env`.
-The package also supplies Nova and Kit as lesson character avatars.
+The preset keeps its existing environment-configured branding as the fallback. Administrators can
+import, preview, and explicitly activate `.openquiz.json` experience packages from the admin
+Appearance section; restoring defaults returns to this instance's environment configuration.
+See [`docs/themes.md`](../../docs/themes.md) for the package schema and asset limits. The package
+also supplies Nova and Kit as lesson character avatars.

@@ -10,6 +10,7 @@ the core authentication, assessment, and progress services.
 - **Content:** create modules in the admin area or import a package. Example curricula live under
   `shared/content/examples` and are not installed automatically.
 - **Presentation:** the frontend accepts instance-level app-name and theme CSS overrides.
+- **Portable experiences:** administrators can import and export `.openquiz.json` packages containing a runtime theme and optional canonical lesson modules. See [portable package documentation](docs/themes.md).
 
 ## 🤝 Community Standards
 

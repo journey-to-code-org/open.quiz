@@ -1,6 +1,15 @@
 const express = require("express");
 const multer = require("multer");
 const { importLessonModule } = require("../controllers/lesson.controller");
+const {
+  activateDefaultTheme,
+  activatePackage,
+  deletePackage,
+  exportPackage,
+  inspectPackage,
+  importPackage,
+  listPackages,
+} = require("../controllers/openQuizPackage.controller");
 const { listAvatarAssets, uploadAvatarAsset } = require("../controllers/contentAsset.controller");
 const {
   getAdminStatus,
@@ -28,6 +37,17 @@ const {
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+const packageUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 16 * 1024 * 1024 },
+});
+const handlePackageUpload = (req, res, next) =>
+  packageUpload.single("file")(req, res, (error) => {
+    if (error?.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).json({ message: "Package exceeds the 16 MB upload limit." });
+    }
+    return next(error);
+  });
 
 router.get("/status", getAdminStatus);
 router.get("/users", listUsers);
@@ -53,5 +73,12 @@ router.post("/modules/:moduleId/lessons", createLesson);
 router.patch("/modules/:moduleId/lessons/:lessonId", updateLesson);
 router.delete("/modules/:moduleId/lessons/:lessonId", deleteLesson);
 router.post("/modules/import", upload.single("file"), importLessonModule);
+router.get("/packages", listPackages);
+router.post("/packages/inspect", handlePackageUpload, inspectPackage);
+router.post("/packages/import", handlePackageUpload, importPackage);
+router.post("/packages/default/activate", activateDefaultTheme);
+router.get("/packages/:packageId/export", exportPackage);
+router.patch("/packages/:packageId/activate", activatePackage);
+router.delete("/packages/:packageId", deletePackage);
 
 module.exports = router;

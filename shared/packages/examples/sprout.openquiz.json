@@ -1,0 +1,2194 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "id": "sprout",
+    "name": "Sprout",
+    "version": "1.0.0",
+    "description": "Historical Sprout visual identity using artwork recovered from repository history.",
+    "author": "open.quiz contributors",
+    "homepage": null
+  },
+  "theme": {
+    "tokens": {
+      "primary": "#18816a",
+      "primaryHover": "#105647",
+      "primaryAlt": "#41e3c0",
+      "accent": "#54dec0",
+      "success": "#18816a",
+      "heading": "#105647",
+      "foreground": "#061e19",
+      "surfaceApp": "#f2fcfa",
+      "surfaceRaised": "#eafbf7",
+      "surfaceInset": "#d4f7ef",
+      "learningPathSurface": "#f2fcfa",
+      "learningPathText": "#061e19",
+      "learningPathHeading": "#105647",
+      "learningPathLine": "#18816a",
+      "fontHeading": "\"Poppins\", sans-serif",
+      "fontBody": "\"Inter\", sans-serif",
+      "radiusSm": "4px",
+      "radiusMd": "8px",
+      "radiusLg": "12px",
+      "radiusPill": "9999px"
+    },
+    "assets": {
+      "logo": "brand.logo",
+      "favicon": null,
+      "hero": null,
+      "progressBar": "progress.flower",
+      "avatars": [
+        {
+          "key": "abigail",
+          "name": "Abigail",
+          "assetKey": "avatar.abigail"
+        },
+        {
+          "key": "ramona",
+          "name": "Ramona",
+          "assetKey": "avatar.ramona"
+        },
+        {
+          "key": "beaver",
+          "name": "Beaver guide",
+          "assetKey": "avatar.beaver"
+        }
+      ]
+    }
+  },
+  "assets": [
+    {
+      "key": "brand.logo",
+      "filename": "sprout-logo.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "progress.flower",
+      "filename": "flower-progress.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "avatar.abigail",
+      "filename": "abigail.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "avatar.ramona",
+      "filename": "ramona.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,UklGRtwLAABXRUJQVlA4WAoAAAAwAAAAXwAAXwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZBTFBIxAMAAAGgRW2bIUmKdLk6p22Mbdu2bds217Zt27tj27Y9zajMiIvMQkb8Z68jYgLQ/0NJ8/gzGvYaN3f56rVrVy2ZMrBpTsCjSVBIroTmi747X0xoxPjSj8taJ7kl/kRfdo9Xzxg0tubFd/rm+kWulLRmqw8Z1Enz6NqmyRI3Sla7d29T56+/0ChB4ELK6fVNPmXz2rMN/Rwkd/+kgLJ7YmZlgTGl5qprlGn8ZWsfU0lD/iOU9XMzchmquuEmoew/eruhwIjU7IN8Qjkk+Of2KhNqj/+KKKd45wgPA+4huzHlNnRist8x1/BdmHJsHBvndUgZfABTro0jk9yOSD13Ysp56MgI2YnWvxVR7vGW9g5U/7KAAlj0Tf2YpTz1iIKY/0ZWjFyjLhEYyPWZ7ti03WZSIM0DHWOS+45BwTQ+qBgDdeQ9CuiDGa7oavxLQd3WKCp9jgmLuVKPpvFeCuzhJkJk+jICDVmRFJFQez8F90BzIRL3OBMec24gkqyfKcD/VYpAbvoAosLeSjh9IQX5hYRwuf/AdKRCGLHxA5hwd83ONYkCvSHBTn8Pqo25dqmHobpbW7CpmA8V6a1YpM4EKrrUa1FmULDf0y3aM3D9nWhxfwHX0VSL9x+4rmVYfPvhephp8Z+DqyTbErgLF7YJFsFVnGUTgut+pg2G63K6TT5ch1Mtgetw/Zdk8R+D64t4i3cjXC8ELe6P4ZrtsWhrwSI9ZIs8AqxHtZFVqFMC1b4yNijtFFTvptmV+hiq6QE71zgCU34z2U6ocwWmHXkobMYXMD0ZH847zIDoUXc5nFD5EEQbK6EI9fUAkeV6JGKLi/AcayNGglJfBIc8loYiljqfh+ZcBykylLKWwEKeS0VRCg33wHK4rRAN8s4oggSviUPRl/sMkp/qoVh2PUigIOf7izHxTL9LgCh8LA7FNuXZAhhKvq6MYl3580II8MYOKPZt/8b8GSeGSw4IPXaHeDMvzHIjJ5XhhzBf5vllQeSse8rhEE/m1RUJyGn3iH2YH/P66njkvNJvazEv5sWVCYhFqfvPxYQL8+z8BMRovdcfEg6MfSO9iNnsuUfZw5+0kxHD/p7flDB2ZW1VxHilBYdZKvmmXxxiPtD0uRuskH3TKkqIQyGr3yf3WSCn17cMIk6VnJ4f33TKPLyuWYKI+FXSmj1x3HDg/u/jq+oi4ltOrDbs40tGLMi9jctb5vgExL+glcptv+Lni6EICL7425P9KyX5JASmqHr82U16j5s1f97UEd3qpvs9moTAFURZUVVVVWQRsQxWUDggIgYAABAeAJ0BKmAAYAA+lUCYSaWjoiErmJyAsBKJYg3A5Yaj2vhGi0VtWQ2Tvfov/SHoAdPTzMebn51W+07yjgMfyAeCXlyj/WJedaOhlXI1LyWvm/IAaa/gNAl04CnnXX4CWNY6SZ73uq1gblLnjl+q8Iht22OQSjntDjzTlAqxw8c79Qlm2lavFBBAYle0ac3LUwDvHTOlN7ucdfNWoPgaSudXQ9j3Lu83vI45aKdNnCfr+u7G6z0wDMpH/809IgqS8u9x+cdSrS4yutmgf4zHPdCVIoOxlu+P1CfuOqYD/C+oK3XHfWah6who1CturR+6r2R0dNChUAhfwAD+1F77/nixIutl0PcCY+iLn12lAdE8xfLfjERHIgi8HAxjNCrdfqQPjFYtQuQbJORRE1iwSyW4smo094q2KPKBNkUBfiAJzOMZ2HCgLHyN4qFWVelxa8NKJHQ23n9bXSS4053S2Ahm2oH77XVfdF//YLq/uV1aYi9qIrXYLWc5ufgeDGQXlM/9f3sf3pr9FQZF+DjP0sgptU4kzed58JV3QtCda62GIvbnIDNNhBgP1Zyh1gqrqKiQ0hzJo8Ih01L7PNrG88DPIPhHrVKr2MddrSjRn2Wvc/mcsZ2vWT8BDsatcW4AScJnorBqUbeBsfNe0UxTHBgLqx5cAPhwSvPzNYOjXdbJFDCEhpP++UAvJJSKB8R1fW0fot3jnXIYdujSapX8+CmvXaLvZDJQLpsN/r39HUGbO8poZBT0+RYgZv/7xjP0WcRaPC8Wq/506L4t3p2ZWtIRE3I/fRBzf6QHZ32mRALpuruCYWTydEhKLnPIm0G3oah7qtXrc1lM/Y4ujMWzMUcF+QI5pZ+FParohf43WXEifYdy3x8IB1E5S+2Hsk9dbo+B6TYcFlPPCF0wuR86rW2Bl1dO628Zzv0DaG7os7tb8DPfVRDtxP2Cy0iF0ZYbX+ObNbtvP2FiHVV0tTq7ss/dPypAJUoR0Jp7AmQ1pjfBhCuoU8vTKeDeWhzCH4pcahZWFEYlTtUus0PR4nyEENEXBraLOSrAxHh7caNkwHIJbhqgfZyQ9jTVkUVSxHLwhpek7ipGsrTKHv/QR0BQBANccX4Y5+dBwsTq8PgEMjBOST2OT1RB4+l+m6yCHCed/QkoinTJDFdbGosCkTwq4mRJBsecXlVm/9TrtphNYdAd1rinztZh9HVzbO/C1j+fOgyTxOCnZyjsgwgL401DieWFE7pSXaxd8+QGg9hKWuM71LpqHwYDWZytcHNUhYPncSnZGsIQOISq/nWCl7Bo2vPqW9Ju+abvssgmNtlJBH9Gb9svlJp0Et6DtHeYkbocUaKDM4G8SjS771FTF8ZJJMKdtMzOIOWK3zTxOrHUxz7N3iRA29MuH/ndGp/ZbG1DuWlgbmGXI2GW+5w1s3otRCTh2LFgdZrbkok4BVpHWCbdWx2zkst0rjmrT4j32zORF+72QTrr0zGv5VMHrgkAb3Y7aMf2LkkczgX7cuTOJ5Vt+Ax+3FxzMhg3hoGj5f2puoVXGgyeBUuENPnMBKOTE0fhTgTPSN8uDTOMdrX24PP0j7Ijs51qDTEC0osDmoUI2l8k2LqzKzUAXpFzyh9jrgZ8rf2k6i6gNthGb6zizPqXdRxbHiSsKyoyWS7+gg0sU/1NIjZx+DMSuERLs40MS26Qq2GFP/fR7tF5t7naESlAqElhYP8fVMjViFnU+M3K6ZySFDnLeCfBXf9MtRcRHv+N2J6/+D6YxYQGahoWd4VBHkyGG6g7caFv5S+Anw+Tiun+kkNpwf8uAPxfrl1lVyIuGR8czHI6/+7wHtrOJvliblcrK6BsEib/dN4hVGF5zKfn4PQALAKx+VzAAHB/xEhST3mosncIFQFO+ptDxsgSrqbaGavp5cCDoFa4LgBlQrck6URYKQAnkr/E2l80JOk7cpvnaBOAZHXI+VxVB59bi/g0wuIXl4rtLFb1oDWvbyB3Y0XZ+4ydGGIUuJdFQdwCSCt3ByWgaDrfucAWGlMAtPucAVkxxeM7/5QigMNJeeN/ZmVBeKGu0BQOlUDe7T6zDnaD3Tc4fhNZ9tTJPYAAAAA="
+    },
+    {
+      "key": "avatar.beaver",
+      "filename": "dabbing-beaver.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    }
+  ],
+  "content": {
+    "modules": [
+      {
+        "id": "cashFlow",
+        "title": "Budgeting and Cash Flow Basics",
+        "tags": [
+          "budget",
+          "cashflow",
+          "income",
+          "expenses"
+        ],
+        "metadata": {
+          "applicationName": "Sprout",
+          "author": "Sprout"
+        },
+        "characters": [
+          {
+            "characterId": "abigail",
+            "name": "Abigail",
+            "description": "Abigail is a single mom with 14 year old twins who works as a Registered Nurse.",
+            "assetKey": "avatar.abigail"
+          },
+          {
+            "characterId": "ramona",
+            "name": "Ramona",
+            "description": "Ramona is an 18 year old Freshman college student who works part-time on campus.",
+            "assetKey": "avatar.ramona"
+          },
+          {
+            "characterId": "beaver",
+            "name": "Beaver",
+            "description": "Sprout's friendly guide.",
+            "assetKey": "avatar.beaver"
+          }
+        ],
+        "budgets": [
+          {
+            "budgetId": "abigail-complete-budget",
+            "characterRef": "abigail",
+            "type": "budget-summary",
+            "title": "Abigail's Budget",
+            "showTotals": true,
+            "income": [
+              {
+                "id": "paycheck",
+                "name": "Registered Nurse Paycheck",
+                "amount": 5850
+              },
+              {
+                "id": "childSupport",
+                "name": "Child Support",
+                "amount": 1230
+              }
+            ],
+            "fixedExpenses": {
+              "needs": [
+                {
+                  "id": "rent",
+                  "name": "Rent",
+                  "amount": 1200
+                },
+                {
+                  "id": "carPayment",
+                  "name": "Car Payment",
+                  "amount": 300
+                }
+              ],
+              "wants": [
+                {
+                  "id": "sportsActivities",
+                  "name": "Sports Activities for Kids",
+                  "amount": 40
+                },
+                {
+                  "id": "rockClimbing",
+                  "name": "Rock Climbing Membership",
+                  "amount": 80
+                }
+              ]
+            },
+            "variableExpenses": {
+              "needs": [
+                {
+                  "id": "groceries",
+                  "name": "Groceries",
+                  "amount": 420
+                },
+                {
+                  "id": "gasoline",
+                  "name": "Gasoline",
+                  "amount": 14
+                },
+                {
+                  "id": "electricity",
+                  "name": "Electricity",
+                  "amount": 95
+                }
+              ],
+              "wants": []
+            },
+            "summary": {
+              "totalIncome": 7080,
+              "totalFixedExpenses": 1625,
+              "totalVariableExpenses": 529,
+              "totalExpenses": 2154,
+              "netCashFlow": 4926
+            }
+          }
+        ],
+        "tables": [
+          {
+            "tableId": "abigail-income",
+            "title": "Income Sources",
+            "headers": [
+              "Income Source",
+              "Monthly Net Pay"
+            ],
+            "rows": [
+              [
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Child Support",
+                "$1,230"
+              ]
+            ]
+          },
+          {
+            "tableId": "abigail-basic-expenses",
+            "title": "Abigail's Monthly Expenses",
+            "headers": [
+              "Expense",
+              "Cost per Month"
+            ],
+            "rows": [
+              [
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Gasoline",
+                "$14"
+              ]
+            ]
+          },
+          {
+            "tableId": "abigail-all-expenses",
+            "title": "Abigail's Monthly Expenses",
+            "headers": [
+              "Expense",
+              "Monthly Amount"
+            ],
+            "rows": [
+              [
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Gasoline",
+                "$14"
+              ]
+            ]
+          },
+          {
+            "tableId": "portable-budget-0",
+            "title": "Abigail's Budget",
+            "headers": [
+              "Category",
+              "Item",
+              "Monthly amount"
+            ],
+            "rows": [
+              [
+                "Income",
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Income",
+                "Child Support",
+                "$1,230"
+              ],
+              [
+                "Fixed expense",
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Fixed expense",
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Fixed expense",
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Fixed expense",
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Variable expense",
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Variable expense",
+                "Gasoline",
+                "$14"
+              ],
+              [
+                "Variable expense",
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Total",
+                "Income",
+                "$7,080"
+              ],
+              [
+                "Total",
+                "Fixed expenses",
+                "$1,625"
+              ],
+              [
+                "Total",
+                "Variable expenses",
+                "$529"
+              ],
+              [
+                "Total",
+                "All expenses",
+                "$2,154"
+              ]
+            ]
+          },
+          {
+            "tableId": "portable-budget-1",
+            "title": "Abigail's Budget",
+            "headers": [
+              "Category",
+              "Item",
+              "Monthly amount"
+            ],
+            "rows": [
+              [
+                "Income",
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Income",
+                "Child Support",
+                "$1,230"
+              ],
+              [
+                "Fixed need",
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Fixed need",
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Fixed want",
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Fixed want",
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Variable need",
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Variable need",
+                "Gasoline",
+                "$14"
+              ],
+              [
+                "Variable need",
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Total",
+                "Income",
+                "$7,080"
+              ],
+              [
+                "Total",
+                "Fixed expenses",
+                "$1,625"
+              ],
+              [
+                "Total",
+                "Variable expenses",
+                "$529"
+              ],
+              [
+                "Total",
+                "All expenses",
+                "$2,154"
+              ]
+            ]
+          },
+          {
+            "tableId": "portable-budget-2",
+            "title": "Abigail's Budget",
+            "headers": [
+              "Category",
+              "Item",
+              "Monthly amount"
+            ],
+            "rows": [
+              [
+                "Income",
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Income",
+                "Child Support",
+                "$1,230"
+              ],
+              [
+                "Fixed need",
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Fixed need",
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Fixed want",
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Fixed want",
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Variable need",
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Variable need",
+                "Gasoline",
+                "$14"
+              ],
+              [
+                "Variable need",
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Total",
+                "Income",
+                "$7,080"
+              ],
+              [
+                "Total",
+                "Fixed expenses",
+                "$1,625"
+              ],
+              [
+                "Total",
+                "Variable expenses",
+                "$529"
+              ],
+              [
+                "Total",
+                "All expenses",
+                "$2,154"
+              ],
+              [
+                "Cash flow",
+                "Net cash flow",
+                "$4,926"
+              ]
+            ]
+          }
+        ],
+        "lessons": [
+          {
+            "id": "1.1",
+            "title": "What is Cash Flow and a Budget?",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll understand what a budget is, why it's important, and how to calculate basic cash flow.",
+            "estimatedMin": 5,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.1.1",
+                "title": "Meet Abigail!",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "characterId": "abigail",
+                    "text": "Abigail: Meet Abigail! Abigail is a single mom with twin 14-year-olds."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She manages all her family's expenses, including paying for her children's activities."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "For fun, Abigail likes to go rock climbing and swim at her apartment complex's pool."
+                  }
+                ]
+              },
+              {
+                "id": "1.1.2",
+                "title": "What is a Budget?",
+                "microLessonContent": [
+                  {
+                    "characterId": "abigail",
+                    "type": "paragraph",
+                    "text": "Juggling everything going on in her life, Abigail feels like she isn't in control of her money."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She wishes that she had a clearer view of her spending so she could cut unnecessary spending and save up for a future vacation."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "To help her feel in control of her money, Abigail has decided to create a budget. "
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "A budget is simply a plan for your money. It's a tool you can use to help make financial decisions."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Budgets involve two main categories: income and expenses."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "text": "Budgets involve two main categories: income and expenses.",
+                    "id": "1.1.2-q1",
+                    "questionType": "multipleChoice",
+                    "question": "What is the purpose of a budget?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "To help you feel in control of your money"
+                      },
+                      {
+                        "key": "b",
+                        "text": "A plan for your money"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Includes your income and expenses"
+                      },
+                      {
+                        "key": "d",
+                        "text": "All of the above"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "The purpose of a budget helps you feel in control of your money by laying out all your income and expenses and creating a plan for your money."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.2-q2",
+                    "questionType": "trueFalse",
+                    "question": " True or False? You should create a budget to help you track where your money is going.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Creating a budget does help you track where your money is going."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.2-q3",
+                    "questionType": "multipleChoice",
+                    "question": "When creating a budget, what are the two main categories that you need to track?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Income and expenses"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Credit card debt and unused balance of credit card"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Retirement accounts and interest from a CD that will mature 5 years from now."
+                      },
+                      {
+                        "key": "d",
+                        "text": "Student loan debt"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Budgeting manages the money that you earn (income) with the expenses that you have."
+                  }
+                ]
+              },
+              {
+                "id": "1.1.3",
+                "title": "Ramona introduction",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "characterId": "ramona",
+                    "text": "Ramona: Meet Ramona! She is an 18-year-old college Freshman."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona has a part-time federal work-study job at her campus dining hall."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona receives federal student loans to cover her tuition, room, and board.\nThe money she earns from her job goes towards groceries, textbooks, fun concerts, and her bowling league. "
+                  }
+                ]
+              },
+              {
+                "id": "1.1.4",
+                "title": "Cash Flow",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Cash flow is tracking the money you earn and the money you're spending."
+                  },
+                  {
+                    "type": "formula",
+                    "text": "Money In (Income) - Money Out (Expenses) = Cash Flow"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "As a Registered Nurse (RN), Abigail earns $7,500 per month. Her total monthly expenses are $2,154.\n\n$7,500 (Income) - $2,154 (Expenses) = $5,346 (Net Cash Flow)\nSo Abigail's total cash flow each month is about $5,346."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.4-q1",
+                    "questionType": "multipleChoice",
+                    "question": "How do you calculate cash flow?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Expenses - Income = Cash Flow"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Income + Expenses = Cash Flow"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Income - Expenses = Cash Flow"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Income x Expenses = Cash Flow"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "Cash flow describes the movement of cash moving into and out of an account over a specific period. Income - Expenses = Cash Flow."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.4-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Ramona earns $1,200 per month and spends $1,000 per month. How much does Ramona have at the end of each month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$200"
+                      },
+                      {
+                        "key": "b",
+                        "text": "-$200"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$2,200"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$500"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Ramona's Cash Flow monitors how much cash is moving into and out of Ramona's account. Within the same month, Ramona's Income($1,200) - Ramona's Expenses ($1,000) = Ramona's Cash Flow ($200). Ramona has more incoming money than outgoing money so Ramona has positive Cash Flow."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.4-q3",
+                    "questionType": "multiSelect",
+                    "question": "What are the two numbers you need to calculate cash flow? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Credit score"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Income"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Bank Account Numbers"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Expenses"
+                      }
+                    ],
+                    "correctResponse": [
+                      "b",
+                      "d"
+                    ],
+                    "explanation": "Cash Flow considers incoming cash from all sources of income and all cash that is outgoing to pay for expenses within a period of time."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.2",
+            "title": "Income",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to identify different sources of income, calculate monthly income, and explain the difference between gross pay and net pay.",
+            "estimatedMin": 5,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.2.1",
+                "title": "Sources of Income",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "There are many different sources of income. Some common sources of income include:"
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "There are many different sources of income. Some common sources of income include:",
+                    "items": [
+                      "Paychecks from a job",
+                      "Tips",
+                      "Freelancing",
+                      "Child Support",
+                      "Alimony from a divorce or separation",
+                      "Government Benefits like Social Security or Unemployment Benefits",
+                      "Rental Income",
+                      "Investment Income"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail, our single mom of two, makes income as a Registered Nurse and receives child support from her ex-husband. So, her two sources of income are her paychecks and monthly child support."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona, on the other hand, only has income from her part-time campus position. So her sole source of income is from her paychecks."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.1-q1",
+                    "questionType": "multipleChoice",
+                    "question": "What is an example of income?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Groceries"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Paycheck"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Electric Bill"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Car Payment"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Paychecks, child support, interest earned on investments, and sales of goods are just some examples of sources of income."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.1-q2",
+                    "questionType": "trueFalse",
+                    "question": "True or False? Income only includes the money you make from a job.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "There are multiple types of income. Paychecks, child support, interest earned on investments, and sales of goods are just some examples of sources of income."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.1-q3",
+                    "questionType": "multiSelect",
+                    "question": "Select Abigail's source(s) of income (select all that apply):",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Gasoline"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Paycheck"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Child Support"
+                      }
+                    ],
+                    "correctResponse": [
+                      "c",
+                      "d"
+                    ],
+                    "explanation": "Abigail's sources of income include both her paycheck and child support payments."
+                  }
+                ]
+              },
+              {
+                "id": "1.2.2",
+                "title": "Calculating Income",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail receives a bi-weekly paycheck from her job and a monthly child support check."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Paychecks are commonly paid on a weekly, bi-weekly, or semi-monthly schedule."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail is paid bi-weekly, which means she receives a paycheck every two weeks for a total of 26 paychecks per year."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "If Abigail were paid semi-monthly, she would receive 24 paychecks per year on the same two dates each month. "
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Common semi-monthly pay dates are the 1st and 15th or the 15th and last day of the month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q1",
+                    "questionType": "multiSelect",
+                    "question": "Select the most common pay frequencies for paychecks (select all that apply):",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Weekly"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Yearly"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Semi-Monthly"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Bi-Weekly"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "c",
+                      "d"
+                    ],
+                    "explanation": "Paychecks are usually paid weekly, bi-weekly, and semi-monthly. The decision is made by the employer."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q2",
+                    "questionType": "multipleChoice",
+                    "question": "How many paychecks does Abigail receive per year since she is paid on a bi-weekly basis?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "26"
+                      },
+                      {
+                        "key": "b",
+                        "text": "24"
+                      },
+                      {
+                        "key": "c",
+                        "text": "20"
+                      },
+                      {
+                        "key": "d",
+                        "text": "30"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Bi-weekly paychecks will total to 26 paychecks per year. Semi-monthly paychecks will total to 24 paychecks per year."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false? Semi-monthly paychecks are paid on the same 2 dates every month.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": " Usually, semi-monthly paychecks are paid to employees consistently on the same 2 dates every month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q4",
+                    "questionType": "multipleChoice",
+                    "question": "Let's help Abigail calculate her income.\n\nAbigail works a full-time job as a nurse at the local hospital. She makes $70,200 a year after taxes and deductions are taken out. What is her monthly income? (Hint: Divide total yearly income by 12 to get monthly income)",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$5,850"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$7,000"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$7,500"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$70,200"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Divide the total yearly income by 12. Abigail earns $70,200/12 = $5,850 per month"
+                  }
+                ]
+              },
+              {
+                "id": "1.2.3",
+                "title": "Gross vs Net Income",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "When Abigail looks at her latest paystub, she sees that she made a total of $3,462 for the past 2 weeks. However, she only receives $2,700 in her bank account. Why is that?"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "The total amount that Abigail sees on her paycheck of $3,462 is called her gross pay, which is her total income before taxes and deductions."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Gross pay is the total amount of money earned in that pay period before any deductions or taxes. The $3,462 is her gross pay."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "So then why did she receive almost $800 less in her bank account?"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "The $2,700 she received in her bank account is called her Net pay or 'take home pay'. Net pay is your gross total pay minus payroll deductions like taxes and any employer benefits that you pay into like health insurance or a retirement plan."
+                  },
+                  {
+                    "type": "formula",
+                    "text": "Gross Pay - Taxes/Benefits = Net Pay (Take Home Pay)"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Gross Pay is:",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "The amount you take home after deductions"
+                      },
+                      {
+                        "key": "b",
+                        "text": "The total amount earned before deductions"
+                      },
+                      {
+                        "key": "c",
+                        "text": "The amount deducted for taxes"
+                      },
+                      {
+                        "key": "d",
+                        "text": "The amount deposited into your bank account"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Gross pay is your total pay before you take out taxes and any employer benefits you might be paying into."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Net pay is:",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "The total amount earned before deductions"
+                      },
+                      {
+                        "key": "b",
+                        "text": "The amount received after deductions"
+                      },
+                      {
+                        "key": "c",
+                        "text": "The amount withheld for taxes"
+                      },
+                      {
+                        "key": "d",
+                        "text": "The amount earned from overtime"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Net pay is your “take home pay”. It's your total pay (gross pay) minus the payroll deductions."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q3",
+                    "questionType": "multipleChoice",
+                    "question": "If Ramona works 20 hours per week for $15 per hour, what is Ramona's gross pay for one week?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$300"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$200"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$500"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$150"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "$15 x 20 = $300"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q4",
+                    "questionType": "multipleChoice",
+                    "question": "What is the correct formula for calculating your net pay?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Payroll Deductions - Gross Pay = Net Pay"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Gross Pay - Payroll Deductions = Net Pay"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Gross Pay + Payroll Deductions = Net Pay"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Payroll Deductions x Gross Pay = Net Pay"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Gross Pay - Payroll Deductions = Net Pay. Net pay is your “take home pay”. It's your total pay (gross pay) minus the payroll deductions."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.3",
+            "title": "Understanding Needs vs Wants",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to identify the difference between needs and wants, as well as categorizing common expenses into each group.",
+            "estimatedMin": 5,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.3.1",
+                "title": "Needs vs Wants",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Learning the difference between a need and a want empowers you to create a budget."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "Needs are essential expenses for survival or well-being such as medical care, transportation, food, and shelter."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Wants are anything non-essential that enhances your life."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Needs and wants depend on your personal situation - what is a 'want' for one person might be a 'need' for another person."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.1-q1",
+                    "questionType": "multipleChoice",
+                    "question": "What would be an example of a need?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Plushies"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Going to the Movies"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Food"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Concert Tickets"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": " As fun as plushies, going to the movies and concerts are, you will survive without these things. However, without food, you would not be able to survive."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.1-q2",
+                    "questionType": "multipleChoice",
+                    "question": "What would be an example of a want?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Food"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Shelter"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Transportation to Work"
+                      },
+                      {
+                        "key": "d",
+                        "text": "A New Boardgame"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "Food, shelter, and transportation to work are all important for survival and are basic needs. A new boardgame is fun, but you will survive without it."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.1-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false? Needs and wants are the same for everyone.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Needs and wants are different for each person. Something one person considers a need may be a want for someone else. For example, a car may be a need for someone who commutes to work, but a want for someone who has reliable public transportation."
+                  }
+                ]
+              },
+              {
+                "id": "1.3.2",
+                "title": "Categorizing Expenses",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's help Abigail and Ramona decide which of their expenses are needs and which are wants."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail lives in an apartment complex that has a gym and pool that's included in the price of rent."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Abigail's other expenses include:",
+                    "items": [
+                      "Rent",
+                      "Groceries",
+                      "Rock Climbing Membership",
+                      "Electricity Bill",
+                      "Gas for Her Car"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona lives on campus. Her room and board is covered by her student loans. She has access to a free gym on campus."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Ramona's additional expenses include:",
+                    "items": [
+                      "Groceries",
+                      "Bowling League Fees",
+                      "College Textbooks",
+                      "Concert Tickets"
+                    ]
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.2-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Which of Abigail's expenses are a want?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Groceries"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Rock Climbing Membership"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Electricity Bill"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "For Abigail, rock climbing is a recreational activity, making it a want rather than an essential expense needed for daily living."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.4",
+            "title": "Fixed vs Variable Expenses",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to identify the difference between fixed and variable expenses, as well as categorize common expenses into each type.",
+            "estimatedMin": 10,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.4.1",
+                "title": "Fixed vs Variable Expense",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's take a look at some of Abigail's monthly expenses."
+                  },
+                  {
+                    "type": "table",
+                    "budgetId": "abigail-basic-expenses"
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Abigail notices that some expenses stay the same every month:",
+                    "items": [
+                      "Rent",
+                      "Car Payment"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "These expenses are the same amount each month and don't change."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Abigail also notices that some expenses change from month to month:",
+                    "items": [
+                      "Groceries",
+                      "Gasoline",
+                      "Electricity"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "These expenses might fluctuate each month based on the amount used each time or fluctuating prices."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "For example, Abigail's electricity bill is higher in the summer and winter due to her A/C and heat being powered by electricity."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "During the spring and fall, she doesn't need to run the heat or A/C as much, so her bill is much lower."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "Expenses that stay the same every month are called fixed expenses.\n\n\nExpenses that change from month to month are variable expenses."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Which of these is an example of a fixed expense?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Electric Bill"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Gas for your Car"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Food"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Rent is a fixed expense because it usually stays the same amount each month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Which is an example of a variable expense?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Health Insurance Premium"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Electricity Bill"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Rent"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "Electricity is a variable expense because the amount you use each month can change."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false: A variable expense can be different each month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Variable expenses can increase or decrease, so they may be different each month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q4",
+                    "questionType": "multipleChoice",
+                    "question": "Abigail's electric bill was $80 in April and $110 in July. Why is electricity considered a variable expense?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "It is paid once a year"
+                      },
+                      {
+                        "key": "b",
+                        "text": "The amount can change each month"
+                      },
+                      {
+                        "key": "c",
+                        "text": "It is always optional"
+                      },
+                      {
+                        "key": "d",
+                        "text": "It never changes"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Abigail's electric bill was different in April and July, showing that electricity costs can vary from month to month."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.5",
+            "title": "Creating a Budget",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to create a basic budget by listing income and expenses, categorizing expenses, and calculating monthly cash flow.",
+            "estimatedMin": 10,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.5.1",
+                "title": "Adding Income to a Budget",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's help Abigail put her budget together."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "The first step to creating a budget is adding up your monthly net income."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "For Abigail, she receives $5,850 after taxes and $1,230 for child support."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Since child support is non-taxable income, her gross and net monthly child support income is the same, $1,230."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Here's what it looks like when she adds all her sources of income to her budget:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "abigail-income"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.1-q1",
+                    "questionType": "trueFalse",
+                    "question": "True or false? To create your budget, you use your gross income.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Budgets should be based on your net income, which is the money you take home after taxes and deductions."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.1-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Which of the following income sources should be included when creating a monthly budget?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Only income from a job"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Only taxable income"
+                      },
+                      {
+                        "key": "c",
+                        "text": "All regular income sources, including non-taxable income like child support"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Only income deposited into a checking account"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "Include all regular sources of income in your budget so you have an accurate picture of your monthly money coming in."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.1-q3",
+                    "questionType": "multipleChoice",
+                    "question": "Given Abigail's net income of $5,850 from nursing and $1,230 from child support, how much is Abigail's total monthly net income?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$4,570"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$7,080"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$6,030"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$6,000"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Abigail's total monthly net income is $7,080 because $5,850 + $1,230 = $7,080"
+                  }
+                ]
+              },
+              {
+                "id": "1.5.2",
+                "title": "Adding Expenses to a Budget",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's take a look at Abigail's monthly expenses."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "First, Abigail lists out all of her expenses over the past month and how much she spent on each item."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "To help Abigail get accurate numbers, she checks her bank statements and finds that she pays $40 every month for her children's sports activities."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "If she's unsure of an expense or it varies each month, she can use an estimate until she tracks her spending more accurately."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Here's a list of Abigail's expenses and how much she paid the past month:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "abigail-all-expenses"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "When creating a budget, we want to categorize our expenses and then divide those expenses into two categories, fixed and variable expenses."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q1",
+                    "questionType": "multiSelect",
+                    "question": "Which of Abigail's expenses are fixed expenses? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rock Climbing Membership, Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Sports Activities for Kids"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Electricity, Groceries, Gasoline"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b",
+                      "c"
+                    ],
+                    "explanation": "These are fixed expenses because the amount is usually the same each month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Which of Abigail's expenses are variable? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rock Climbing Membership, Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Sports Activities for Kids"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Electricity, Groceries, Gasoline"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "These are variable expenses because their costs can change from month to month based on usage and needs."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Now that we have categorized Abigail's expenses, here is what her budget looks like with her income:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "portable-budget-0"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "To keep Abigail's budget more organized and easier to analyze her spending, let's categorize her expenses even further into needs and wants."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q3",
+                    "questionType": "multiSelect",
+                    "question": "Within Abigail's fixed expenses, which ones could be categorized as needs? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rock Climbing Membership"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Rent"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Sports Activities for Kids"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Car Payment"
+                      }
+                    ],
+                    "correctResponse": [
+                      "b",
+                      "d"
+                    ],
+                    "explanation": "Rent and a car payment are typically necessary expenses for housing and transportation, so they can be considered needs."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q4",
+                    "questionType": "multiSelect",
+                    "question": "Within Abigail's variable expenses, which ones could be categorized as needs? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Electricity"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Groceries"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Gasoline"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b",
+                      "c"
+                    ],
+                    "explanation": "Electricity, groceries, and gasoline are often needed for daily living, making them examples of variable expenses that can also be needs."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Great! Now here's Abigail's budget organized by needs and wants:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "portable-budget-1"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q5",
+                    "questionType": "multipleChoice",
+                    "question": "Now that we have Abigail's total income and expenses, what is the formula to calculate her cash flow?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Expenses - Income  = Cash Flow"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Income + Expenses = Cash Flow"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Expenses x Income = Cash Flow"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Income - Expenses = Cash Flow"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "Income - Expenses = Cash Flow. Cash flow is calculated by subtracting your expenses from your income to see how much money you have left over."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q6",
+                    "questionType": "multipleChoice",
+                    "question": "What would Abigail's cash flow be if her income totals to $7,080 and all her expenses total to $2,154?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "-$4,926"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$4,926"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$9,234"
+                      },
+                      {
+                        "key": "d",
+                        "text": "-$9,234"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Abigail's cash flow is $4,876 because $7,080 (income) - $2,154 (expenses) = $4,926."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Great job helping Abigail with her budget! Here's her completed budget:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "portable-budget-2"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.6",
+            "title": "Tracking Your Expenses",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to track your expenses, compare your spending to your budget, and make adjustments based on your spending habits.",
+            "estimatedMin": 10,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.6.1",
+                "title": "Tracking Expenses",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Now that Abigail has her budget, the next step is to track her spending over the next 2 months to see if her budget is accurate and learn about her spending habits."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "There's several different ways that Abigail can track her spending including:",
+                    "items": [
+                      "Pen and Paper",
+                      "Spreadsheets",
+                      "An App"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail decides that the best method for her is an app on her phone."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Using the app, Abigail is able to categorize each of her purchases and can see where each cent is going."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Her categories include things like:"
+                  },
+                  {
+                    "type": "unorderedList",
+                    "items": [
+                      "Groceries",
+                      "Gasoline",
+                      "Rock Climbing Membership"
+                    ]
+                  },
+                  {
+                    "type": "callout",
+                    "text": "The key to expense tracking is consistency and choosing a tracking method that works best for you."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Each week, Abigail sets aside time to review her purchases to make sure they are categorized correctly in the app and to keep an eye on her spending."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q1",
+                    "questionType": "multiSelect",
+                    "question": "What are different ways to keep track of your spending? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Pen and Paper"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Spreadsheets"
+                      },
+                      {
+                        "key": "c",
+                        "text": "In your Brain"
+                      },
+                      {
+                        "key": "d",
+                        "text": "An App"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b",
+                      "d"
+                    ],
+                    "explanation": "Pen and paper, spreadsheets, and apps can all help you track your spending, while relying only on memory is not reliable."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q2",
+                    "questionType": "trueFalse",
+                    "question": "True or false? The best way to keep track of your spending is just in your head.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Tracking expenses in your head can make it easy to forget purchases or miss important details."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false? The method you choose to track your expenses at the beginning is the method you need to stick with the rest of your life.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Choose a method that works best for you and don't be afraid to change it if it is no longer working."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q4",
+                    "questionType": "multiSelect",
+                    "question": "What is the key to success when tracking your expenses? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Choosing a method that works best for you"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Consistency"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Hopes and prayers"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Never looking at your expenses"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b"
+                    ],
+                    "explanation": "Successful expense tracking depends on using a method you like and keeping up with it regularly."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q5",
+                    "questionType": "trueFalse",
+                    "question": "True or false? Tracking your spending is enough.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Tracking your spending is important, but you also need to review and use that information to make informed financial decisions."
+                  }
+                ]
+              },
+              {
+                "id": "1.6.2",
+                "title": "Compare Spending to Budget",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Now that Abigail has been tracking her spending for a month, it's time for her monthly budget review."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail compares her budget line by line with her categorized spending that she's been tracking in her app."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "After comparing her budget and spending habits, she notices that she spends closer to $500 on groceries per month."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She readjusts her budget to increase the amount of money she spends on groceries to $500."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She also notices that she's not using the rock climbing membership as much as she thought she would, so she decides to cancel her monthly membership for now."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "Tip: Review your budget monthly."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "By tracking and reviewing your spending month-by-month, you'll be able to identify trends in your spending habits."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Understanding your habits is the first step in making a change to your money management habits."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.2-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Why is it important to compare your actual spending to your budget each month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "To make sure your paycheck was deposited"
+                      },
+                      {
+                        "key": "b",
+                        "text": "To see if you are staying on track with your spending and make adjustments if needed"
+                      },
+                      {
+                        "key": "c",
+                        "text": "To increase all of your budget categories"
+                      },
+                      {
+                        "key": "d",
+                        "text": "To calculate your gross income"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Comparing your spending to your budget helps you identify differences and make changes to stay on track."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.2-q2",
+                    "questionType": "multipleChoice",
+                    "question": "What is one benefit of tracking your expenses and reviewing your budget every month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "It helps you identify spending trends and habits over time"
+                      },
+                      {
+                        "key": "b",
+                        "text": "It guarantees you'll never overspend"
+                      },
+                      {
+                        "key": "c",
+                        "text": "It automatically increases your income"
+                      },
+                      {
+                        "key": "d",
+                        "text": "It eliminates all unexpected expenses"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Regularly reviewing your spending helps you understand where your money goes and spot patterns over time."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.2-q3",
+                    "questionType": "multipleChoice",
+                    "question": "After reviewing her spending, Abigail noticed she was spending about $500 per month on groceries instead of the amount she originally budgeted. What should she do?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Ignore the difference and keep her budget the same"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Stop buying groceries altogether"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Adjust her grocery budget to better match her actual spending"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Remove groceries from her budget"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "If Abigail consistently spends more on groceries than planned, she should update her budget to reflect her actual expenses."
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "glossary": [
+          {
+            "term": "APR (Annual Percentage Rate)",
+            "definition": "The cost of borrowing money on a yearly basis, expressed as a percentage rate."
+          },
+          {
+            "term": "Budget",
+            "definition": "A plan that outlines what money you expect to earn or receive (your income) and how you will save it or spend it (your expenses) for a given period of time; also called a spending plan."
+          },
+          {
+            "term": "Compound interest",
+            "definition": "When you earn interest on both the money you save and the interest you earn."
+          },
+          {
+            "term": "Credit",
+            "definition": "Borrowing money, or having the right to borrow money, to buy something. Usually it means you're using a credit card, but it might also mean that you got a loan"
+          },
+          {
+            "term": "Debt",
+            "definition": "Money you owe another person or a business."
+          },
+          {
+            "term": "Earned income",
+            "definition": "Money made from working for someone who pays you or from running a business or farm. This includes all the income, wages, and tips you get from working."
+          },
+          {
+            "term": "Fixed expenses",
+            "definition": "Expenses, like bills, that must be paid each month and generally cost the same amount. Some fixed expenses, like a utility bill, may also be variable because the amount changes each month depending on usage."
+          },
+          {
+            "term": "Income",
+            "definition": "Money earned or received such as wages or salaries, tips, commissions, contracted pay, government transfer payments, dividends on investments, tax refunds, gifts, and inheritances."
+          },
+          {
+            "term": "Needs",
+            "definition": "Basic things people must have to survive (such as food, clothing, and shelter), resources they may need to do their jobs (such as reliable transportation and the tools of the trade), and resources to help build and protect their money and property so they can meet future needs (such as emergency savings and insurance)."
+          },
+          {
+            "term": "Principal",
+            "definition": "In the lending context, principal is the amount of money that you originally received from the lender and agreed to pay back on the loan with interest. In the investment context, it is the amount of money you contribute with the expectation of receiving income."
+          },
+          {
+            "term": "Savings",
+            "definition": "Money you have set aside in a secure place, such as in a bank account, that you can use for future emergencies or to make specific purchases."
+          },
+          {
+            "term": "Variable expenses",
+            "definition": "Expenses that change in amount from month to month."
+          },
+          {
+            "term": "Wants",
+            "definition": "Upgrades and other things that would be nice to have but aren't necessary for living, income, or protecting what you have."
+          }
+        ],
+        "worksCited": [
+          {
+            "id": "adp-nc-paycheck-calculator",
+            "title": "North Carolina Paycheck Calculator",
+            "author": "ADP",
+            "citation": "ADP. \"North Carolina Paycheck Calculator.\"",
+            "url": "https://www.adp.com/resources/tools/calculators/states/north-carolina-salary-paycheck-calculator.aspx"
+          },
+          {
+            "id": "ivey-glen-apartment-community",
+            "title": "Ivey Glen Apartment Community",
+            "author": "Apartments.com",
+            "citation": "Apartments.com. \"Ivey Glen Apartment Community.\"",
+            "url": "https://www.apartments.com/ivey-glen-apartment-community-graham-nc/n1fre0m/"
+          },
+          {
+            "id": "cfpb-youth-glossary",
+            "title": "Youth Financial Education Glossary",
+            "author": "Consumer Financial Protection Bureau (CFPB)",
+            "citation": "Consumer Financial Protection Bureau. \"Youth Financial Education Glossary.\"",
+            "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/glossary/#b"
+          },
+          {
+            "id": "fnb-financial-literacy",
+            "title": "Financial Literacy",
+            "author": "First National Bank (FNB)",
+            "citation": "First National Bank (FNB). \"Financial Literacy.\" Udemy.",
+            "url": "https://www.udemy.com/course/fnb-financial-literacy/"
+          },
+          {
+            "id": "mit-living-wage-calculator",
+            "title": "Living Wage Calculator",
+            "author": "Massachusetts Institute of Technology (MIT)",
+            "citation": "Massachusetts Institute of Technology. \"Living Wage Calculator.\"",
+            "url": "https://livingwage.mit.edu/"
+          },
+          {
+            "id": "nc-child-support-calculator",
+            "title": "North Carolina Child Support Guidelines",
+            "author": "North Carolina Department of Health and Human Services (NCDHHS)",
+            "citation": "North Carolina Department of Health and Human Services. \"North Carolina Child Support Guidelines.\"",
+            "url": "https://ncchildsupport.ncdhhs.gov/ecoa/index.jsp?timeout=true"
+          }
+        ]
+      }
+    ]
+  }
+}

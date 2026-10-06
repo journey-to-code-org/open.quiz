@@ -25,6 +25,7 @@ import {
 } from "../services/api";
 import Card from "../shared/Card/Card.component";
 import Button from "../shared/Button/Button.component";
+import PackageManager from "../features/admin/packages/PackageManager";
 
 const emptyModule = { id: "", title: "", lessons: [] };
 const lessonModuleTemplate = {
@@ -354,6 +355,8 @@ export default function AdminDashboardPage() {
         <p className="max-w-2xl text-foreground">Manage users and lesson content.</p>
       </header>
 
+      <PackageManager csrfToken={csrfToken} modules={modules} />
+
       {state.error ? (
         <p role="alert" className="text-danger">
           {state.error}
@@ -677,6 +680,11 @@ export default function AdminDashboardPage() {
                 />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-heading">{asset.name}</p>
+                  {asset.sourcePackageId ? (
+                    <p className="truncate text-xs text-neutral-600">
+                      From package {asset.sourcePackageId}
+                    </p>
+                  ) : null}
                   <code className="block truncate text-xs text-neutral-600">{asset.url}</code>
                   <Button
                     variant="ghost"
