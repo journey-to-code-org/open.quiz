@@ -28,6 +28,45 @@ function authHeader(user) {
 }
 
 describe("leaderboard API", () => {
+  it("returns public rankings without credentials and excludes private or inactive accounts", async () => {
+    const { weekStart, weekEnd } = getLeaderboardWeek();
+    const publicUser = await createUser("public");
+    const hiddenUsers = await Promise.all([
+      createUser("opted-out", { leaderboard_opt_in: false }),
+      createUser("disabled", { is_disabled: true }),
+      createUser("deleted", { is_deleted: true }),
+      createUser("archived", { is_archived: true }),
+    ]);
+    await WeeklyLeaderboard.insertMany(
+      [publicUser, ...hiddenUsers].map((user) => ({
+        user_id: user._id,
+        week_start: weekStart,
+        week_end: weekEnd,
+        xp_total: 100,
+      })),
+    );
+
+    const response = await request(app).get("/api/v1/leaderboard/public");
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({ optedIn: null, currentUser: null });
+    expect(response.body.entries).toEqual([
+      {
+        displayName: "Learner public",
+        avatarUrl: null,
+        weeklyXp: 100,
+        rank: 1,
+        isCurrentUser: false,
+      },
+    ]);
+    expect(Object.keys(response.body.entries[0]).sort()).toEqual([
+      "avatarUrl",
+      "displayName",
+      "isCurrentUser",
+      "rank",
+      "weeklyXp",
+    ]);
+  });
+
   it("requires authentication", async () => {
     const response = await request(app).get("/api/v1/leaderboard");
 
@@ -97,5 +136,12 @@ describe("leaderboard API", () => {
     expect(JSON.stringify(response.body)).not.toContain(currentUser._id.toString());
     expect(JSON.stringify(response.body)).not.toContain("@example.com");
     expect(JSON.stringify(response.body)).not.toContain("email");
+
+    const publicResponse = await request(app).get("/api/v1/leaderboard/public");
+    expect(publicResponse.status).toBe(200);
+    expect(publicResponse.body.entries).toHaveLength(20);
+    expect(publicResponse.body.currentUser).toBeNull();
+    expect(publicResponse.body.entries.every((entry) => entry.isCurrentUser === false)).toBe(true);
+    expect(JSON.stringify(publicResponse.body)).not.toContain("@example.com");
   });
 });

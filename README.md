@@ -41,6 +41,7 @@ can import their own content packages.
 - Form validation and error handling
 - RESTful API integration
 - XP, badges, and streak rewards
+- Public weekly leaderboard at `/leaderboard`, showing only opted-in learners
 
 <!--
 ## 📸 Screenshots
