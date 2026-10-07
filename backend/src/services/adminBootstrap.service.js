@@ -1,5 +1,6 @@
 const AdminBootstrap = require("../models/AdminBootstrap.model");
 const User = require("../models/User.model");
+const { isDemoMode } = require("../config/demoMode");
 
 async function bootstrapLoginAdmin(user) {
   if (
@@ -12,6 +13,13 @@ async function bootstrapLoginAdmin(user) {
     const error = new Error("Only a verified, active account can initialize administrator access.");
     error.status = 403;
     throw error;
+  }
+  if (isDemoMode()) {
+    if (user.role !== "admin") {
+      await User.updateOne({ _id: user._id }, { $set: { role: "admin" } });
+      user.role = "admin";
+    }
+    return;
   }
   await AdminBootstrap.init();
   const existingAdmin = await User.findOne({

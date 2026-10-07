@@ -151,7 +151,7 @@ test("admin previews, installs, activates, reloads, and restores a package theme
       await route.fulfill({ json: { activePackageId: null } });
     },
   );
-  await page.goto("/admin/dashboard");
+  await page.goto("/admin/dashboard#theming");
   await expect(
     page.getByRole("heading", { name: "Appearance and packages" }),
   ).toBeVisible();

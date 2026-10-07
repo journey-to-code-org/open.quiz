@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.4.0] - 2026-10-06
+
+### Added
+
+- Organized the admin dashboard into **Users**, **Lessons**, and **Theming** tabs. The open tab is kept in the URL hash (for example `/admin/dashboard#theming`), the tabs work with the keyboard (arrow keys, Home, End), and the Users tab shows a badge with the number of pending deletion requests.
+- Added a public demo mode (`DEMO_MODE=true`) for showcase deployments. Every verified sign-in, including Google and GitHub, becomes an admin. Other users' emails are hidden and user search matches names only. Admin actions on other accounts return `403`, and the admin dashboard shows a demo notice. `/admin/status` and `/admin/users` report `demoMode`.
+- Added a daily **Reset demo site** GitHub Actions workflow and a `npm run demo:reset` script (which requires `DEMO_RESET_CONFIRM=reset-demo-site`). The reset deletes every account and its learner data, then restores lessons, themes, packages, assets, and site settings to the bundled starter content, so the next visitor becomes an admin. The workflow uses the `DEMO_MONGO_URI` repository secret and skips when the secret is missing, so forks are unaffected.
+
+### Changed
+
+- In demo mode, cached lessons expire after 60 seconds, so the outside reset reaches a running server without a restart.
+
+---
+
 ## [1.3.1] - 2026-10-06
 
 ### Added

@@ -56,6 +56,7 @@ vi.mock("../services/api", () => ({
 
 describe("AdminDashboardPage", () => {
   beforeEach(() => {
+    window.history.replaceState(null, "", "/admin/dashboard");
     useAuthContext.mockReturnValue({ csrfToken: "csrf-token", user: { id: "admin-123" } });
     getAdminUsers.mockResolvedValue({
       users: [
@@ -111,6 +112,7 @@ describe("AdminDashboardPage", () => {
 
     render(<AdminDashboardPage />);
 
+    await user.click(await screen.findByRole("tab", { name: /Lessons/ }));
     await user.click(await screen.findByText("Lesson JSON schema and example"));
     expect(screen.getByText(/"microLessonContent"/, { selector: "pre" })).toBeInTheDocument();
 
@@ -124,6 +126,42 @@ describe("AdminDashboardPage", () => {
       });
       expect(screen.getByText("/api/v1/assets/avatar-1")).toBeInTheDocument();
     });
+  });
+
+  it("organizes the dashboard into users, lessons, and theming tabs", async () => {
+    const user = userEvent.setup();
+    getAdminUsers.mockResolvedValue({ users: [], demoMode: true });
+    render(<AdminDashboardPage />);
+
+    const usersTab = await screen.findByRole("tab", { name: /Users/ });
+    expect(usersTab).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByLabelText("1 pending deletion request")).toBeInTheDocument();
+    expect(await screen.findByRole("note")).toHaveTextContent(/everyone who signs in is an admin/);
+    expect(screen.getByRole("heading", { name: "Pending deletions" })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "Appearance and packages" })).toBeNull();
+
+    await user.click(screen.getByRole("tab", { name: /Theming/ }));
+    expect(screen.getByRole("tab", { name: /Theming/ })).toHaveAttribute("aria-selected", "true");
+    expect(
+      await screen.findByRole("heading", { name: "Appearance and packages" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Pending deletions" })).toBeNull();
+    expect(window.location.hash).toBe("#theming");
+
+    await user.keyboard("{ArrowLeft}");
+    expect(screen.getByRole("tab", { name: /Lessons/ })).toHaveFocus();
+    expect(screen.getByRole("heading", { name: "Lesson modules" })).toBeInTheDocument();
+    await user.keyboard("{Home}");
+    expect(screen.getByRole("tab", { name: /Users/ })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("reopens the tab named in the URL hash", async () => {
+    window.history.replaceState(null, "", "/admin/dashboard#lessons");
+    render(<AdminDashboardPage />);
+    expect(await screen.findByRole("tab", { name: /Lessons/ })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
   });
 
   it("passes the pending user's ID and CSRF token to deletion approval", async () => {

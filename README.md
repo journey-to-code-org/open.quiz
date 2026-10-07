@@ -111,7 +111,9 @@ database ready and allow connections from your Render service. The application c
 successfully until its required environment variables are configured.
 
 See [Render deployment instructions](docs/development-setup.md#render-deployment) for details,
-manual service settings, and OAuth configuration.
+manual service settings, and OAuth configuration. To host a public showcase where every visitor
+can sign in as an admin and the site resets daily, see
+[public demo mode](docs/development-setup.md#public-demo-mode).
 
 ### Quick Start
 
@@ -126,7 +128,7 @@ npm run dev
 The first successful password, Google, or GitHub sign-in initializes administrator access
 on a fresh installation. Complete your own initial sign-in before opening it to the public.
 Learning Garden and Sprout are preinstalled as inactive themes; an administrator can choose
-one in **Appearance and packages** without finding or uploading a package. The open.quiz
+one in the admin dashboard's **Theming** tab without finding or uploading a package. The open.quiz
 instructional lessons are installed automatically for new learners to explore. See
 [initial setup details](docs/development-setup.md#first-sign-in-and-built-in-themes).
 

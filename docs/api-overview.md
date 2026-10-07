@@ -53,6 +53,18 @@ GET    /api/v1/admin/site-export
 name and landing page in an exported theme. Limits are listed in
 [themes.md](themes.md#app-name-and-landing-page).
 
+## Admin Status And Demo Mode
+
+```text
+GET    /api/v1/admin/status                  { isAdmin, userId, demoMode }
+GET    /api/v1/admin/users                   { users, page, limit, total, demoMode }
+```
+
+When `DEMO_MODE=true`, other users' `email` values are returned as `hidden in demo`, `search`
+matches names only, and user-targeted admin routes (`/admin/users/:userId/*`,
+`DELETE /admin/users/:userId`, `/admin/deletions/*/:userId`) return `403` unless `:userId`
+is the signed-in admin. See [public demo mode](development-setup.md#public-demo-mode).
+
 ## OAuth Browser Routes
 
 ```text

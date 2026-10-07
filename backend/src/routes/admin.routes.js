@@ -14,6 +14,7 @@ const {
   listPackages,
   updateSiteSettings,
 } = require("../controllers/openQuizPackage.controller");
+const { demoOwnAccountOnly } = require("../config/demoMode");
 const { listAvatarAssets, uploadAvatarAsset } = require("../controllers/contentAsset.controller");
 const {
   getAdminStatus,
@@ -56,16 +57,16 @@ const handlePackageUpload = (req, res, next) =>
 router.get("/status", getAdminStatus);
 router.get("/users", listUsers);
 router.post("/users/seed-random", seedRandomUsers);
-router.post("/users/:userId/progress/reset", resetUserProgress);
-router.patch("/users/:userId/disabled", setUserDisabled);
-router.patch("/users/:userId/role", updateUserRole);
-router.patch("/users/:userId/verify-email", verifyUserEmail);
-router.patch("/users/:userId/deleted", setUserDeleted);
-router.delete("/users/:userId", hardDeleteUser);
+router.post("/users/:userId/progress/reset", demoOwnAccountOnly, resetUserProgress);
+router.patch("/users/:userId/disabled", demoOwnAccountOnly, setUserDisabled);
+router.patch("/users/:userId/role", demoOwnAccountOnly, updateUserRole);
+router.patch("/users/:userId/verify-email", demoOwnAccountOnly, verifyUserEmail);
+router.patch("/users/:userId/deleted", demoOwnAccountOnly, setUserDeleted);
+router.delete("/users/:userId", demoOwnAccountOnly, hardDeleteUser);
 router.get("/deletions/pending", getPendingDeleteAccount);
-router.patch("/deletions/approve/:userId", approveDeleteAccount);
-router.patch("/deletions/deny/:userId", rejectDeleteAccount);
-router.patch("/deletions/reactivate/:userId", reactivateUserAcct);
+router.patch("/deletions/approve/:userId", demoOwnAccountOnly, approveDeleteAccount);
+router.patch("/deletions/deny/:userId", demoOwnAccountOnly, rejectDeleteAccount);
+router.patch("/deletions/reactivate/:userId", demoOwnAccountOnly, reactivateUserAcct);
 router.get("/modules", listModules);
 router.get("/assets/avatars", listAvatarAssets);
 router.post("/assets/avatars", upload.single("file"), uploadAvatarAsset);

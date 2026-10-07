@@ -115,7 +115,7 @@ Complete your own initial sign-in before sharing a new installation publicly: th
 eligible person to sign in receives site-wide administrative privileges.
 
 After connecting to MongoDB, server startup installs the bundled **Learning Garden** and
-**Sprout** themes if they are missing. They appear under **Admin > Appearance and packages**
+**Sprout** themes if they are missing. They appear under **Admin > Theming**
 without a manual upload. Startup also installs the **Welcome to open.quiz** instructional
 module, so a fresh installation has lessons, quizzes, glossary entries, and Nova/Kit guides
 ready to explore. The module's metadata loads its bundled character artwork and renderers;
@@ -130,6 +130,65 @@ Sprout's character artwork, including the beaver, is also available in the admin
 avatar library without activating Sprout. Restarting the server repairs a missing beaver
 entry in an older Sprout installation. See [theme authoring and image specifications](themes.md)
 for custom packages.
+
+## Admin Dashboard
+
+The admin dashboard at `/admin/dashboard` is organized into three tabs:
+
+- **Users**: accounts, roles, bans, email verification, and pending deletion requests. A badge
+  on the tab shows how many deletion requests are waiting.
+- **Lessons**: lesson modules, the lesson editor and JSON import, and the avatar library.
+- **Theming**: bundled and uploaded packages, the theme customizer, site name, landing page,
+  and exports.
+
+The selected tab is stored in the URL hash (for example `/admin/dashboard#theming`), so a
+refresh or shared link reopens the same section. Use the arrow keys, **Home**, and **End** to
+move between tabs with the keyboard.
+
+## Public Demo Mode
+
+Set `DEMO_MODE=true` on a public showcase deployment so visitors can explore the admin tools
+without credentials being shared:
+
+- Every verified sign-in, including Google and GitHub, is promoted to administrator.
+- Other users' email addresses are replaced with `hidden in demo` in admin lists, and the user
+  search only matches names, so addresses cannot be probed.
+- Admin actions that target another account (role changes, bans, verification, deletion,
+  progress resets, and deletion decisions) return `403`. Admins can still act on their own account.
+- The admin dashboard shows a demo notice.
+- Cached lessons expire after 60 seconds, so the daily reset, which runs outside the server,
+  reaches the live site without a restart.
+
+Leave `DEMO_MODE` unset for real installations. Lessons, themes, and site settings stay editable
+because exploring them is the point of the demo; the daily reset restores them.
+
+### Daily Demo Reset
+
+The [Reset demo site](../.github/workflows/reset-demo.yml) workflow runs daily at 08:00 UTC and
+can be started manually from the **Actions** tab. It returns the demo database to a fresh
+installation:
+
+- Every user, the first-admin bootstrap record, and learner data (progress, quiz attempts, XP, and
+  leaderboards) are deleted. Signed-in visitors are signed out automatically because their accounts
+  no longer exist, and the next verified sign-in becomes an admin.
+- All lesson modules, packages, uploaded assets, and site settings are deleted, then the bundled
+  starter content is reinstalled: the inactive Learning Garden and Sprout themes and the
+  **Welcome to open.quiz** lessons. Default branding, app name, and landing page return.
+
+To enable it, add a repository secret named `DEMO_MONGO_URI` (**Settings > Secrets and variables >
+Actions**) containing the same MongoDB connection string, including the database name, as the demo
+service's `MONGO_URI`. If the secret is missing, the workflow skips without error. Repository secrets
+are not copied to forks, and GitHub disables scheduled workflows on forks by default, so forks never
+reset your database. Scheduled workflows run from the default branch, so merge the workflow there
+before relying on the schedule.
+
+To run the same reset manually, run the following in `backend`. It deletes everything in the target
+database except the bundled starter content, so the confirmation variable is required to prevent
+accidental runs:
+
+```bash
+MONGO_URI="mongodb+srv://..." DEMO_RESET_CONFIRM=reset-demo-site npm run demo:reset
+```
 
 ## Social Sign-In Setup
 
@@ -197,15 +256,15 @@ environment variables and MongoDB connectivity.
 
 If you create a Web Service manually instead of using the Blueprint, use these same settings:
 
-| Setting | Value |
-| --- | --- |
-| Runtime | Node |
-| Root Directory | Leave blank (repository root) |
-| Node version | 24, matching `.nvmrc` |
-| Build Command | `npm ci --omit=dev --prefix backend && npm ci --include=dev --prefix frontend && npm run build` |
-| Start Command | `npm run start:backend` |
-| Health Check Path | `/health` |
-| Environment | `NODE_ENV=production`, plus the required secrets below |
+| Setting           | Value                                                                                           |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| Runtime           | Node                                                                                            |
+| Root Directory    | Leave blank (repository root)                                                                   |
+| Node version      | 24, matching `.nvmrc`                                                                           |
+| Build Command     | `npm ci --omit=dev --prefix backend && npm ci --include=dev --prefix frontend && npm run build` |
+| Start Command     | `npm run start:backend`                                                                         |
+| Health Check Path | `/health`                                                                                       |
+| Environment       | `NODE_ENV=production`, plus the required secrets below                                          |
 
 The frontend install explicitly includes development dependencies because Vite and its plugins
 are needed during the build. The root build and start scripts do not require installing the

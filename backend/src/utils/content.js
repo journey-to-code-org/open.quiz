@@ -1,15 +1,22 @@
 const LessonModule = require("../models/LessonModule.model");
+const { isDemoMode } = require("../config/demoMode");
+
+// The daily demo reset rewrites lessons from outside this process, so demo caches expire.
+const DEMO_MODULE_CACHE_TTL_MS = 60 * 1000;
 
 let moduleCache = new Map();
 
 const getModule = async (moduleId) => {
-  if (moduleCache.has(moduleId)) {
-    return moduleCache.get(moduleId);
+  const cached = moduleCache.get(moduleId);
+  if (cached && (!isDemoMode() || Date.now() - cached.cachedAt < DEMO_MODULE_CACHE_TTL_MS)) {
+    return cached.data;
   }
 
   const moduleData = await LessonModule.findOne({ id: moduleId }).lean();
   if (moduleData) {
-    moduleCache.set(moduleId, moduleData);
+    moduleCache.set(moduleId, { data: moduleData, cachedAt: Date.now() });
+  } else {
+    moduleCache.delete(moduleId);
   }
   return moduleData;
 };
@@ -64,4 +71,5 @@ module.exports = {
   sanitizeModuleData,
   clearCache,
   clearModuleCache,
+  DEMO_MODULE_CACHE_TTL_MS,
 };

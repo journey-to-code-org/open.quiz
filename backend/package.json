@@ -26,6 +26,7 @@
   "scripts": {
     "dev": "nodemon server",
     "start": "node server",
+    "demo:reset": "node scripts/resetDemoSite.js",
     "test": "cross-env NODE_ENV=test jest --runInBand",
     "test:coverage": "cross-env NODE_ENV=test jest --runInBand --coverage",
     "lint": "eslint . --max-warnings 0 && echo 'Backend ESLint checks passed successfully'",
