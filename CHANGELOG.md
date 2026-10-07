@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Updated the README and project structure guide for the current open.quiz repository, capabilities, directories, and local setup requirements.
+
 ### Fixed
 
 - Allowed external HTTPS avatar images in the production Content Security Policy, restoring Google/GitHub profile images while retaining the existing script and object restrictions.
