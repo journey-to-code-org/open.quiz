@@ -1,7 +1,7 @@
 {
-  "name": "sprout-frontend",
+  "name": "open-quiz-frontend",
   "version": "0.0.0",
-  "description": "This is the frontend code for a financial literacy app created for Code the Dream's Summer Practicum 2026",
+  "description": "Frontend for the open.quiz learning platform",
   "keywords": [
     "frontend",
     "vite",
@@ -10,7 +10,7 @@
     "context",
     "auth",
     "jwt",
-    "financial-literacy",
+    "learning-platform",
     "collab",
     "team",
     "group"
@@ -44,7 +44,7 @@
     "react-dom": "^19.3.0",
     "react-hook-form": "^7.89.0",
     "react-router": "^8.4.0",
-    "sprout": "file:..",
+    "open.quiz": "file:..",
     "tailwindcss": "^4.3.3",
     "zod": "^4.6.5"
   },

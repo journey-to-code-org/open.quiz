@@ -28,6 +28,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
   pull-requests: write
 
 concurrency:
@@ -115,6 +116,21 @@ jobs:
           git add -- "${PATHS[@]}"
           git commit -m "${{ steps.prepare.outputs.commit-message }}"
           git push --force-with-lease origin "${{ steps.prepare.outputs.sync-branch }}"
+
+      - name: Ensure sync PR labels exist
+        if: steps.prepare.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING_LABELS=$(gh label list --repo "$GITHUB_REPOSITORY" --limit 1000 --json name --jq '.[].name')
+
+          if ! grep -Fxq "documentation" <<< "$EXISTING_LABELS"; then
+            gh label create documentation --repo "$GITHUB_REPOSITORY" --color 0075ca --description "Improvements or additions to documentation" --force
+          fi
+
+          if ! grep -Fxq "changelog" <<< "$EXISTING_LABELS"; then
+            gh label create changelog --repo "$GITHUB_REPOSITORY" --color fbca04 --description "Updates to the project changelog" --force
+          fi
 
       - name: Create or update sync PR
         if: steps.prepare.outputs.changed == 'true'

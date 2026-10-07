@@ -1,6 +1,6 @@
 # Project Structure
 
-This page describes the main folders and files in the Sprout repository.
+This page describes the main folders and files in the open.quiz repository.
 
 ```text
 summer-26-js-practicum-team2/

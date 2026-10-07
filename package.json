@@ -1,10 +1,10 @@
 {
-  "name": "sprout",
-  "version": "1.0.2",
+  "name": "open.quiz",
+  "version": "1.4.0",
   "private": true,
-  "description": "Sprout is a full-stack financial literacy platform featuring guided learning paths, interactive quizzes, and progress tracking, built with React, Node.js, and Express.",
+  "description": "Open Quiz is a full-stack quiz platform featuring guided learning paths, interactive quizzes, and progress tracking, built with React, Node.js, and Express.",
   "keywords": [
-    "sprout",
+    "open-quiz",
     "full-stack",
     "react",
     "vite",
@@ -12,7 +12,6 @@
     "express",
     "mongodb",
     "jwt-auth",
-    "financial-literacy",
     "guided-learning-paths",
     "interactive-lessons",
     "quizzes",
@@ -40,6 +39,8 @@
   "scripts": {
     "setup": "npm i && npm --prefix backend i && npm --prefix frontend i && ./setup.sh",
     "dev": "dotenv -e .env -- npm-run-all --parallel --race -l development:backend development:frontend",
+    "dev:openquiz": "node scripts/runInstance.js openquiz",
+    "instance:seed:openquiz": "dotenv -e instances/openquiz/settings.env -e instances/openquiz/.env -e .env -- node backend/scripts/importLessonModule.js shared/content/examples/openquiz-introduction/openquiz-introduction.json",
     "development:backend": "npm --prefix backend run dev",
     "development:frontend": "npm --prefix frontend run dev",
     "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",
@@ -53,7 +54,8 @@
     "test": "npm run test:backend && npm run test:frontend",
     "verify": "npm run format && npm run lint && npm test && npm run test:e2e:all",
     "start:backend": "npm --prefix backend start",
-    "build:frontend": "npm --prefix frontend run build"
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run build:frontend"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

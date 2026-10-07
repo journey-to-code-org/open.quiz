@@ -9,6 +9,158 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.4.0] - 2026-10-06
+
+### Added
+
+- Organized the admin dashboard into **Users**, **Lessons**, and **Theming** tabs. The open tab is kept in the URL hash (for example `/admin/dashboard#theming`), the tabs work with the keyboard (arrow keys, Home, End), and the Users tab shows a badge with the number of pending deletion requests.
+- Added a public demo mode (`DEMO_MODE=true`) for showcase deployments. Every verified sign-in, including Google and GitHub, becomes an admin. Other users' emails are hidden and user search matches names only. Admin actions on other accounts return `403`, and the admin dashboard shows a demo notice. `/admin/status` and `/admin/users` report `demoMode`.
+- Added a daily **Reset demo site** GitHub Actions workflow and a `npm run demo:reset` script (which requires `DEMO_RESET_CONFIRM=reset-demo-site`). The reset deletes every account and its learner data, then restores lessons, themes, packages, assets, and site settings to the bundled starter content, so the next visitor becomes an admin. The workflow uses the `DEMO_MONGO_URI` repository secret and skips when the secret is missing, so forks are unaffected.
+
+### Changed
+
+- In demo mode, cached lessons expire after 60 seconds, so the outside reset reaches a running server without a restart.
+
+---
+
+## [1.3.1] - 2026-10-06
+
+### Added
+
+- Added learning-path color tokens for secondary text, step titles, divider lines, completed steps, current and upcoming steps, step outlines, the footer bar, and the footer border. The theme customizer, built-in palettes, package schema, and theme docs include them.
+- The bundled Sprout (v1.5.0) and Learning Garden (v1.2.0) themes ship green values for the new tokens. Existing installs get any missing tokens filled in at startup without overwriting admin edits.
+
+### Fixed
+
+- Fixed the admin theme preview showing yellow learning-path steps that did not match the live page and could not be changed. The preview now renders the same step component and colors as the learning-path page, and scales to fit narrow columns.
+- Removed unused hard-coded yellow step colors. The learning-path hero card now follows the theme's highlight and card colors.
+- Fixed an intermittent glossary end-to-end failure by waiting for page requests to settle before recording the lesson baseline.
+
+---
+
+## [1.3.0] - 2026-10-06
+
+### Added
+
+- Added a site-wide app name, configurable in the admin panel. It is used in the page title, header, footer, image alt text, server-rendered `index.html` metadata, and the web app manifest. `VITE_APP_NAME` is now only a fallback.
+- Added a customizable landing page (hero, benefits, how it works, and FAQ) with an admin editor that can reorder, add, remove, and reset items. The landing page can optionally show the theme's avatars in the hero.
+- Theme packages can now carry `theme.appName` and `theme.landing`. When activating a theme, admins can choose whether to apply its app name and landing page. Exports can include the current site's name and landing page (`includeSite`).
+- Bundled the Learning Garden and Sprout themes as installed but inactive packages, so admins can switch to them without finding the package files. The Sprout package (v1.4.0) ships its own app name and landing page.
+- Added a checkbox and button to install the Sprout lessons when activating the Sprout theme, so they can be configured like any other lessons.
+- Added a full site export and import, plus a theme customizer that builds a portable theme package from the admin panel.
+- Added a themeable learning-path trail (for example, vine or dashed) and themeable answer marks: Sprout uses its check and X images, and other themes use accessible built-in badges.
+
+### Changed
+
+- The first verified user to sign in becomes the administrator, including users who sign in with GitHub or Google OAuth.
+- Restored the original Sprout presentation for the home, learning-path, and lesson screens.
+- Made the progress-bar marker (for example, Sprout's flower) larger so it reads clearly against the bar.
+- In production, lessons no longer show missing guide-character images. In development they still appear broken, so missing assets are easy to spot.
+- If the site settings fail to load in the admin package manager, the error is shown on its own and package uploads keep working.
+- Documented the app name, landing page, and site settings API in the theme and API guides and the package schema.
+
+### Fixed
+
+- Fixed the missing beaver avatar in the Sprout avatar library.
+- Restored Jest 30 and nodemon 3 in the backend after an `npm audit fix --force` downgrade broke the test suite.
+- Updated stale backend, end-to-end, and smoke-test expectations to match the current theme API and accessible answer marks.
+
+---
+
+## [1.2.2] - 2026-10-06
+
+### Fixed
+
+- Fixed shared-file sync pull requests between `docs` and `development` failing when the `documentation` or `changelog` labels are missing. The workflow now creates missing labels before creating or updating a pull request, preserves existing labels, and requests the required `issues: write` permission.
+
+### Changed
+
+- Documented shared-file synchronization, automatic label creation, and the required GitHub Actions permissions.
+
+---
+
+## [1.2.1] - 2026-10-06
+
+### Added
+
+- Added a Render Blueprint quick-start to the README and detailed deployment instructions covering MongoDB connectivity, required secrets, and manual Web Service settings.
+
+### Changed
+
+- Documented the single-service deployment flow: install backend runtime and frontend build dependencies, build Vite into `frontend/dist`, and start Express to serve the frontend and API from the same origin.
+- Clarified that the Blueprint does not provision MongoDB or prompt for secrets, and that the service must be redeployed after configuring its required environment variables.
+- Refreshed dependency lockfiles following an npm audit pass, including backend development dependency changes to Jest `^25.0.0` and nodemon `^1.14.10`.
+
+---
+
+## [1.2.0] - 2026-10-01
+
+### Added
+
+- Added administrator-managed portable `.openquiz.json` packages with optional themes, embedded image assets, avatars, and canonical lesson/module content.
+- Added runtime theme loading and explicit activation, theme previews, scoped package imports, export, and default-brand restoration.
+- Added package manifests, asset-key portability, content conflict reporting, and package format documentation/schema.
+
+### Changed
+
+- Runtime branding now overrides environment-based instance defaults while preserving them as the fallback.
+- Persistent content assets now support theme and package-specific image kinds.
+
+### Security
+
+- Package themes accept allowlisted design tokens and signature-checked PNG, JPEG, or WebP assets only; executable code, raw CSS, and private operational data are rejected.
+
+---
+
+## [1.1.0] - 2026-10-01
+
+### Added
+
+- Added an opt-in weekly XP leaderboard with a dashboard top-20 list and a separate current-rank summary.
+- Added weekly XP rollups, leaderboard history, and an opt-in profile setting.
+
+### Changed
+
+- Set leaderboard weeks to reset Mondays at 00:00 UTC and documented the schedule.
+- Centralized XP awards in UTC daily totals to enforce the daily cap and support weekly rankings.
+
+### Fixed
+
+- Kept leaderboard responses private by returning display names, avatars, ranks, XP totals, and a current-user marker without user IDs or email addresses.
+
+---
+
+## [1.0.4] - 2026-10-01
+
+### Added
+
+- Added a Render deployment that builds the Vite frontend and serves it from the Express backend.
+- Added a clickable email verification link to registration when Brevo delivery is unavailable.
+
+### Changed
+
+- Switched production frontend, API, OAuth, and verification flows to a same-origin Render service.
+- Removed the Netlify-only redirect configuration.
+
+## [1.0.3] - 2026-10-01
+
+### Added
+
+- Added an open.quiz orientation instance with its own database, preserved green theme, logo, and Nova/Kit lesson avatars.
+- Added guest lesson discovery, sample previews, admin lesson JSON guidance, and persistent avatar uploads.
+- Added a generic lesson table format and an orientation module covering the platform's core layers.
+
+### Changed
+
+- Replaced the active Sprout finance demo with the open.quiz orientation sample; legacy finance data now exists only as backend test fixtures.
+- Added root instance setup and import commands for repeatable local instance creation.
+
+### Fixed
+
+- Restored the homepage's guest lesson exploration flow using public module discovery.
+
+---
+
 ## [1.0.2] - 2026-09-09
 
 ### Added
