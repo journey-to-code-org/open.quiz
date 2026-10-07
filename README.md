@@ -151,14 +151,16 @@ one in the admin dashboard's **Theming** tab without finding or uploading a pack
 instructional lessons are installed automatically for new learners to explore. See
 [initial setup details](docs/development-setup.md#first-sign-in-and-built-in-themes).
 
-Before opening a pull request, run the full check:
+Before opening a pull request, run the full verification pipeline:
 
 ```bash
 npm run verify
 ```
 
-It formats, lints, runs the backend and frontend unit suites, and runs every Playwright project,
-including the throttled-network and learn flow latency runs.
+This runs formatting, linting, the backend and frontend unit suites, and every Playwright project,
+including the throttled-network and learn flow latency runs. Formatting uses Prettier's write mode
+and may modify files. To check formatting without changing files, run
+`npm --prefix backend run format:check` and `npm --prefix frontend run format:check`.
 
 For full setup, scripts, testing, and API details, see:
 

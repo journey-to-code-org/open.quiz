@@ -340,8 +340,11 @@ npm run start:backend
 npm run build:frontend
 ```
 
-`npm run verify` is the pre-pull-request check: it formats, lints, runs the backend and frontend
-unit suites, and then runs every Playwright project.
+`npm run verify` is the pre-pull-request verification pipeline: it formats, lints, runs the backend
+and frontend unit suites, and then runs every Playwright project. Its formatting step uses
+Prettier's write mode and may modify files. To check formatting without changing files, run
+`npm --prefix backend run format:check` and `npm --prefix frontend run format:check` from the
+project root.
 
 ### Frontend (run from frontend)
 
