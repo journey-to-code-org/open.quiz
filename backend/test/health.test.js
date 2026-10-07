@@ -2,6 +2,13 @@ const request = require("supertest");
 const app = require("../src/app");
 
 describe("health endpoint", () => {
+  test("allows HTTPS avatars without loosening script security", async () => {
+    const response = await request(app).get("/health");
+    const policy = response.headers["content-security-policy"];
+    expect(policy).toContain("img-src 'self' data: https:");
+    expect(policy).toContain("script-src 'self'");
+    expect(policy).toContain("object-src 'none'");
+  });
   test("returns process health without authentication, session, or CSRF credentials", async () => {
     const response = await request(app).get("/health");
 
