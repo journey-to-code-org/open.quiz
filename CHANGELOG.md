@@ -5,9 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
 
-<!-- --- -->
+### Added
+
+- Added a public `/leaderboard` page and desktop/mobile navigation links so signed-out visitors can view weekly rankings. The public API shows only opted-in, active learners and never exposes account IDs or email addresses.
+
+### Changed
+
+- Updated leaderboard opt-in messaging and the privacy policy to explain public visibility. The authenticated dashboard keeps its personalized rank and participation settings.
+- Updated the README and project structure guide for the current open.quiz repository, capabilities, directories, and local setup requirements.
+
+### Fixed
+
+- Corrected leaderboard refresh listeners to use the application's `openquiz` profile and progress events.
+- Allowed external HTTPS avatar images in the production Content Security Policy, restoring Google/GitHub profile images while retaining the existing script and object restrictions.
+
+---
 
 ## [1.4.1] - 2026-10-06
 

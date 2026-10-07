@@ -126,8 +126,13 @@ of this endpoint.
 
 `GET /api/v1/leaderboard` requires authentication and returns the current UTC leaderboard week,
 the top 20 opted-in learners, and the current learner's entry separately. An opted-out learner
-receives empty rankings. Public entries contain only an internal user ID, display name, avatar URL,
-weekly XP, and rank; email addresses are never included.
+receives empty rankings.
+
+`GET /api/v1/leaderboard/public` requires no authentication and returns the same top 20
+rankings without a personalized entry (`currentUser: null`, `optedIn: null`). Both endpoints
+exclude opted-out, disabled, deleted, and archived learners. Entries contain a display name,
+avatar URL, weekly XP, rank, and `isCurrentUser`; account IDs and email addresses are never included.
+The public page is available at `/leaderboard` and linked in desktop and mobile navigation.
 
 ## Lesson Content
 
