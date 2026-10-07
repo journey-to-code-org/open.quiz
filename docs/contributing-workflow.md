@@ -26,6 +26,18 @@
 - Pull requests required for all merges
 - Code reviews before merging to `main`, `development`, or `docs`
 
+### Shared-file synchronization
+
+The [shared-file sync workflow](../.github/workflows/sync-shared-files.yml) opens or updates
+pull requests in both directions between `development` and `docs` when shared files change.
+Before labeling a sync pull request, it creates the `documentation` and `changelog` labels
+if they are missing. Existing labels are left unchanged. Label creation uses `--force` so
+simultaneous sync runs can safely create the same missing label.
+
+The workflow's `GITHUB_TOKEN` needs `contents: write`, `pull-requests: write`, and
+`issues: write` permissions; the last permission allows repository label creation.
+Repository Actions settings must also allow GitHub Actions to create pull requests.
+
 ## Development Process
 
 - Agile/sprint-based workflow

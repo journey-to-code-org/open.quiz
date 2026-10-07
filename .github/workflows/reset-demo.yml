@@ -1,0 +1,51 @@
+name: Reset demo site
+
+# Returns the public demo database to a fresh installation once a day: every account and its
+# learner data are removed, and lessons, themes, packages, assets, and site settings are restored
+# to the bundled starter content. The next visitor to sign in becomes an admin.
+# Requires the DEMO_MONGO_URI repository secret; without it the job skips, so forks are safe.
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: reset-demo-site
+  cancel-in-progress: false
+
+jobs:
+  reset:
+    name: Reset demo site
+    runs-on: ubuntu-latest
+    env:
+      HAS_DEMO_MONGO_URI: ${{ secrets.DEMO_MONGO_URI != '' }}
+    steps:
+      - name: Skip when the demo database secret is missing
+        if: env.HAS_DEMO_MONGO_URI != 'true'
+        run: echo "::notice::DEMO_MONGO_URI is not set for this repository; skipping the demo reset."
+
+      - name: Checkout
+        if: env.HAS_DEMO_MONGO_URI == 'true'
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: env.HAS_DEMO_MONGO_URI == 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        if: env.HAS_DEMO_MONGO_URI == 'true'
+        run: npm ci --prefix backend --omit=dev
+
+      - name: Reset demo site
+        if: env.HAS_DEMO_MONGO_URI == 'true'
+        env:
+          MONGO_URI: ${{ secrets.DEMO_MONGO_URI }}
+          DEMO_RESET_CONFIRM: reset-demo-site
+        run: npm --prefix backend run demo:reset

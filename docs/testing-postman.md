@@ -1,10 +1,13 @@
 # Postman Backend Testing
 
-Use the included Postman files to speed up backend testing across local and cloud environments.
+Use the included Postman files to test the backend against a local instance or a deployment you
+control.
 
 ## Files
 
-- Collection: `docs/postman/sprout-api.postman-collection.json`
+- Admin collection: `docs/postman/admin-backend-api.postman-collection.json`
+- Public collection: `docs/postman/public-backend-api.postman-collection.json`
+- User collection: `docs/postman/user-backend-api.postman-collection.json`
 - Environment (local): `docs/postman/local-backend-api.postman_environment.json`
 - Environment (remote development): `docs/postman/remote-dev-backend-api.postman_environment.json`
 - Environment (remote production): `docs/postman/remote-backend-api.postman_environment.json`
@@ -15,8 +18,7 @@ Use the included Postman files to speed up backend testing across local and clou
 2. Select one environment based on where you want to test:
 
 - Local Backend API (`http://localhost:8080`)
-- Remote Development Backend API (`https://sprout-backend-dev.onrender.com/`)
-- Remote Production Backend API (`https://sprout-backend-x46w.onrender.com/`)
+- Remote development and production environments must be configured with your own backend URLs.
 
 3. If testing local, start the backend first (`npm run dev` from root or backend).
 4. Run the full collection in its listed order for end-to-end coverage. The Users folder

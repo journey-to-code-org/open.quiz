@@ -1,7 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - "/"
+      - "/frontend"
+      - "/backend"
     schedule:
       interval: "weekly"
       day: "tuesday"
@@ -9,30 +12,9 @@ updates:
     labels:
       - "dependencies"
       - "npm"
-
-  - package-ecosystem: "npm"
-    directory: "/frontend"
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-    open-pull-requests-limit: 10
-    labels:
-      - "dependencies"
       - "frontend"
-      - "npm"
-    groups:
-      vitest-dependencies:
-        patterns:
-          - "vitest"
-          - "@vitest/*"
-
-  - package-ecosystem: "npm"
-    directory: "/backend"
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-    open-pull-requests-limit: 10
-    labels:
-      - "dependencies"
       - "backend"
-      - "npm"
+    groups:
+      all-npm-updates:
+        patterns:
+          - "*"
