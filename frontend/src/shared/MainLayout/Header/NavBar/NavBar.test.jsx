@@ -5,6 +5,17 @@ import { describe, expect, it } from "vitest";
 import NavBar from "./NavBar.component";
 
 describe("NavBar", () => {
+  it.each([false, true])("links to the public leaderboard when signedIn is %s", (signedIn) => {
+    render(
+      <MemoryRouter>
+        <NavBar signedIn={signedIn} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole("link", { name: "Leaderboard" })).toHaveAttribute(
+      "href",
+      "/leaderboard",
+    );
+  });
   it("uses the authenticated user's avatar label after hydration", () => {
     const { rerender } = render(
       <MemoryRouter>

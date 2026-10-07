@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getLeaderboard } from "../services/api";
+import { getLeaderboard, getPublicLeaderboard } from "../services/api";
 
-export default function useLeaderboardData({ userId, isAuthenticated }) {
+export default function useLeaderboardData({ userId, isAuthenticated, publicView = false }) {
   const [leaderboard, setLeaderboard] = useState(null);
-  const [isLoading, setIsLoading] = useState(Boolean(isAuthenticated && userId));
+  const [isLoading, setIsLoading] = useState(Boolean(publicView || (isAuthenticated && userId)));
   const [error, setError] = useState("");
 
   const fetchLeaderboard = useCallback(async () => {
-    if (!isAuthenticated || !userId) {
+    if (!publicView && (!isAuthenticated || !userId)) {
       setLeaderboard(null);
       setIsLoading(false);
       setError("");
@@ -17,7 +17,7 @@ export default function useLeaderboardData({ userId, isAuthenticated }) {
     setIsLoading(true);
     setError("");
     try {
-      const payload = await getLeaderboard();
+      const payload = await (publicView ? getPublicLeaderboard() : getLeaderboard());
       setLeaderboard(payload);
       return payload;
     } catch (requestError) {
@@ -26,7 +26,7 @@ export default function useLeaderboardData({ userId, isAuthenticated }) {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated, userId]);
+  }, [isAuthenticated, userId, publicView]);
 
   useEffect(() => {
     void Promise.resolve().then(fetchLeaderboard);
@@ -36,11 +36,11 @@ export default function useLeaderboardData({ userId, isAuthenticated }) {
     if (!isAuthenticated || !userId) return undefined;
 
     const refresh = () => void fetchLeaderboard();
-    window.addEventListener("sprout:profile-updated", refresh);
-    window.addEventListener("sprout:progress-updated", refresh);
+    window.addEventListener("openquiz:profile-updated", refresh);
+    window.addEventListener("openquiz:progress-updated", refresh);
     return () => {
-      window.removeEventListener("sprout:profile-updated", refresh);
-      window.removeEventListener("sprout:progress-updated", refresh);
+      window.removeEventListener("openquiz:profile-updated", refresh);
+      window.removeEventListener("openquiz:progress-updated", refresh);
     };
   }, [fetchLeaderboard, isAuthenticated, userId]);
 

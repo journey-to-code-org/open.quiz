@@ -1,16 +1,33 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getLeaderboardMock } = vi.hoisted(() => ({ getLeaderboardMock: vi.fn() }));
+const { getLeaderboardMock, getPublicLeaderboardMock } = vi.hoisted(() => ({
+  getLeaderboardMock: vi.fn(),
+  getPublicLeaderboardMock: vi.fn(),
+}));
 
-vi.mock("../services/api", () => ({ getLeaderboard: getLeaderboardMock }));
+vi.mock("../services/api", () => ({
+  getLeaderboard: getLeaderboardMock,
+  getPublicLeaderboard: getPublicLeaderboardMock,
+}));
 
 import useLeaderboardData from "./useLeaderboardData";
 
 const leaderboard = { optedIn: true, entries: [], currentUser: null };
 
 describe("useLeaderboardData", () => {
-  beforeEach(() => getLeaderboardMock.mockReset());
+  beforeEach(() => {
+    getLeaderboardMock.mockReset();
+    getPublicLeaderboardMock.mockReset();
+  });
+
+  it("loads public rankings without an authenticated user", async () => {
+    const payload = { optedIn: null, entries: [], currentUser: null };
+    getPublicLeaderboardMock.mockResolvedValue(payload);
+    const { result } = renderHook(() => useLeaderboardData({ publicView: true }));
+    await waitFor(() => expect(result.current.leaderboard).toEqual(payload));
+    expect(getLeaderboardMock).not.toHaveBeenCalled();
+  });
 
   it("loads leaderboard data for the authenticated learner", async () => {
     getLeaderboardMock.mockResolvedValue(leaderboard);
@@ -43,7 +60,7 @@ describe("useLeaderboardData", () => {
     renderHook(() => useLeaderboardData({ userId: "learner-1", isAuthenticated: true }));
     await waitFor(() => expect(getLeaderboardMock).toHaveBeenCalledTimes(1));
 
-    act(() => window.dispatchEvent(new Event("sprout:profile-updated")));
+    act(() => window.dispatchEvent(new Event("openquiz:profile-updated")));
 
     await waitFor(() => expect(getLeaderboardMock).toHaveBeenCalledTimes(2));
   });

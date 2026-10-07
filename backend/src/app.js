@@ -98,7 +98,7 @@ app.use("/api/v1/assets", contentAssetRoutes);
 app.use("/api/v1/theme", themeRoutes);
 app.use("/api/v1/lessons", jwtMiddleware, lessonRoutes);
 app.use("/api/v1/dashboard", jwtMiddleware, dashboardRoutes);
-app.use("/api/v1/leaderboard", jwtMiddleware, leaderboardRoutes);
+app.use("/api/v1/leaderboard", leaderboardRoutes);
 app.use("/api/v1/profile", jwtMiddleware, profileRoutes);
 app.use("/api/v1/quizzes", quizPublicRoutes);
 app.use("/api/v1/quizzes", jwtMiddleware, quizRoutes);

@@ -353,8 +353,8 @@ export default function ProfilePage() {
             <span>
               <span className="block font-semibold text-heading">Join the weekly leaderboard</span>
               <span className="block text-neutral-600">
-                Show your display name, avatar, weekly XP, and rank to other learners. Leave this
-                off to stay hidden and not see rankings.
+                Show your display name, avatar, weekly XP, and rank publicly, including to visitors
+                who are not logged in. Leave this off to stay hidden and not see rankings.
               </span>
             </span>
           </label>

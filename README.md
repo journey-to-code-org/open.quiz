@@ -38,6 +38,7 @@ can import their own content packages.
 - Password authentication with email verification, plus optional Google and GitHub sign-in
 - Structured lesson modules, guided learning paths, interactive quizzes, and glossary entries
 - Learner dashboards, progress tracking, XP, badges, streaks, and leaderboards
+- Public weekly leaderboard at `/leaderboard`, showing only opted-in learners
 - Administrator tools for managing users, editing lessons, importing content, and customizing themes
 - Portable `.openquiz.json` packages for sharing themes and lesson modules
 - Customizable branding, landing pages, character artwork, and light/dark palettes
