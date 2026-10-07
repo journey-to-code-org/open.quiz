@@ -13,6 +13,7 @@ import OAuthCallbackPage from "../../pages/OAuthCallbackPage";
 import PasswordResetPage from "../../pages/PasswordResetPage";
 import ProfilePage from "../../pages/ProfilePage";
 import DashboardPage from "../../pages/DashboardPage";
+import LeaderboardPage from "../../pages/LeaderboardPage";
 import LearningPathPage from "../../pages/LearningPathPage";
 import LearnPage from "../../pages/LearnPage";
 import LastLessonRedirect from "../../pages/LastLessonRedirect";
@@ -37,6 +38,7 @@ export default function AppRouter() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.LEADERBOARD} element={<LeaderboardPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />

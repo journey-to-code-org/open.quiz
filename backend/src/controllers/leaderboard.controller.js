@@ -1,5 +1,16 @@
 const { StatusCodes } = require("http-status-codes");
-const { getLeaderboardForUser } = require("../services/leaderboardRead.service");
+const {
+  getLeaderboardForUser,
+  getPublicLeaderboard: readPublicLeaderboard,
+} = require("../services/leaderboardRead.service");
+
+async function getPublicLeaderboard(_req, res, next) {
+  try {
+    return res.status(StatusCodes.OK).json(await readPublicLeaderboard());
+  } catch (error) {
+    return next(error);
+  }
+}
 
 async function getLeaderboard(req, res, next) {
   try {
@@ -13,4 +24,4 @@ async function getLeaderboard(req, res, next) {
   }
 }
 
-module.exports = { getLeaderboard };
+module.exports = { getLeaderboard, getPublicLeaderboard };

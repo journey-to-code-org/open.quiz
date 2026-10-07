@@ -21,6 +21,9 @@ vi.mock("../../shared/MainLayout/MainLayout.component", () => ({
 vi.mock("../../pages/AdminDashboardPage", () => ({
   default: () => <h1>Admin dashboard page</h1>,
 }));
+vi.mock("../../pages/LeaderboardPage", () => ({
+  default: () => <h1>Public leaderboard page</h1>,
+}));
 
 describe("AppRouter", () => {
   beforeEach(() => {
@@ -29,6 +32,16 @@ describe("AppRouter", () => {
       isAuthenticated: true,
       user: { role: "admin" },
     });
+  });
+
+  it("renders the leaderboard without authentication", () => {
+    useAuthContext.mockReturnValue({ isHydrating: false, isAuthenticated: false });
+    render(
+      <MemoryRouter initialEntries={[ROUTES.LEADERBOARD]}>
+        <AppRouter />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole("heading", { name: "Public leaderboard page" })).toBeInTheDocument();
   });
 
   it("waits for auth hydration before rendering the application layout", () => {

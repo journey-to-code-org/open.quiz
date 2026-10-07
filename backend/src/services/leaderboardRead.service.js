@@ -39,6 +39,15 @@ async function getLeaderboardForUser({
     };
   }
 
+  return readRankings({ date, limit, currentUserId });
+}
+
+async function getPublicLeaderboard({ date = new Date(), limit = DEFAULT_LEADERBOARD_LIMIT } = {}) {
+  return readRankings({ date, limit });
+}
+
+async function readRankings({ date, limit, currentUserId = null }) {
+  const { weekStart, weekEnd } = getLeaderboardWeek(date);
   await weeklyLeaderboardService.rollupLeaderboardWeek({ date });
 
   const entryLimit = normalizeLimit(limit);
@@ -71,7 +80,7 @@ async function getLeaderboardForUser({
     {
       $project: {
         _id: 0,
-        isCurrentUser: { $eq: ["$user_id", currentUserId] },
+        isCurrentUser: currentUserId ? { $eq: ["$user_id", currentUserId] } : { $literal: false },
         displayName: "$user.name",
         avatarUrl: "$user.avatar_url",
         weeklyXp: "$xp_total",
@@ -87,7 +96,7 @@ async function getLeaderboardForUser({
   ]);
 
   return {
-    optedIn: true,
+    optedIn: currentUserId ? true : null,
     weekStart,
     weekEnd,
     entries: leaderboard.entries,
@@ -99,5 +108,6 @@ module.exports = {
   DEFAULT_LEADERBOARD_LIMIT,
   MAX_LEADERBOARD_LIMIT,
   getLeaderboardForUser,
+  getPublicLeaderboard,
   normalizeLimit,
 };

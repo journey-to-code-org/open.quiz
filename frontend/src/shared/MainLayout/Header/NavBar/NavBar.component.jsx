@@ -1,8 +1,13 @@
 import { useEffect, useId, useState } from "react";
 import { NavLink } from "react-router";
 import Button from "../../../Button/Button.component";
+import { ROUTES } from "../../../../app/router/routes";
+import { resolveAssetUrl } from "../../../../services/api";
 
-const primaryNavLinks = [{ label: "Home", href: "/" }];
+const primaryNavLinks = [
+  { label: "Home", href: "/" },
+  { label: "Leaderboard", href: ROUTES.LEADERBOARD },
+];
 
 export default function NavBar({
   signedIn = false,
@@ -94,7 +99,7 @@ export default function NavBar({
                   <NavLink to="/profile">
                     {showAvatarImage ? (
                       <img
-                        src={avatarUrl}
+                        src={resolveAssetUrl(avatarUrl)}
                         alt={`${avatarLabel} avatar`}
                         referrerPolicy="no-referrer"
                         onError={() => setFailedAvatarUrl(avatarUrl)}
@@ -177,7 +182,7 @@ export default function NavBar({
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/40 bg-surface-raised font-semibold">
                   {showAvatarImage ? (
                     <img
-                      src={avatarUrl}
+                      src={resolveAssetUrl(avatarUrl)}
                       alt=""
                       referrerPolicy="no-referrer"
                       onError={() => setFailedAvatarUrl(avatarUrl)}

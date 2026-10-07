@@ -20,6 +20,19 @@ const entry = (overrides = {}) => ({
 });
 
 describe("LeaderboardCard", () => {
+  it("shows public rankings without participation or personalized prompts", () => {
+    render(
+      <MemoryRouter>
+        <LeaderboardCard
+          leaderboard={{ optedIn: null, entries: [entry()], currentUser: null }}
+          publicView
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText("Avery")).toBeInTheDocument();
+    expect(screen.queryByText(/Earn XP to receive/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Choose leaderboard settings")).not.toBeInTheDocument();
+  });
   it("shows a settings CTA instead of rankings when opted out", () => {
     renderCard({ optedIn: false, entries: [], currentUser: null });
 

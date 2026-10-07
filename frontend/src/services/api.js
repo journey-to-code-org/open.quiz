@@ -204,6 +204,9 @@ export const getDashboard = () =>
     cache: "no-store",
   });
 
+export const getPublicLeaderboard = () =>
+  apiRequest("/public", { basePath: LEADERBOARD_BASE_PATH });
+
 export const getLeaderboard = () =>
   apiRequest("", {
     method: "GET",

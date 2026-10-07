@@ -17,9 +17,15 @@ export default function PrivacyPage() {
           <li>Your lesson progress and quiz attempts.</li>
           <li>Basic session cookies required to keep you logged in.</li>
         </ul>
+        <h2 className="font-heading text-h4 font-bold text-heading">Public leaderboard</h2>
+        <p className="text-body leading-normal text-foreground">
+          If you opt in to the weekly leaderboard, your display name, avatar, weekly XP, and rank
+          are visible to anyone, including visitors who are not logged in. Your email address and
+          account ID are not shown. You can opt out in your profile settings.
+        </p>
         <h2 className="font-heading text-h4 font-bold text-heading">What we don't do</h2>
         <ul className="list-inside list-disc space-y-1 text-body text-foreground">
-          <li>We don't sell or share your data with third parties.</li>
+          <li>We don't sell your data.</li>
           <li>We don't run third-party ad networks.</li>
         </ul>
         <p className="text-body leading-normal text-foreground">
