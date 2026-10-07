@@ -1,5 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { changeProfilePassword, clearCsrfToken, deleteProfile, setProfileAvatarUrl } from "./api";
+import {
+  changeProfilePassword,
+  clearCsrfToken,
+  deleteProfile,
+  getLeaderboard,
+  setProfileAvatarUrl,
+} from "./api";
 
 describe("profile API contracts", () => {
   afterEach(() => {
@@ -75,5 +81,54 @@ describe("profile API contracts", () => {
         headers: expect.objectContaining({ "X-CSRF-TOKEN": "csrf-token" }),
       }),
     );
+  });
+});
+
+describe("leaderboard API contract", () => {
+  afterEach(() => {
+    clearCsrfToken();
+    vi.unstubAllGlobals();
+  });
+
+  it("fetches the authenticated weekly leaderboard", async () => {
+    const payload = {
+      optedIn: true,
+      entries: [{ displayName: "Avery", avatarUrl: null, weeklyXp: 100, rank: 1 }],
+      currentUser: { displayName: "Maya", avatarUrl: null, weeklyXp: 25, rank: 21 },
+    };
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      headers: { get: () => "application/json" },
+      json: async () => payload,
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(getLeaderboard()).resolves.toEqual(payload);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/v1/leaderboard",
+      expect.objectContaining({ method: "GET", credentials: "include" }),
+    );
+  });
+
+  it("preserves authentication errors from the leaderboard endpoint", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 401,
+        headers: { get: () => "application/json" },
+        json: async () => ({
+          message: "No user is authenticated.",
+          code: "SESSION_INVALIDATED",
+        }),
+      }),
+    );
+
+    await expect(getLeaderboard()).rejects.toMatchObject({
+      message: "No user is authenticated.",
+      status: 401,
+      code: "SESSION_INVALIDATED",
+      authInvalidating: true,
+    });
   });
 });

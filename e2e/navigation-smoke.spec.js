@@ -72,7 +72,7 @@ test("signed-in learners can reach their profile from the mobile menu", async ({
 
   await page.addInitScript((storedUser) => {
     window.sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({ user: storedUser, csrfToken: "test-csrf-token" }),
     );
   }, user);

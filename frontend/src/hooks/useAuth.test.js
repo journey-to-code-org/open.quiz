@@ -5,8 +5,8 @@ import * as api from "../services/api";
 
 // Mock the API functions so these tests only focus on how useAuth handles auth state.
 vi.mock("../services/api", () => ({
-  AUTH_EXPIRED_EVENT: "sprout:auth-expired",
-  CSRF_TOKEN_UPDATED_EVENT: "sprout:csrf-token-updated",
+  AUTH_EXPIRED_EVENT: "openquiz:auth-expired",
+  CSRF_TOKEN_UPDATED_EVENT: "openquiz:csrf-token-updated",
   clearCsrfToken: vi.fn(),
   getProfile: vi.fn(),
   registerUser: vi.fn(),
@@ -33,7 +33,7 @@ describe("useAuth", () => {
     };
 
     // Pretend the user already has an authenticated session saved in the browser.
-    sessionStorage.setItem("sprout.auth", JSON.stringify(storedAuth));
+    sessionStorage.setItem("openquiz.auth", JSON.stringify(storedAuth));
 
     const { result } = renderHook(() => useAuth());
 
@@ -74,8 +74,8 @@ describe("useAuth", () => {
     expect(result.current.csrfToken).toBe(payload.csrfToken);
 
     // Remembering the user should save auth in localStorage instead of sessionStorage.
-    expect(JSON.parse(localStorage.getItem("sprout.auth"))).toMatchObject(payload);
-    expect(sessionStorage.getItem("sprout.auth")).toBeNull();
+    expect(JSON.parse(localStorage.getItem("openquiz.auth"))).toMatchObject(payload);
+    expect(sessionStorage.getItem("openquiz.auth")).toBeNull();
   });
 
   it("logs out through the API and clears the stored auth state", async () => {
@@ -85,7 +85,7 @@ describe("useAuth", () => {
     };
 
     // Start with an existing session so the hook has auth state to clear.
-    sessionStorage.setItem("sprout.auth", JSON.stringify(storedAuth));
+    sessionStorage.setItem("openquiz.auth", JSON.stringify(storedAuth));
     api.logoutUser.mockResolvedValue({ ok: true });
 
     const { result } = renderHook(() => useAuth());
@@ -104,7 +104,7 @@ describe("useAuth", () => {
     expect(result.current.csrfToken).toBeNull();
 
     // Logging out should remove auth from either storage location.
-    expect(sessionStorage.getItem("sprout.auth")).toBeNull();
-    expect(localStorage.getItem("sprout.auth")).toBeNull();
+    expect(sessionStorage.getItem("openquiz.auth")).toBeNull();
+    expect(localStorage.getItem("openquiz.auth")).toBeNull();
   });
 });

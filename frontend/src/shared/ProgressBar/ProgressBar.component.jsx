@@ -1,5 +1,5 @@
-import flowerProgress from "../../assets/flower-progress.webp";
 import progressBarFrame from "../../assets/progress-bar.svg";
+import { useInstanceAssets } from "../../app/instanceAssets";
 
 // Colors used by the standard progress bars
 const toneStyles = {
@@ -28,71 +28,9 @@ const circularSizes = {
   lg: 96,
 };
 
-// Colors used by the illustrated quiz progress bar
-const quizColors = {
-  yellowLeft: [255, 191, 31],
-  yellowRight: [255, 210, 84],
-  goldLeft: [255, 198, 24],
-  goldRight: [255, 221, 79],
-  pinkLeft: [234, 111, 238],
-  pinkRight: [201, 137, 247],
-};
-
 // Keeps a number between a minimum and maximum value
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
-}
-
-// Mixes two RGB colors together
-function mixColor(startColor, endColor, amount) {
-  const progress = clamp(amount, 0, 1);
-
-  const red = Math.round(startColor[0] + (endColor[0] - startColor[0]) * progress);
-
-  const green = Math.round(startColor[1] + (endColor[1] - startColor[1]) * progress);
-
-  const blue = Math.round(startColor[2] + (endColor[2] - startColor[2]) * progress);
-
-  return `rgb(${red} ${green} ${blue})`;
-}
-
-// Returns a value from 0 to 1 based on how far
-// progress is between a start and end point
-function getProgressBetween(value, start, end) {
-  if (value <= start) {
-    return 0;
-  }
-
-  if (value >= end) {
-    return 1;
-  }
-
-  return (value - start) / (end - start);
-}
-
-// Creates the changing colors and flower position
-// for the illustrated quiz progress bar
-function getQuizStyles(percent) {
-  const safePercent = clamp(percent, 0, 100);
-
-  const goldProgress = getProgressBetween(safePercent, 70, 92);
-  const pinkProgress = getProgressBetween(safePercent, 92, 100);
-
-  let leftColor = mixColor(quizColors.yellowLeft, quizColors.goldLeft, goldProgress);
-
-  let rightColor = mixColor(quizColors.yellowRight, quizColors.goldRight, goldProgress);
-
-  // After 92%, start changing from gold to pink
-  if (pinkProgress > 0) {
-    leftColor = mixColor(quizColors.goldLeft, quizColors.pinkLeft, pinkProgress);
-
-    rightColor = mixColor(quizColors.goldRight, quizColors.pinkRight, pinkProgress);
-  }
-
-  return {
-    barBackground: `linear-gradient(90deg, ${leftColor} 0%, ${rightColor} 100%)`,
-    flowerLeft: `${safePercent}%`,
-  };
 }
 
 export default function ProgressBar({
@@ -110,7 +48,12 @@ export default function ProgressBar({
   imageWrapperClassName = "",
   imageClassName = "",
   className = "",
+  themeAssets,
 }) {
+  const instanceAssets = useInstanceAssets();
+  const artwork = themeAssets ?? instanceAssets;
+  const progressArtwork = artwork.progressFrame || progressBarFrame;
+  const progressMarker = artwork.progressBar;
   // Make sure min, max, and value are valid numbers
   const safeMin = Number.isFinite(min) ? min : 0;
 
@@ -148,7 +91,19 @@ export default function ProgressBar({
 
     // Quiz illustrated progress bar
     if (isQuiz) {
-      const quizStyles = getQuizStyles(percent);
+      const markerLeft = `${clamp(percent, 0, 100)}%`;
+      const nearProgress = clamp((percent - 70) / 22, 0, 1) * 100;
+      const completeProgress = clamp((percent - 92) / 8, 0, 1) * 100;
+      const mix = (start, end, amount) =>
+        `color-mix(in srgb, var(--color-${start}), var(--color-${end}) ${amount}%)`;
+      const leftColor =
+        percent > 92
+          ? mix("progress-near-start", "progress-complete-start", completeProgress)
+          : mix("progress-start", "progress-near-start", nearProgress);
+      const rightColor =
+        percent > 92
+          ? mix("progress-near-end", "progress-complete-end", completeProgress)
+          : mix("progress-end", "progress-near-end", nearProgress);
 
       return (
         <div className={`w-full ${className}`.trim()}>
@@ -160,19 +115,21 @@ export default function ProgressBar({
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 rounded-full transition-[background] duration-500 ease-out"
                   style={{
-                    background: quizStyles.barBackground,
+                    background: progressMarker
+                      ? `linear-gradient(90deg, ${leftColor}, ${rightColor})`
+                      : "linear-gradient(90deg, var(--color-primary), var(--color-primary-alt))",
                   }}
                 />
 
                 {/* Progress bar frame */}
                 <img
-                  src={progressBarFrame}
+                  src={progressArtwork}
                   alt=""
                   aria-hidden="true"
                   className={`relative mx-auto w-full ${imageClassName}`.trim()}
                 />
 
-                {/* Moving flower */}
+                {/* Moving progress marker */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-y-[8%] left-[4%] right-[8%]"
@@ -180,15 +137,37 @@ export default function ProgressBar({
                   <div className="pointer-events-none absolute inset-x-[4%] bottom-[92%] h-0 overflow-visible max-[360px]:bottom-[104%] sm:bottom-[80%]">
                     <div
                       className="absolute left-0 w-[26%] max-w-[6.5rem] min-w-[4.25rem] -translate-x-1/2 overflow-visible transition-[left] duration-500 ease-out sm:w-[24%]"
-                      style={{
-                        left: quizStyles.flowerLeft,
-                      }}
+                      style={{ left: markerLeft }}
                     >
-                      <img
-                        src={flowerProgress}
-                        alt=""
-                        className="block h-auto w-full origin-bottom scale-[1.25] max-[360px]:scale-[1.12] sm:scale-[1.65]"
-                      />
+                      {progressMarker ? (
+                        <img
+                          src={progressMarker}
+                          alt=""
+                          className="block h-auto w-full origin-bottom scale-[1.25] max-[360px]:scale-[1.12] sm:scale-[1.65]"
+                        />
+                      ) : (
+                        <svg
+                          viewBox="0 0 128 128"
+                          aria-hidden="true"
+                          className="block h-auto w-full origin-bottom scale-[1.25] text-accent drop-shadow-sm max-[360px]:scale-[1.12] sm:scale-[1.65]"
+                        >
+                          <path
+                            d="M64 7 80 43 119 47 90 74 98 113 64 93 30 113 38 74 9 47 48 43Z"
+                            fill="currentColor"
+                            stroke="var(--color-heading)"
+                            strokeWidth="5"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="m64 25 11 25 27 3-20 18 5 27-23-14-23 14 5-27-20-18 27-3Z"
+                            fill="none"
+                            stroke="var(--color-on-primary)"
+                            strokeWidth="3"
+                            strokeLinejoin="round"
+                            opacity="0.6"
+                          />
+                        </svg>
+                      )}
                     </div>
                   </div>
                 </div>

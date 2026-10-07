@@ -52,6 +52,7 @@ const getProfile = async (req, res, next) => {
         timezone: user.timezone,
         avatar_url: user.avatar_url || null,
         avatar_initial: getFirstInitial(user.name, user.email),
+        leaderboard_opt_in: user.leaderboard_opt_in ?? false,
         current_lesson: progress?.current_micro_lesson_id || "Lesson 1",
         badges: user.earned_badges || [],
       },
@@ -100,7 +101,7 @@ const updateProfile = async (req, res, next) => {
   try {
     const value = validateRequest(res, updateProfileSchema, req.body);
     if (!value) return;
-    const { name, email, goals, notifications, timezone } = value;
+    const { name, email, goals, notifications, timezone, leaderboard_opt_in } = value;
     const user = await User.findById(req.user.id);
 
     if (!user || user.is_deleted) {
@@ -120,6 +121,10 @@ const updateProfile = async (req, res, next) => {
     }
     if (notifications !== undefined) {
       user.notifications = notifications;
+      hasUpdates = true;
+    }
+    if (leaderboard_opt_in !== undefined) {
+      user.leaderboard_opt_in = leaderboard_opt_in;
       hasUpdates = true;
     }
     // Email changed
@@ -159,6 +164,7 @@ const updateProfile = async (req, res, next) => {
         timezone: user.timezone,
         avatar_url: user.avatar_url || null,
         avatar_initial: getFirstInitial(user.name, user.email),
+        leaderboard_opt_in: user.leaderboard_opt_in ?? false,
       },
     });
   } catch (error) {

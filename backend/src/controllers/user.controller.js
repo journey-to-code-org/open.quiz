@@ -3,7 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const { sendVerificationEmail } = require("../utils/sendEmail");
 //User is capitalized because it represents a model which is a collection of items for the database
 const User = require("../models/User.model.js");
-const AdminBootstrap = require("../models/AdminBootstrap.model.js");
+const { bootstrapLoginAdmin } = require("../services/adminBootstrap.service");
 const { hashPassword, comparePassword } = require("../utils/password.js");
 const { clearSessionCookie, issueSession } = require("../utils/session");
 const { isWithinReactivationGracePeriod, reactivateAccount } = require("../utils/accountDeletion");
@@ -18,7 +18,8 @@ const {
   validateRequest,
 } = require("../validation/userValidation.js");
 const { getAuthenticationFailure } = require("../utils/authSession.js");
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+const CLIENT_URL =
+  process.env.CLIENT_URL || process.env.RENDER_EXTERNAL_URL || "http://localhost:5173";
 const IS_DEV_ENV = process.env.NODE_ENV !== "production";
 const accountStateLookup = {
   is_deleted: { $in: [true, false, null] },
@@ -87,18 +88,9 @@ const register = async (req, res, next) => {
       verification_token_expires_at: tokenExpiresAt,
     });
 
-    const bootstrapRecord = await AdminBootstrap.findOneAndUpdate(
-      { key: "first-user-admin" },
-      { $setOnInsert: { key: "first-user-admin", user_id: newUser._id } },
-      { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
-    );
-    if (String(bootstrapRecord.user_id) === String(newUser._id)) {
-      newUser.role = "admin";
-      await newUser.save();
-    }
     const verifyUrl = `${CLIENT_URL}/verify?token=${verificationToken}`;
 
-    await sendVerificationEmail(
+    const emailDelivery = await sendVerificationEmail(
       newUser.email,
       "Verify your email address",
       `Hello ${newUser.name || ""},\n\nPlease verify your account by clicking this link: ${verifyUrl}`,
@@ -109,7 +101,9 @@ const register = async (req, res, next) => {
     );
 
     return res.status(StatusCodes.CREATED).json({
-      message: "Registration successful. Please check for verification email.",
+      message: emailDelivery.skipped
+        ? "Registration successful. Use the verification link to activate your account."
+        : "Registration successful. Please check for verification email.",
       user: {
         id: newUser._id,
         name: newUser.name,
@@ -120,6 +114,7 @@ const register = async (req, res, next) => {
         created_at: newUser.createdAt || newUser.created_at,
       },
       ...(IS_DEV_ENV ? { devVerification: { token: verificationToken, verifyUrl } } : {}),
+      ...(emailDelivery.skipped ? { verificationUrl: verifyUrl } : {}),
     });
   } catch (err) {
     return next(err);
@@ -213,6 +208,7 @@ const login = async (req, res, next) => {
         .status(authenticationFailure.status)
         .json({ message: authenticationFailure.message });
     }
+    await bootstrapLoginAdmin(user);
     const motivation = await getLearningMotivation(user._id);
     const csrfToken = issueSession(res, user, { remember });
     req.app.emit?.("login_success", {

@@ -1,7 +1,7 @@
 import { expect } from "./network.js";
 
 export const lessonIds = ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6"];
-export const moduleId = "cashFlow";
+export const moduleId = "openQuizIntroduction";
 export const quizCompletionError =
   "Pass every knowledge check before completing this lesson.";
 
@@ -56,7 +56,7 @@ function buildMicroLesson(id, title, questions = []) {
 function buildCurriculum() {
   return {
     id: moduleId,
-    title: "Budgeting and Cash Flow Basics",
+    title: "Welcome to open.quiz",
     lessons: lessonIds.map((lessonId, index) => ({
       id: lessonId,
       title: `Lesson ${lessonId}`,
@@ -109,7 +109,7 @@ export async function prepareCurriculumSession(page, delays = {}) {
   // learner immediately instead of redirecting to login during hydration.
   await page.addInitScript(() => {
     window.sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({
         user: {
           id: "curriculum-learner",
@@ -159,7 +159,7 @@ export async function prepareCurriculumSession(page, delays = {}) {
 
     if (request.method() === "GET") {
       // Lesson detail requests end with the lesson ID:
-      // /api/v1/lessons/cashFlow/1.1 -> "1.1"
+      // /api/v1/lessons/openQuizIntroduction/1.1 -> "1.1"
       const lessonId = url.pathname.split("/").pop();
       const lessonData = curriculum.lessons.find(
         (lesson) => lesson.id === lessonId,

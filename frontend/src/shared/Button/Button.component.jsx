@@ -14,18 +14,18 @@ export default function Button({
     primary:
       "border-primary bg-primary text-on-primary shadow-sm hover:bg-primary-hover focus:border-primary focus:ring-primary/20",
     secondary:
-      "border-neutral-300 bg-surface-app text-heading shadow-sm hover:bg-surface-raised focus:border-primary focus:ring-primary/20",
+      "border-neutral-300 bg-surface-app text-heading shadow-sm hover:bg-surface-inset focus:border-primary focus:ring-primary/20",
     ghost:
       "border-transparent bg-transparent text-primary shadow-none hover:bg-surface-inset focus:border-primary focus:ring-primary/20",
     quiz: "border-primary bg-primary text-on-primary shadow-[var(--shadow-quiz)] hover:bg-primary-hover focus:border-primary focus:ring-primary/20",
     quizSecondary:
-      "border-neutral-300 bg-white text-heading shadow-[var(--shadow-quiz-secondary)] hover:bg-surface-raised focus:border-primary focus:ring-primary/20",
+      "border-neutral-300 bg-surface-raised text-heading shadow-[var(--shadow-quiz-secondary)] hover:bg-surface-inset focus:border-primary focus:ring-primary/20",
     circleCompleted:
-      "border-neutral-300 bg-surface-app text-heading shadow-sm hover:bg-surface-raised focus:border-primary focus:ring-primary/20",
+      "border-learning-path-node-border bg-learning-path-node-completed text-heading shadow-sm hover:brightness-95 focus:border-primary focus:ring-primary/20",
     circleCurrent:
-      "border-primary bg-primary text-on-primary shadow-sm hover:bg-primary-hover focus:border-primary focus:ring-primary/20",
+      "border-learning-path-node-current bg-learning-path-node-current text-on-primary shadow-sm hover:brightness-90 focus:border-primary focus:ring-primary/20",
     circleDisabled:
-      "border-primary bg-primary text-on-primary shadow-sm hover:bg-primary-hover focus:border-primary focus:ring-primary/20",
+      "border-learning-path-node-current bg-learning-path-node-current text-on-primary shadow-sm hover:brightness-90 focus:border-primary focus:ring-primary/20",
   };
 
   const circleClass =

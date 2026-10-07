@@ -6,9 +6,14 @@ const app = require("../src/app");
 const User = require("../src/models/User.model");
 const UserProgress = require("../src/models/UserProgress.model");
 const QuizAttempt = require("../src/models/QuizAttempt.model");
-const cashFlow = require("../../shared/content/budgeting.json");
+const LessonModule = require("../src/models/LessonModule.model");
+const cashFlow = require("./fixtures/budgetingModule.json");
 
 useTestDb();
+
+beforeEach(async () => {
+  await LessonModule.create(cashFlow);
+});
 
 async function createAuthedUser(email) {
   const user = await User.create({

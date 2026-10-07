@@ -4,7 +4,12 @@ import { defineConfig, devices } from "@playwright/test";
 // asset loading match what learners actually hit. Set E2E_DEV_SERVER=1 to fall
 // back to the Vite dev server for faster iteration.
 const useDevServer = process.env.E2E_DEV_SERVER === "1";
-const port = useDevServer ? 5173 : 4173;
+const configuredPort = Number(process.env.E2E_PORT);
+const port = Number.isInteger(configuredPort) && configuredPort > 0
+  ? configuredPort
+  : useDevServer
+    ? 5173
+    : 4173;
 const baseURL = `http://127.0.0.1:${port}`;
 const latencySuite = /.*\.latency\.spec\.js/;
 
@@ -20,8 +25,8 @@ export default defineConfig({
   },
   webServer: {
     command: useDevServer
-      ? "npm --prefix frontend run dev -- --host 127.0.0.1"
-      : "npm --prefix frontend run build && npm --prefix frontend run preview -- --host 127.0.0.1 --port 4173 --strictPort",
+      ? `npm --prefix frontend run dev -- --host 127.0.0.1 --port ${port} --strictPort`
+      : `npm --prefix frontend run build && npm --prefix frontend run preview -- --host 127.0.0.1 --port ${port} --strictPort`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

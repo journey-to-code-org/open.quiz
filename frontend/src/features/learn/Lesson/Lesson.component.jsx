@@ -6,7 +6,7 @@ function LessonComponent({
   eyebrow,
   content = [],
   module,
-  characterVariant = "beaver",
+  blockRenderers,
   characterImage,
   characterAlt = "Lesson guide",
   bubbleText,
@@ -24,7 +24,6 @@ function LessonComponent({
       </div>
 
       <LessonGuideCharacter
-        variant={characterVariant}
         imageSrc={characterImage}
         imageAlt={characterAlt}
         bubbleText={bubbleText}
@@ -33,7 +32,11 @@ function LessonComponent({
         {visibleContent.length > 0 ? (
           visibleContent.map((contentItem) => (
             <div key={contentItem.id}>
-              <LessonRenderer content={contentItem} module={module} />
+              <LessonRenderer
+                content={contentItem}
+                module={module}
+                blockRenderers={blockRenderers}
+              />
             </div>
           ))
         ) : (

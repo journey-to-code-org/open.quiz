@@ -9,6 +9,7 @@ import ConsentBanner from "../../features/legal/ConsentBanner/ConsentBanner.comp
 import { getOnboardingPageName } from "../../features/onboarding/onboarding.utils";
 import useRewardQueue from "../../hooks/useRewardQueue";
 import Toast from "../Toast/Toast.component";
+import ColorModeToggle from "../ColorModeToggle/ColorModeToggle.component";
 
 function OnboardingWrapper() {
   const { currentStep, hasCompleted, activePage, startOnboarding, skipOnboarding, handleNextStep } =
@@ -35,8 +36,8 @@ export default function MainLayout() {
   const { hasToasts, currentToast, addRewards, closeToast } = useRewardQueue();
   useEffect(() => {
     const handleRewards = (event) => addRewards(event.detail?.rewards);
-    window.addEventListener("sprout:progress-updated", handleRewards);
-    return () => window.removeEventListener("sprout:progress-updated", handleRewards);
+    window.addEventListener("openquiz:progress-updated", handleRewards);
+    return () => window.removeEventListener("openquiz:progress-updated", handleRewards);
   }, [addRewards]);
   //add for admin update
   const isAdmin = user?.role === "admin";
@@ -83,6 +84,8 @@ export default function MainLayout() {
           worksCited={currentModuleResources.worksCited}
         />
         <Toast isOpen={hasToasts} {...currentToast} onClose={closeToast} />
+        <ColorModeToggle placement="bottom-right" />
+        <ColorModeToggle placement="bottom-left" />
         <ConsentBanner />
       </div>
     </OnboardingProvider>

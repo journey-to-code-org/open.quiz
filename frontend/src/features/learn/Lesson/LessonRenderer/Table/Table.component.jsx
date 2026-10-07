@@ -1,83 +1,53 @@
 function Table({ content, module }) {
-  // Check if the module is available
-  if (!module) return <div>Module not found</div>;
-  // Check if the content is available
-  const tableId = content?.tableId ?? content?.budgetId;
-  // If tableId is not provided, default to the first table in the module
-  const table = tableId
-    ? module.tables?.find((item) => item.tableId === tableId)
-    : module.tables?.[0];
+  const tables = module?.tables ?? [];
+  const table = content?.tableId
+    ? tables.find((item) => item.tableId === content.tableId)
+    : tables[0];
 
-  if (!table) {
-    return <div>Table not found</div>;
-  }
-  // Find the budget associated with the table
-  const budgetId = content?.budgetId;
-  // If budgetId is not provided, default to the first budget in the module
-  const budget = budgetId
-    ? module.budgets?.find((b) => b.budgetId === budgetId)
-    : module.budgets?.[0];
+  if (!table || !Array.isArray(table.rows)) return <div>Table not found</div>;
 
-  if (!budget) {
-    return <div>Budget not found</div>;
-  }
-  let rows = [];
-
-  if (table.incomeRefs) {
-    rows = table.incomeRefs
-      .map((incomeRef) => budget.income.find((income) => income.id === incomeRef))
-      .filter(Boolean);
-  }
-
-  if (table.expenseRefs) {
-    const allExpenses = [
-      ...budget.fixedExpenses.needs,
-      ...budget.fixedExpenses.wants,
-      ...budget.variableExpenses.needs,
-      ...budget.variableExpenses.wants,
-    ];
-
-    rows = table.expenseRefs
-      .map((expenseRef) => allExpenses.find((expense) => expense.id === expenseRef))
-      .filter(Boolean);
-  }
-  const currencyFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  const columns = table.columns ?? table.headers ?? [];
+  const getColumnKey = (column) => (typeof column === "string" ? column : column.key);
+  const getColumnLabel = (column) =>
+    typeof column === "string" ? column : (column.label ?? column.key);
 
   return (
     <div>
       <h3>{table.title}</h3>
       <div className="overflow-x-auto">
         <table
-          className="w-full table-auto border-collapse border border-slate-300 text-left"
-          aria-labelledby={`table-title-${table.tableId}`}
+          className="w-full table-auto border-collapse border border-neutral-300 text-left"
+          aria-labelledby={`table-title-${content.tableId ?? "default"}`}
         >
-          <caption id={`table-title-${table.tableId}`} className="sr-only">
+          <caption id={`table-title-${content.tableId ?? "default"}`} className="sr-only">
             {table.title}
           </caption>
-          <thead className="bg-slate-100">
+          <thead className="bg-surface-inset">
             <tr>
-              {table.headers.map((header) => (
+              {columns.map((column) => (
                 <th
                   scope="col"
-                  key={header}
-                  className="border border-slate-300 px-4 py-2 font-semibold"
+                  key={getColumnKey(column)}
+                  className="border border-neutral-300 px-4 py-2 font-semibold"
                 >
-                  {header}
+                  {getColumnLabel(column)}
                 </th>
               ))}
             </tr>
           </thead>
 
           <tbody>
-            {rows.map((row) => (
-              <tr key={row.id} className="even:bg-slate-50">
-                <td className="border border-slate-300 px-4 py-2">{row.name}</td>
-                <td className="border border-slate-300 px-4 py-2">
-                  {currencyFormatter.format(row.amount)}
-                </td>
+            {table.rows.map((row) => (
+              <tr key={row.id ?? JSON.stringify(row)} className="even:bg-surface-app">
+                {columns.map((column, columnIndex) => {
+                  const key = getColumnKey(column);
+                  const value = Array.isArray(row) ? row[columnIndex] : row[key];
+                  return (
+                    <td key={key} className="border border-neutral-300 px-4 py-2">
+                      {value}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>

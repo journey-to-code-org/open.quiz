@@ -1,0 +1,244 @@
+{
+  "id": "openQuizIntroduction",
+  "title": "Welcome to open.quiz",
+  "description": "A short tour of instances, learning modules, quizzes, and customization.",
+  "tags": ["orientation", "learning platform", "open.quiz"],
+  "metadata": {
+    "applicationName": "open.quiz",
+    "packageId": "openquiz-introduction",
+    "packageVersion": "1.0.0"
+  },
+  "characters": [
+    {
+      "characterId": "nova",
+      "name": "Nova",
+      "description": "A curious learner exploring a new open.quiz instance.",
+      "imagePath": "nova-avatar.svg"
+    },
+    {
+      "characterId": "kit",
+      "name": "Kit",
+      "description": "A friendly guide who helps learners understand how open.quiz works.",
+      "imagePath": "kit-avatar.svg"
+    }
+  ],
+  "tables": [
+    {
+      "tableId": "platform-layers",
+      "title": "Four open.quiz layers",
+      "headers": ["Layer", "Responsibility"],
+      "rows": [
+        ["Core", "Accounts, lessons, quizzes, and progress"],
+        ["Instance settings", "Name, terminology, defaults, and features"],
+        ["Content packages", "Courses, modules, lessons, and questions"],
+        ["Themes", "Colors, fonts, logos, graphics, and presentation"]
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Content package",
+      "definition": "A collection of courses, modules, lessons, quizzes, and optional specialized renderers that can be installed in an open.quiz instance."
+    },
+    {
+      "term": "Instance",
+      "definition": "A configured deployment of open.quiz with its own name, theme, enabled features, and installed content."
+    },
+    {
+      "term": "Knowledge check",
+      "definition": "A question embedded in a lesson that lets learners check what they understood."
+    },
+    {
+      "term": "Micro-lesson",
+      "definition": "A short step within a lesson. A lesson can contain several micro-lessons and knowledge checks."
+    },
+    {
+      "term": "Theme",
+      "definition": "A set of visual choices such as colors, fonts, radii, logos, and graphics."
+    }
+  ],
+  "worksCited": [
+    {
+      "id": "openquiz-readme",
+      "title": "open.quiz README",
+      "author": "open.quiz maintainers",
+      "citation": "open.quiz maintainers. README and project documentation.",
+      "url": "https://github.com/journey-to-code-org/open.quiz"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "1.1",
+      "title": "Meet your learning platform",
+      "learningGoal": "Describe what an open.quiz instance provides and how its main parts fit together.",
+      "estimatedMin": 4,
+      "passingScore": 70,
+      "accuracy_reviewed_by": "open.quiz sample content",
+      "accuracy_reviewed_at": "2026-10-01",
+      "microLessons": [
+        {
+          "id": "1.1.1",
+          "title": "A place to learn",
+          "microLessonContent": [
+            {
+              "type": "characterIntro",
+              "characterId": "nova",
+              "text": "Hi, I'm Nova. I'm exploring this open.quiz instance to find lessons on a topic I care about."
+            },
+            {
+              "type": "paragraph",
+              "characterId": "nova",
+              "text": "open.quiz is a platform for delivering structured lessons, interactive knowledge checks, and learner progress. The platform can support different subjects and different visual identities."
+            },
+            {
+              "type": "callout",
+              "text": "The platform is the learning engine. Each instance decides what it teaches and how it looks."
+            }
+          ]
+        },
+        {
+          "id": "1.1.2",
+          "title": "Four parts working together",
+          "microLessonContent": [
+            {
+              "type": "paragraph",
+              "characterId": "kit",
+              "text": "An instance brings four independent parts together: the core platform, instance settings, content packages, and a theme."
+            },
+            {
+              "type": "formula",
+              "text": "Core + Instance Settings + Content Packages + Theme = Your learning instance"
+            },
+            {
+              "type": "unorderedList",
+              "intro": "Each part has a different job:",
+              "items": [
+                "Core handles accounts, roles, lesson delivery, quizzes, and progress.",
+                "Instance settings choose the name, terminology, enabled features, and defaults.",
+                "Content packages provide courses, modules, lessons, and quizzes.",
+                "Themes control colors, fonts, radii, logos, and graphics."
+              ]
+            },
+            {
+              "type": "table",
+              "tableId": "platform-layers"
+            },
+            {
+              "type": "knowledgeCheck",
+              "id": "1.1.2-q1",
+              "questionType": "multipleChoice",
+              "question": "Which part supplies the lessons and quizzes learners study?",
+              "answerChoices": [
+                { "key": "a", "text": "The theme" },
+                { "key": "b", "text": "A content package" },
+                { "key": "c", "text": "The account role" }
+              ],
+              "correctResponse": "b",
+              "explanation": "Content packages supply the learning material; the core delivers it."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1.2",
+      "title": "From a topic to a lesson",
+      "learningGoal": "Explain how content packages organize a learning experience.",
+      "estimatedMin": 4,
+      "passingScore": 70,
+      "accuracy_reviewed_by": "open.quiz sample content",
+      "accuracy_reviewed_at": "2026-10-01",
+      "microLessons": [
+        {
+          "id": "1.2.1",
+          "title": "Follow the learning path",
+          "microLessonContent": [
+            {
+              "type": "characterIntro",
+              "characterId": "kit",
+              "text": "Let's follow one idea from a package all the way to a learner's screen."
+            },
+            {
+              "type": "paragraph",
+              "characterId": "kit",
+              "text": "A content package can organize material into paths, modules, lessons, and short micro-lessons. A micro-lesson can include text, callouts, lists, media, or a question."
+            },
+            {
+              "type": "unorderedList",
+              "intro": "A learner's loop is simple:",
+              "items": [
+                "Choose an available lesson.",
+                "Work through short steps.",
+                "Answer knowledge checks.",
+                "See progress and continue later."
+              ]
+            },
+            {
+              "type": "knowledgeCheck",
+              "id": "1.2.1-q1",
+              "questionType": "multipleChoice",
+              "question": "What is a micro-lesson?",
+              "answerChoices": [
+                { "key": "a", "text": "A short step within a lesson" },
+                { "key": "b", "text": "A color setting for the theme" },
+                { "key": "c", "text": "An account permission" }
+              ],
+              "correctResponse": "a",
+              "explanation": "Lessons can be divided into short, focused micro-lessons."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1.3",
+      "title": "Make an instance yours",
+      "learningGoal": "Identify which parts can be customized without changing the core platform.",
+      "estimatedMin": 4,
+      "passingScore": 70,
+      "accuracy_reviewed_by": "open.quiz sample content",
+      "accuracy_reviewed_at": "2026-10-01",
+      "microLessons": [
+        {
+          "id": "1.3.1",
+          "title": "Choose a voice and a look",
+          "microLessonContent": [
+            {
+              "type": "characterIntro",
+              "characterId": "nova",
+              "text": "This instance has its own name and green theme, but the same open.quiz core can host a completely different experience."
+            },
+            {
+              "type": "paragraph",
+              "characterId": "nova",
+              "text": "Instance settings can choose terminology, a default module, and enabled features. Theme settings can provide logo and graphic URLs, colors, fonts, and component radii."
+            },
+            {
+              "type": "callout",
+              "text": "Changing the subject or visual identity should be a configuration or content decision, not a source-code fork."
+            },
+            {
+              "type": "knowledgeCheck",
+              "id": "1.3.1-q1",
+              "questionType": "multipleChoice",
+              "question": "Which change should not require editing the open.quiz core?",
+              "answerChoices": [
+                {
+                  "key": "a",
+                  "text": "Changing the instance logo and theme colors"
+                },
+                { "key": "b", "text": "Changing the core quiz scoring rule" },
+                {
+                  "key": "c",
+                  "text": "Adding a core authentication capability"
+                }
+              ],
+              "correctResponse": "a",
+              "explanation": "Brand assets and theme values belong to instance configuration."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

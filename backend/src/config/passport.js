@@ -4,7 +4,7 @@ const GitHubStrategy = require("passport-github2").Strategy;
 const { OAUTH_PROVIDER_SCOPES, isOAuthProviderEnabled } = require("./oauthProviders.js");
 const { findOrCreateOAuthUser } = require("../services/oauthUser.service.js");
 
-const API_URL = process.env.API_URL || "http://localhost:8080";
+const API_URL = process.env.API_URL || process.env.RENDER_EXTERNAL_URL || "http://localhost:8080";
 
 const createVerifyCallback =
   (provider) => async (req, _accessToken, _refreshToken, profile, done) => {

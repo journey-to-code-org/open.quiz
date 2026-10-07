@@ -4,7 +4,7 @@ import { getDashboard } from "../services/api";
 // Sets default cache Time to Live to 30 seconds.
 const DASHBOARD_CACHE_TTL_MS = 30 * 1000;
 
-const getCacheKey = (userId) => `sprout.dashboard.${userId}`;
+const getCacheKey = (userId) => `openquiz.dashboard.${userId}`;
 
 const readCachedDashboard = (userId) => {
   // We use sessionStorage to cache dashboard data for the current browser session.
@@ -93,8 +93,8 @@ export default function useDashboardData({ userId, isAuthenticated }) {
       fetchDashboard({ force: true });
     };
 
-    window.addEventListener("sprout:progress-updated", handleProgressUpdate);
-    return () => window.removeEventListener("sprout:progress-updated", handleProgressUpdate);
+    window.addEventListener("openquiz:progress-updated", handleProgressUpdate);
+    return () => window.removeEventListener("openquiz:progress-updated", handleProgressUpdate);
   }, [fetchDashboard, userId]);
 
   const refresh = useCallback(() => {

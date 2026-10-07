@@ -1,7 +1,7 @@
 # Rollback Procedure
 
-How to roll back a bad deploy on `main` (production) in under 5 minutes. Frontend is hosted
-on Netlify, backend on Render.
+How to roll back a bad deploy on `main` (production). The frontend and backend are built and
+deployed together as one Render service.
 
 ## 1. Identify the last good commit
 
@@ -11,17 +11,7 @@ git log --oneline main -10
 
 Find the last commit/tag known to work in production (release tags look like `v0.8.x`).
 
-## 2. Frontend rollback (Netlify)
-
-Fastest option — no git changes required:
-
-1. Open the site's **Deploys** tab in the Netlify dashboard.
-2. Find the last known-good deploy in the list.
-3. Click **Publish deploy** on that entry to make it live immediately.
-
-Netlify keeps every previous deploy, so this takes effect in seconds.
-
-## 3. Backend rollback (Render)
+## 2. Roll back the Render service
 
 1. Open the backend service in the Render dashboard.
 2. Go to the **Events**/**Deploys** tab and find the last successful deploy for the
@@ -41,7 +31,7 @@ Open a PR from `rollback/revert-<bad-commit-sha>` into `dev` and/or `main` and m
 passes checks. Render auto-deploys `main` on merge, so the merged revert triggers a fresh,
 working deploy.
 
-## 4. Verify
+## 3. Verify
 
 - Load the production URL and confirm the console has no errors.
 - Hit `GET /health` on the backend to confirm it responds `200`.
@@ -51,5 +41,4 @@ working deploy.
 
 - Prefer the dashboard rollback (steps 2–3) over a git revert when possible — it's faster
   and doesn't require a new deploy to build.
-- Always roll back the frontend and backend together if the bad deploy touched an API
-  contract, to avoid version-mismatch errors.
+- The frontend and backend deploy together, so a single Render rollback restores both.

@@ -12,7 +12,7 @@ const verifiedEmail = (value, primary = true) => [{ value, verified: true, prima
 
 const createLocalUser = (overrides = {}) =>
   User.create({
-    name: "Existing Sprout User",
+    name: "Existing Learner",
     email: "existing@example.com",
     password_hash: "not-a-real-hash",
     role: "learner",
@@ -102,7 +102,7 @@ describe("OAuth user service", () => {
     expect(await User.countDocuments()).toBe(1);
   });
 
-  it("links a verified provider email to an existing Sprout account", async () => {
+  it("links a verified provider email to an existing account", async () => {
     const existingUser = await createLocalUser();
 
     const user = await findOrCreateOAuthUser({

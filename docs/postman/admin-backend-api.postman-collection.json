@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "c2b5d8c7-3c58-4e88-8e59-5f90f0b1d8a1",
-    "name": "Sprout Admin API",
+    "name": "open.quiz Admin API",
     "description": "Admin-only workflows for user and lesson management. Requires an authenticated admin session.",
     "schema": "https://schema.postman.com/json/collection/v2.1.0/collection.json"
   },
@@ -296,42 +296,6 @@
               "raw": "{{baseUrl}}/api/v1/admin/modules/{{adminModuleId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "admin", "modules", "{{adminModuleId}}"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Seed Budgeting Module",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('POST /admin/modules/seed-budgeting returns an expected status', function () { pm.expect([201, 409]).to.include(pm.response.code); });",
-                  "pm.test('Seed response is JSON', function () { pm.expect(pm.response.json()).to.be.an('object'); });"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "X-CSRF-TOKEN",
-                "value": "{{csrfToken}}",
-                "type": "text"
-              },
-              {
-                "key": "Cookie",
-                "value": "{{sessionCookie}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/admin/modules/seed-budgeting",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "admin", "modules", "seed-budgeting"]
             }
           },
           "response": []

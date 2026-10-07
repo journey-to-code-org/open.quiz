@@ -12,7 +12,7 @@ test("completes the curriculum with weighted quiz scoring and the final lesson",
 }) => {
   const state = await prepareCurriculumSession(page);
 
-  await page.goto("/learn/cashFlow/1.1");
+  await page.goto(`/learn/${moduleId}/1.1`);
   await expect(page.getByRole("heading", { name: "Lesson 1.1" })).toBeVisible();
 
   // Quiz 1: 2/3 correct = 67%, which fails its individual 70% threshold.

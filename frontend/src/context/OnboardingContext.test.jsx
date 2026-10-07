@@ -28,13 +28,13 @@ const UserTest = () => {
 describe("OnboardingContext tests", () => {
   beforeEach(() => {
     sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({ user: { id: "learner-1", name: "Learner" }, csrfToken: "test-csrf" }),
     );
   });
 
   it("persists completed onboarding using the value read on reload", async () => {
-    localStorage.removeItem("sprout_onboarding_complete");
+    localStorage.removeItem("openquiz_onboarding_complete");
     api.getOnboardingState.mockResolvedValueOnce({
       onboarding: { is_completed: true },
     });
@@ -47,10 +47,10 @@ describe("OnboardingContext tests", () => {
     );
 
     await waitFor(() => {
-      expect(localStorage.getItem("sprout_onboarding_complete")).toBe("true");
+      expect(localStorage.getItem("openquiz_onboarding_complete")).toBe("true");
     });
     expect(screen.getByTestId("syncStep")).toHaveTextContent("null");
-    localStorage.removeItem("sprout_onboarding_complete");
+    localStorage.removeItem("openquiz_onboarding_complete");
   });
 
   it("sends the lesson tour through the last-lesson redirect", () => {

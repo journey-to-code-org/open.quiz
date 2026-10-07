@@ -42,7 +42,7 @@ export default function LoginPage() {
   const oauthErrorMessages = {
     oauth_failed: "That sign-in attempt didn't work. Please try again.",
     oauth_email_required:
-      "We need a verified email address from your sign-in provider to create your Sprout account.",
+      "We need a verified email address from your sign-in provider to create your account.",
     oauth_terms_required: "Please agree to the Terms of Service and Privacy Policy to continue.",
     oauth_unavailable:
       "That sign-in provider is not available right now. Please choose another option.",

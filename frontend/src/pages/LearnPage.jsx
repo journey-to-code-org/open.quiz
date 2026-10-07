@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Link,
   Navigate,
@@ -10,13 +10,13 @@ import {
 import { useAuthContext } from "../context/AuthContext";
 import useLessonContent from "../hooks/useLessonContent";
 import { ROUTES } from "../app/router/routes";
+import { loadContentPackage } from "../contentPackages";
 import { normalizeLearnData, selectRandomLesson } from "../features/learn/normalizeLesson";
 import LearnFlow from "../features/learn/LearnFlow/LearnFlow.component";
 import Card from "../shared/Card/Card.component";
 import Skeleton from "../shared/Skeleton/Skeleton.component";
-import dabbingBeaverImg from "../assets/dabbingBeaver.svg";
-import abigailImg from "../assets/abigail.webp";
-import ramonaImg from "../assets/ramona.webp";
+
+const configuredPackageId = import.meta.env.VITE_CONTENT_PACKAGE?.trim();
 
 export default function LearnPage() {
   const { isAuthenticated, isHydrating, csrfToken, refreshProfile } = useAuthContext();
@@ -24,6 +24,7 @@ export default function LearnPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const setCurrentModuleResources = useOutletContext();
+  const [loadedContentPackage, setLoadedContentPackage] = useState(null);
 
   const selectedMicroLessonId = location.state?.microLessonId;
   const isSamplePreview = searchParams.get("sample") === "true";
@@ -40,6 +41,29 @@ export default function LearnPage() {
     enabled: isAuthenticated || isSamplePreview,
     isPublic: !isAuthenticated && isSamplePreview,
   });
+  const contentPackageId = configuredPackageId || fetchedModuleData?.metadata?.packageId;
+  const contentPackage =
+    loadedContentPackage && loadedContentPackage.id === contentPackageId
+      ? loadedContentPackage.data
+      : null;
+
+  useEffect(() => {
+    let isActive = true;
+    if (!contentPackageId) return undefined;
+
+    void loadContentPackage(contentPackageId)
+      .then((loadedPackage) => {
+        if (isActive) setLoadedContentPackage({ id: contentPackageId, data: loadedPackage });
+      })
+      .catch((error) => {
+        console.error(`Failed to load content package ${contentPackageId}:`, error);
+        if (isActive) setLoadedContentPackage(null);
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [contentPackageId]);
 
   const learnData = useMemo(
     () =>
@@ -63,12 +87,6 @@ export default function LearnPage() {
         }
       : learnData;
   }, [isAuthenticated, learnData]);
-
-  const characterImages = {
-    abigail: abigailImg,
-    ramona: ramonaImg,
-    beaver: dabbingBeaverImg,
-  };
 
   useEffect(() => {
     if (typeof setCurrentModuleResources !== "function") {
@@ -128,8 +146,9 @@ export default function LearnPage() {
         <LearnFlow
           key={`${learnData.moduleId}:${learnData.id}`}
           learnData={sampleLearnData}
-          characterImages={characterImages}
-          guideImage={dabbingBeaverImg}
+          blockRenderers={contentPackage?.lessonBlockRenderers}
+          characterImages={contentPackage?.characterImages}
+          guideImage={contentPackage?.guideImage}
           isReadOnly
         />
       </>
@@ -140,8 +159,9 @@ export default function LearnPage() {
     <LearnFlow
       key={`${learnData.moduleId}:${learnData.id}:${selectedMicroLessonId ?? "resume"}`}
       learnData={learnData}
-      characterImages={characterImages}
-      guideImage={dabbingBeaverImg}
+      blockRenderers={contentPackage?.lessonBlockRenderers}
+      characterImages={contentPackage?.characterImages}
+      guideImage={contentPackage?.guideImage}
       savedProgress={progress}
       selectedMicroLessonId={selectedMicroLessonId}
       csrfToken={csrfToken}

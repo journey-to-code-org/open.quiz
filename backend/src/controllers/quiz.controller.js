@@ -9,6 +9,7 @@ const { calculateXpDelta } = require("../utils/coreRules");
 const { updateUserStreak } = require("../services/streak.service");
 const { awardEligibleBadges } = require("../services/badge.service");
 const { getXpEarnedToday } = require("../services/xp.service");
+const { awardXp } = require("../services/xpAward.service");
 
 quizEvents.on("quiz_submit", ({ userId, microLessonId, score, attemptNumber }) => {
   console.log(
@@ -25,7 +26,7 @@ quizEvents.on("quiz_fail", ({ userId, microLessonId }) => {
 const QuizAttempt = require("../models/QuizAttempt.model");
 const UserProgress = require("../models/UserProgress.model");
 const { invalidateDashboardCache } = require("./dashboard.controller");
-const { getModule } = require("../utils/content");
+const { getModule, getDefaultModule } = require("../utils/content");
 const {
   quizStartSchema,
   quizCheckSchema,
@@ -36,7 +37,6 @@ const {
 
 //Import Status codes library http-status-codes
 const { StatusCodes } = require("http-status-codes");
-const XpEvent = require("../models/XpEvent.model");
 const { getUserXpTotal } = require("../services/xp.service");
 
 //Array comparison helper for single, multi-choice and multi-select questions
@@ -51,7 +51,8 @@ const arraysMatch = (arr1 = [], arr2 = []) => {
 };
 //search inside modules => lessons ....knowledge check
 const getQuestionsFromLesson = async (moduleId, microLessonId) => {
-  const moduleData = await getModule(moduleId || "cashFlow");
+  const resolvedModuleId = moduleId || (await getDefaultModule())?.id;
+  const moduleData = resolvedModuleId ? await getModule(resolvedModuleId) : null;
   if (!moduleData) return [];
 
   //search inside the modules to get the lessons and then inside lessons to get microlessons which then include the knowledgechecks
@@ -67,7 +68,8 @@ const getQuestionsFromLesson = async (moduleId, microLessonId) => {
 
 // get all micro-lesson IDS that belong to a specific lesson ID
 const getMicroLessonIdsForLesson = async (moduleId, lessonId) => {
-  const moduleData = await getModule(moduleId || "cashFlow");
+  const resolvedModuleId = moduleId || (await getDefaultModule())?.id;
+  const moduleData = resolvedModuleId ? await getModule(resolvedModuleId) : null;
   if (!moduleData) return [];
   const lesson = (moduleData.lessons || []).find((l) => l.id === lessonId);
 
@@ -82,9 +84,13 @@ exports.getUserProgress = async (req, res, next) => {
 
     let progressRecord = await UserProgress.findOne({ user_id: req.user.id });
     if (!progressRecord) {
+      const defaultModule = await getDefaultModule();
+      if (!defaultModule) {
+        return res.status(StatusCodes.OK).json({ module_id: null, xp: xpTotal });
+      }
       progressRecord = await UserProgress.create({
         user_id: req.user.id,
-        module_id: "cashFlow",
+        module_id: defaultModule.id,
       });
     }
     return res.status(StatusCodes.OK).json({
@@ -367,53 +373,55 @@ exports.submitQuiz = async (req, res, next) => {
         },
       };
 
-      //increases UserProgress.xp
+      let quizPassAwarded = 0;
       if (quizPassXp.amount > 0) {
-        update.$inc = {
-          xp: quizPassXp.amount,
-        };
+        const award = await awardXp({
+          userId,
+          eventType: "quiz_pass",
+          sourceKey: `quiz_pass:${microLessonId}`,
+          requestedXp: quizPassXp.amount,
+        });
+        quizPassAwarded = award.duplicate ? 0 : (award.event?.awarded_xp ?? 0);
       }
 
-      //Add xp to XpEvent database for quiz pass
-      if (quizPassXp.amount > 0) {
-        await XpEvent.create({
-          user_id: userId,
-          event_type: "quiz_pass",
-          amount: quizPassXp.amount,
-          reference_id: microLessonId,
-        });
+      //increases UserProgress.xp
+      if (quizPassAwarded > 0) {
+        update.$inc = {
+          xp: quizPassAwarded,
+        };
       }
 
       //award xp to send to frontend for Toast notification
-      if (quizPassXp.amount > 0) {
+      if (quizPassAwarded > 0) {
         xpRewards.push({
           type: "quiz_pass",
-          amount: quizPassXp.amount,
+          amount: quizPassAwarded,
         });
+      }
+
+      let perfectAwarded = 0;
+      if (perfectXp.amount > 0) {
+        const award = await awardXp({
+          userId,
+          eventType: "quiz_perfect",
+          sourceKey: `quiz_perfect:${microLessonId}`,
+          requestedXp: perfectXp.amount,
+        });
+        perfectAwarded = award.duplicate ? 0 : (award.event?.awarded_xp ?? 0);
       }
 
       //increases UserProgress.xp
-      if (perfectXp.amount > 0) {
+      if (perfectAwarded > 0) {
         update.$inc = {
           ...(update.$inc || {}),
-          xp: (update.$inc?.xp || 0) + perfectXp.amount,
+          xp: (update.$inc?.xp || 0) + perfectAwarded,
         };
       }
 
-      //Add xp to XpEvent database for perfect quiz score
-      if (perfectXp.amount > 0) {
-        await XpEvent.create({
-          user_id: userId,
-          event_type: "quiz_perfect",
-          amount: perfectXp.amount,
-          reference_id: microLessonId,
-        });
-      }
-
-      if (perfectXp.amount > 0) {
+      if (perfectAwarded > 0) {
         xpRewards.push({
           type: "quiz_perfect",
-          amount: perfectXp.amount,
+          amount: perfectAwarded,
         });
       }
 
@@ -442,6 +450,17 @@ exports.submitQuiz = async (req, res, next) => {
           isFirstTime: !alreadyCompletedLesson,
         });
 
+        let lessonAwarded = 0;
+        if (lessonXp.amount > 0) {
+          const award = await awardXp({
+            userId,
+            eventType: "lesson_complete",
+            sourceKey: `lesson_complete:${moduleId}:${lessonId}`,
+            requestedXp: lessonXp.amount,
+          });
+          lessonAwarded = award.duplicate ? 0 : (award.event?.awarded_xp ?? 0);
+        }
+
         await UserProgress.findOneAndUpdate(
           { user_id: userId, module_id: moduleId },
           {
@@ -449,27 +468,15 @@ exports.submitQuiz = async (req, res, next) => {
               completed_lessons: lessonId,
             },
             //increases UserProgress.xp
-            $inc: {
-              xp: lessonXp.amount,
-            },
+            ...(lessonAwarded > 0 ? { $inc: { xp: lessonAwarded } } : {}),
           },
         );
 
-        //Update xp for lesson completion in XpEvent database
-        if (lessonXp.amount > 0) {
-          await XpEvent.create({
-            user_id: userId,
-            event_type: "lesson_complete",
-            amount: lessonXp.amount,
-            reference_id: lessonId,
-          });
-        }
-
         //award xp for Toast notification to frontend for lesson completion
-        if (lessonXp.amount > 0) {
+        if (lessonAwarded > 0) {
           xpRewards.push({
             type: "lesson_complete",
-            amount: lessonXp.amount,
+            amount: lessonAwarded,
           });
         }
       }

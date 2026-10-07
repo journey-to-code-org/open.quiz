@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Kit avatar">
+  <circle cx="64" cy="64" r="62" fill="#f4e4d8" />
+  <path d="M23 120c4-24 18-37 41-37s37 13 41 37" fill="#c45f49" />
+  <path d="M37 52c0-21 11-34 28-34 19 0 29 14 27 38l-6 20H43z" fill="#674535" />
+  <ellipse cx="64" cy="58" rx="24" ry="29" fill="#e5ae7e" />
+  <path d="M40 48c4-19 14-29 27-29 15 0 24 9 27 25-11 0-19-5-24-12-6 8-16 14-30 16" fill="#674535" />
+  <circle cx="55" cy="58" r="2" fill="#48362d" />
+  <circle cx="73" cy="58" r="2" fill="#48362d" />
+  <path d="M58 70q6 5 12 0" fill="none" stroke="#a85b4a" stroke-linecap="round" stroke-width="2.5" />
+</svg>

@@ -182,8 +182,8 @@ describe("learn flow", () => {
     await user.click(screen.getByRole("button", { name: "View results" }));
     await user.click(screen.getByRole("button", { name: "Review Answers" }));
 
-    expect(screen.getByAltText("Correct answer")).toBeInTheDocument();
-    expect(screen.queryByAltText("Incorrect answer")).not.toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Correct answer" })).toBeInTheDocument();
+    expect(screen.queryByRole("img", { name: "Incorrect answer" })).not.toBeInTheDocument();
     expect(
       screen.getByText(/Explanation: Cash flow describes money moving in and out/),
     ).toBeInTheDocument();
@@ -200,7 +200,7 @@ describe("learn flow", () => {
       })),
     };
 
-    window.localStorage.setItem("sprout-quiz-feedback-preference", "end");
+    window.localStorage.setItem("openquiz-quiz-feedback-preference", "end");
     api.updateLessonProgress.mockResolvedValue({});
     api.startQuiz.mockResolvedValue({ attemptId: "attempt-1" });
     api.submitQuiz.mockResolvedValue({
@@ -234,8 +234,8 @@ describe("learn flow", () => {
     await user.click(screen.getByRole("button", { name: "Review Answers" }));
 
     expect(api.checkQuizAnswer).not.toHaveBeenCalled();
-    expect(screen.getByAltText("Correct answer")).toBeInTheDocument();
-    expect(screen.queryByAltText("Incorrect answer")).not.toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Correct answer" })).toBeInTheDocument();
+    expect(screen.queryByRole("img", { name: "Incorrect answer" })).not.toBeInTheDocument();
     expect(
       screen.getByText(/Explanation: Cash flow describes money moving in and out/),
     ).toBeInTheDocument();

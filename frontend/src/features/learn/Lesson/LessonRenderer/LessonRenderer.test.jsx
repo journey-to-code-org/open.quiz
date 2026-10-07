@@ -2,25 +2,15 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import LessonRenderer from "./LessonRenderer.component";
+import { lessonBlockRenderers } from "../../../../contentPackages/examples/openquiz-introduction";
 
-// Provide the table and budget data needed by the lesson content that depends on module data.
 const moduleData = {
   tables: [
     {
-      tableId: "income-table",
-      title: "Monthly income",
-      headers: ["Name", "Amount"],
-      incomeRefs: ["salary"],
-    },
-  ],
-  budgets: [
-    {
-      budgetId: "budget-1",
-      title: "Sample budget",
-      income: [{ id: "salary", name: "Salary", amount: 2000 }],
-      fixedExpenses: { needs: [], wants: [] },
-      variableExpenses: { needs: [], wants: [] },
-      summary: { totalIncome: 2000, totalExpenses: 500, netCashFlow: 1500 },
+      tableId: "platform-layers",
+      title: "Platform layers",
+      headers: ["Layer", "Responsibility"],
+      rows: [["Core", "Accounts and learning flow"]],
     },
   ],
 };
@@ -36,8 +26,16 @@ describe("LessonRenderer", () => {
 
     expect(screen.getByText("Paragraph text")).toBeInTheDocument();
 
-    rerender(<LessonRenderer content={{ type: "characterIntro", text: "Meet Abigail" }} />);
-    expect(screen.getByText("Meet Abigail")).toBeInTheDocument();
+    rerender(<LessonRenderer content={{ type: "characterIntro", text: "Meet Nova" }} />);
+    expect(screen.queryByText("Meet Nova")).not.toBeInTheDocument();
+
+    rerender(
+      <LessonRenderer
+        content={{ type: "characterIntro", text: "Meet Nova" }}
+        blockRenderers={lessonBlockRenderers}
+      />,
+    );
+    expect(screen.getByText("Meet Nova")).toBeInTheDocument();
 
     rerender(
       <LessonRenderer content={{ type: "formula", text: "Income - Expenses = Cash Flow" }} />,
@@ -72,25 +70,16 @@ describe("LessonRenderer", () => {
     await user.click(screen.getByRole("button", { name: "Check Answer" }));
     expect(screen.getByText("✅ Correct!")).toBeInTheDocument();
 
-    // Table content uses the matching table and budget information from the module.
-    rerender(
-      <LessonRenderer content={{ type: "table", tableId: "income-table" }} module={moduleData} />,
-    );
-    expect(screen.getByRole("table", { name: "Monthly income" })).toHaveTextContent("$2,000.00");
-
-    // Budget summaries should pull the requested values from the matching budget.
+    // Tables render generic columns and rows from module data.
     rerender(
       <LessonRenderer
-        content={{
-          type: "budget-summary",
-          budgetId: "budget-1",
-          show: { income: true, totals: true, cashFlow: true },
-        }}
+        content={{ type: "table", tableId: "platform-layers" }}
         module={moduleData}
       />,
     );
-    expect(screen.getByRole("heading", { name: "Sample budget" })).toBeInTheDocument();
-    expect(screen.getByText("$1,500")).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: "Platform layers" })).toHaveTextContent(
+      "CoreAccounts and learning flow",
+    );
   });
 
   it("renders safe fallbacks for missing or unknown content", () => {

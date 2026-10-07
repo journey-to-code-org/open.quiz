@@ -22,3 +22,4 @@ copy_env() {
 copy_env "."
 copy_env "./frontend"
 copy_env "./backend"
+copy_env "./instances/openquiz"

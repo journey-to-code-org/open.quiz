@@ -21,10 +21,10 @@ export function OnboardingProvider({ children }) {
   const stepSyncInFlightRef = useRef(false);
 
   const [hasCompleted, setHasCompleted] = useState(() => {
-    const status = localStorage.getItem("sprout_onboarding_complete");
+    const status = localStorage.getItem("openquiz_onboarding_complete");
 
     if (status === null) {
-      localStorage.setItem("sprout_onboarding_complete", "false");
+      localStorage.setItem("openquiz_onboarding_complete", "false");
       return false;
     }
     return status === "true";
@@ -42,7 +42,7 @@ export function OnboardingProvider({ children }) {
           const onboarding = response.onboarding;
           const completed = Boolean(onboarding.is_completed);
           setHasCompleted(completed);
-          localStorage.setItem("sprout_onboarding_complete", completed ? "true" : "false");
+          localStorage.setItem("openquiz_onboarding_complete", completed ? "true" : "false");
           if (!completed && onboarding.started_at) {
             setCurrentStep(onboarding.current_step ?? 0);
           } else if (!completed && !onboarding.started_at) {
@@ -59,7 +59,7 @@ export function OnboardingProvider({ children }) {
   }, [isAuthenticated]);
   const startOnboarding = async () => {
     setCurrentStep(0);
-    localStorage.setItem("sprout_onboarding_complete", "false");
+    localStorage.setItem("openquiz_onboarding_complete", "false");
     setHasCompleted(false);
     navigate(ONBOARDING_STEPS[0].route);
     try {
@@ -84,7 +84,7 @@ export function OnboardingProvider({ children }) {
   };
   const skipOnboarding = async () => {
     setCurrentStep(null);
-    localStorage.setItem("sprout_onboarding_complete", "true");
+    localStorage.setItem("openquiz_onboarding_complete", "true");
     setHasCompleted(true);
     navigate("/dashboard");
 
@@ -116,7 +116,7 @@ export function OnboardingProvider({ children }) {
       setCurrentStep(nextStepIndex);
       navigate(ONBOARDING_STEPS[nextStepIndex].route);
     } else {
-      localStorage.setItem("sprout_onboarding_complete", "true");
+      localStorage.setItem("openquiz_onboarding_complete", "true");
       setHasCompleted(true);
       navigate("/dashboard");
     }

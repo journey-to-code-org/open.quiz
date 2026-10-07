@@ -14,7 +14,6 @@ const userProgressSchema = new mongoose.Schema(
     module_id: {
       type: String,
       required: true,
-      default: "cashFlow",
     },
     course_module_id: {
       type: String,

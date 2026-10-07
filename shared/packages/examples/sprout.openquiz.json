@@ -1,0 +1,2343 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "id": "sprout",
+    "name": "Sprout",
+    "version": "1.6.0",
+    "description": "Historical Sprout visual identity using artwork recovered from repository history.",
+    "author": "open.quiz contributors",
+    "homepage": null
+  },
+  "theme": {
+    "appName": "Sprout",
+    "tokens": {
+      "primary": "#18816a",
+      "primaryHover": "#105647",
+      "primaryAlt": "#41e3c0",
+      "accent": "#54dec0",
+      "success": "#18816a",
+      "progressStart": "#ffbf1f",
+      "progressEnd": "#ffd254",
+      "progressNearStart": "#ffc618",
+      "progressNearEnd": "#ffdd4f",
+      "progressCompleteStart": "#ea6fee",
+      "progressCompleteEnd": "#c989f7",
+      "heading": "#105647",
+      "foreground": "#061e19",
+      "onPrimary": "#f2fcfa",
+      "surfaceApp": "#f2fcfa",
+      "surfaceRaised": "#eafbf7",
+      "surfaceInset": "#d4f7ef",
+      "surfaceInput": "#ffffff",
+      "focus": "#105647",
+      "learningPathSurface": "#e8f7f2",
+      "learningPathText": "#195d50",
+      "learningPathHeading": "#1a6b58",
+      "learningPathLine": "#263e39",
+      "learningPathMuted": "#3f6b60",
+      "learningPathLabel": "#195d50",
+      "learningPathDivider": "#9fd1c3",
+      "learningPathFooterSurface": "#d4f7ef",
+      "learningPathFooterBorder": "#a7dccd",
+      "learningPathNodeCompleted": "#f2fcfa",
+      "learningPathNodeCurrent": "#18816a",
+      "learningPathNodeBorder": "#9fd1c3",
+      "fontHeading": "\"Poppins\", sans-serif",
+      "fontBody": "\"Inter\", sans-serif",
+      "radiusSm": "4px",
+      "radiusMd": "8px",
+      "radiusLg": "12px",
+      "radiusPill": "9999px"
+    },
+    "darkTokens": {
+      "primary": "#3cc9a5",
+      "primaryHover": "#6fdcbf",
+      "primaryAlt": "#41e3c0",
+      "accent": "#54dec0",
+      "success": "#3cc9a5",
+      "heading": "#c8f3e7",
+      "foreground": "#d6ebe5",
+      "onPrimary": "#06231c",
+      "surfaceApp": "#0b1a17",
+      "surfaceRaised": "#10241f",
+      "surfaceInset": "#163029",
+      "surfaceInput": "#0e1f1b",
+      "focus": "#6fdcbf",
+      "learningPathSurface": "#0e201c",
+      "learningPathText": "#cfe8e0",
+      "learningPathHeading": "#a8ecd9",
+      "learningPathLine": "#7fcfb5",
+      "learningPathMuted": "#93b8ad",
+      "learningPathLabel": "#b5e6d8",
+      "learningPathDivider": "#2b4a42",
+      "learningPathFooterSurface": "#132a24",
+      "learningPathFooterBorder": "#24423a",
+      "learningPathNodeCompleted": "#163029",
+      "learningPathNodeCurrent": "#3cc9a5",
+      "learningPathNodeBorder": "#3b6a5e"
+    },
+    "trail": {
+      "style": "vine",
+      "decorationCount": 2
+    },
+    "landing": {
+      "hero": {
+        "heading": "Master money in five minutes a day.",
+        "body": "Bite-sized lessons on budgeting, saving, and credit — built for students and new grads starting out on their own.",
+        "showAvatars": true
+      },
+      "benefits": {
+        "heading": "Why Choose Our App",
+        "items": [
+          {
+            "icon": "⚡",
+            "title": "No Jargon",
+            "body": "Learn budgeting basics without the finance jargon."
+          },
+          {
+            "icon": "📱",
+            "title": "Gamified Progress",
+            "body": "Track streaks and earn badges as you progress."
+          },
+          {
+            "icon": "🔒",
+            "title": "100% Free",
+            "body": "Free forever — no bank account required."
+          }
+        ]
+      },
+      "steps": {
+        "heading": "How It Works",
+        "items": [
+          {
+            "title": "Pick a Topic",
+            "body": "Choose from modules covering topics such as Budgeting, Credit Cards, or Savings."
+          },
+          {
+            "title": "5-Min Daily Lesson",
+            "body": "Read interactive, simplified concepts designed to fit straight into a busy schedule."
+          },
+          {
+            "title": "Test Your Knowledge",
+            "body": "Complete quick summary checkpoints to solidify your learning and lock in streaks."
+          }
+        ]
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "Is it free?",
+            "answer": "Yes — every lesson, quiz, and badge is free. There's no paid tier and no ads. We built this so anyone starting out can learn money basics without a paywall."
+          },
+          {
+            "question": "How long does it take?",
+            "answer": "Most lessons take three to five minutes, and a full topic runs about a week at one lesson a day. You can go faster or slower — your progress saves automatically."
+          },
+          {
+            "question": "Who is it for?",
+            "answer": "It's designed for first-time earners: students opening their first checking account and recent grads getting their first paycheck. No prior finance knowledge is assumed."
+          }
+        ]
+      }
+    },
+    "assets": {
+      "logo": "brand.logo",
+      "favicon": null,
+      "hero": null,
+      "progressBar": "progress.flower",
+      "progressFrame": "progress.frame",
+      "answerCorrect": "feedback.correct",
+      "answerIncorrect": "feedback.incorrect",
+      "avatars": [
+        {
+          "key": "abigail",
+          "name": "Abigail",
+          "assetKey": "avatar.abigail"
+        },
+        {
+          "key": "ramona",
+          "name": "Ramona",
+          "assetKey": "avatar.ramona"
+        },
+        {
+          "key": "beaver",
+          "name": "Beaver guide",
+          "assetKey": "avatar.beaver"
+        },
+        {
+          "key": "guide",
+          "name": "Beaver guide",
+          "assetKey": "avatar.beaver"
+        }
+      ]
+    }
+  },
+  "assets": [
+    {
+      "key": "brand.logo",
+      "filename": "sprout-logo.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,UklGRloNAABXRUJQVlA4WAoAAAAwAAAAKwEAfgAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZBTFBI+AoAAAHwRdvWsifats3NFMQhiru7u1twt8KdEtzhvnF3bxTurqmK576Cc1fwENydBIdk714bp83zOHPnulqxExETgKw4oO7Q5XEvRfflpd2zWsJT2WplwluxXt8T4dVybbpQP4d5HiodE3p/eBrLnRD+f+BhLHJI7CzsWfBbJua/JCWbWwyPYoO3Yjp52KJMMf3F16MwQ8xeHVRq6gexuA6exBVi8nQEOr0SyxU9CevE+L+1ELRPrF+FB3GRGM8HOqYL8XcPwmgxfFEbmCzM/wV7DlqJ4Vl/YKVQ4+AxDEgzOAxgr3AHeg42i/4GAMuF7ONm5W+7ON7lcrkOLRhc18dCMdFfB6CPkI/BjQ7usfSpmHf1NrVV7zSAqsLu6z7VOyHMz9OMwkT3RW4gx0taoLtU9LSw7zbUm61XDcBCYZ+Fu+z9ysy9E9NHztt/XU9koM4DnaUAigt9ktuESp9MiEjaH60QMuCIjvQAUEC0aTkBxPCKuk+okWlKRF71A6re1EgLoK/OVADNhX4Z7nQHKyJXqgFTNWkhWKD56gcghjfRrcI4SyKrgXppIhKFw5oFAEoLP9S9wi5rEgnkuyoibS5rggBs4+2Hm53jjjVJAHxviri+iUgMgNzCr+luoSxBtgPFRH8EgH68JLjfQwkyHpigVxLAYV7j7FjZmUS1cJIgDYDrmnQAyKCdQHa8pxAVy/2G8Con+mlcAJoL+2vhbFkPx6E5QebA66OIbAawlBaBbHlP52EQITMP1orIFADRrGHInvfIAjDDmixCNRHpD+AlaTyy6T2zAky1dhl4I9ISCBDqp/bIrvfIEjDwi7mrvwLYLVIdqEfZGgT3DqErXxhkHO4MbV+RCsAwa18XhyEbn1UAqNZj7MyZ0xrAMEykNNAi8qWptE1tfkK2Pgux/ljKQRtUr6FheWT7e2Zd26SmjlvZK+vqKY08KKES4X70zLpwe4T70SsLW7LMk1LtpPvRMwvDEPejhyNyNGhoXNfPDmJDwyrOKNl24KTxfRqF2eBbv13v4eNnjOrbrmZoVtVTudB+Bz+L+YeHpkZ4q+D3e4qYTV7fP1gpn5+3vxLDD5G/FiDUGn/wvpjOSNnZI1cW1EOxIdeFnDDcX7NdrI/Xq7xDiAdaW4kU69sNpnwUq8fLmGu8+pVwkyeFW0sW63Mp3uLIb1aGPBI7NzW2ocZpIV9pbi6KVvGWMPeHGeT8d7rYGd/u/9Wvr8XuJ3lY08XGg4Fmolm/C/eDt96wN2L3hfp2zc+SchwU+1OwgzAB4Ulia1ojW3YAWC3kf0Hb4J6oeKiYmcuEhRQfx50RBQdgF2Fi/XSxe7BRLGEncETI3/w1M0TVXiauEBZTfJ12VBS8DewmxImCUwxiCDsQJew5AIKTRN15RpcJSyk+DpssKnblqDlcL46wfZuwvwUCZZ6LyjsNriri7awqouIdOEda68QT3gh9EdD8i6gd5aVzjbCc4uOsP5Xo76RPeTQJBH5mEJqL8nFerJUUX0eVFxWfAsAep0iSaitQ9Zt6cpK1iuLjqDlKjHSWDAMQr1B4+Htx4jTS2iznMuHjypnaJWeNHkG72zlfwpRah8PizHrqeDtKrN8Jh3HHvd803XT2OEeWAy518keIQx/nwHXCBoqPkwIJTWG+dZTcge4+B2XkQpIym/DUKbIQ1wgbKd6MWy6Xy3WH4TIZpZOXUMECUKOB3n7e933dygcB+X+NpckUnOV9/qN1w2Yzdp19q1dwqNB3Ni4ZiDJ99n2jZQTfcE4XAOjPgOV8hNmWjGlvxuWEcfh61l2cZ93pAuO8o2+KbMcT1sowGHr9fJMky1IIWyl+jA6afioEEWS+WrG+MN/4HUeqXiJtgsXRacV6CfdpNZhfQsp4SdhO8We01fysAhjyYGledbbDcoE7nHnJnEOw7IMoTnIArA7jUHeo0lrTW4kXDBHZEqFIIohFPlOuplBe+FlDkFBTAmB9liq7VWmp6aFEJEnk9aIKVg4yvuRiYChFMij9QBzCKQRmlCJ7KbkZTdXpThOR1Ol5TB1mTAL3HoWaAuYmylxQC2WqsV+VRpouSuCBDSKyIczEEcL3n0izVRlBuUgJ5mCLGgcpwYwGCrW1R2SDv8FxwnGQK6riT8lkJILcTI0jlDBGXU1HNbDTJkkbqHeCMJKF92qcATO3MGeyvNQ4TsnLqKnpoAiibBLZpBNJ6ES7oYaLUojSnoWnSpyiFGTU0LRRBYfsksQcAKIIjWjRzilPqU9LVOIvSnFGFbWwwC6JAxBLqEPbr0YipTqlOi1aiXhKBUYFTQt10P69TbIRSCC0pp1SI55SnhJBS1YiiVKbUVrTVCEErLZJaiOJMIJ2yzlFKYNp6UpcokQwimsaqwQU2GLPeZwlbGf5iJrRlEDKUlYJUTKV0p+RX9OA4WUDUHBNhg1S8iLhLauXg/CJ8Zg1Wo23lImMEE1dhr8tgN/467zZlwnSmnTOSRcZUoV0Tw3Jz9jN8NPUYoTbBKDMhkxSYirjKqeFUL8TIjlrKHs4Q0TR3xgvGNBWZxS3Dwjdxfn2giEzGGHPKF+TVOlGkQhGka+qxBIqCjFDpwqjMaWYFaDmOwZ7oLXgVKEejyec4uTmfG1uzSdVlC1nbRnjqU4FxlhGiYy//K1gkDoyykqhe8LtzzjOQSJFpIuVoL+Fu5SSYKlABuO8TklGEuOCyOsGViooJJF5TI38JGQ/dYaTZEuQqRbPhHsriCILLfhdF+YWnYIMWajxXbPDRHfRHithrrZKkjEjWK/Eyk/CPgF1vD+SJHNbA72Sv8UKewguU2Sdv5nOT4T6q04QRc7OXJUk8sXLINdbHZH1pc2soHykicjDvTNnLjojNjagHCVhLkt7yeVyPRV+KrCQI2mrW/kBKN1vULKQy+uAY9jeYKeYjGqpV3SnMNOu2WH7eVAOs/zf2GB3R6AJyf6H0H9qxwa9BmLxhsvluirc2L8d1BCIUQddnBIFAO+dsdhgvR0f9G5YsXPeBeccAxBLOETDYWd8CNcsckYpg3Z2SA1NH1G3/DnHZBYCEEM4wPN55IhG0OZ3xFEYetsyC0BIujopOOOYwQAQTdjPQ7nvDhgF/c1OqGSEA3akANgt6g5CklMOQhtD2GsD2qs3HIb+L9VbCpPV7ZCiKCfqnoNjzufQiSbssQMDVOsNkxHK3fUyA5cdIxGjzucSwH+ccc0ftN22oKtSn5rC9BjF3hWG6XJ2HMdQZTLqAIgnvFQgKQC8Hfag4n11HpWAxYVKfaoIi0ts+OqF6ilqfGoKUnTNN3ZthjFju03w3qzK0QBYHqlQahFYTuJJawATvirwd0HQEHbalvdd4SSg5XMVUpuAWeyCKnt8YT33Q94qAAiY/dGmp6OgH00BZtiwOQRm/yRssQ8YnWbX2X5gt7+uws16oAbG0i5oAJ+xT21I7AZjFvJv42TuLAXzkYTNKuCnfmdtSFtZCnZGHLDpw8b6oI/6QLkyyk8PQLf4TMr12QVglgb4jzj5wcLnY4NywmrvmdbbKQEgfOSxz4yrs6vDdp+hu26wUhbXh62Bs1OsnJ1VClYrDV4383CqztvzroTNo+p4wWIUT1t66IpD559Lemr8ymHVkeXWmLR2f8LdDBFJf3g1YdWIen5QtnKPSTNnztkSde21PDvjcrn2TO5W1Q8KFuo9P9J1Td7dil//e2MvOPFPezyOJz0qxzwqhzwqB/+xcuCHoP0/BO37x8reH4L2/BC0+x8ru35UAVZQOCBsAAAAEAsAnQEqLAF/AD4ZDIVCIQQJAAQAYS0t3C7WI2gCe16KuEGQQ1VJrttFwgyCGqpNdtouEGQQ1VJrttFwgyCGqpNdtouEGQQ1VJrttFwgyCGqpNdtouEGQQ1VJrttFwgUAAD+//iJgAAAAAAA"
+    },
+    {
+      "key": "progress.flower",
+      "filename": "flower-progress.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,UklGRr4oAABXRUJQVlA4WAoAAAAwAAAA+AAA/wAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZBTFBIvw4AAAGgh+2TIUnK0WK0Nk5rm2fbtm3btm3btm37bjme2fH0dnfNU1MRkVkRGdX/3UWEA0mSoqgGFhR15xLhC+b/f6Vo8MR5a681e5XCHEvenHsXNbd1pFIdLQ1/rV+QMynd4+GlQScpmU+u3jgHDuWPPKW500WCrzfunuMYfv/y8HpH6Xhvai5jyJl1nXGk9vDinMVObZ2UuN30WF5uYtSjHaRvCclmyc7zvXMQhZtUkmOWG7KkGh/3yT31xhTuYf/SaUdd8GiuYcBL1BWWZ1JRwBqclVtWEqusIKrDE+watc7NJcz6nTwbp6A/eL8odzC9ytJj6J6SO2oF9GRXjbt8wPxbnCtWib/QvbhdFJlLcgO94SjucZ0alRO4w9JnO3VWXIpWWXfXQ48+Yr+tZ/ZLsM3vGVSfqwuHY2yN8/rPPfbtFQGx2Fz0wH5TeiUSk1voPufwUe4LkQcrU3ZV25bdvFry0O9bsvKe+qWnG/PvaHHVtv3ZrZPmC3QZrqwFLhunuFB2VzwDvhuZKFvpNRpg8vCCDo9zYMufYhgAY3RdSXLQ4z2iL3D4fb51V7l9k0W7SOxL0K/GJAZbpPkBesLPxHgbJ6fpHiHZLK1Ow7rKiPHF+4C/gnuRC0+mKb6UqFF+2fQk9ajcNhkesUPknigThJqnycPu1wX2M/T7RirTtkUS0O0d0Irg8NCbAiKrLKo6ZV/NegnAaiuI90Xm4o7hxOhlQHvXvMUaEaH4c4h+LgyizJAB3rcf5mKgfIy0JZRCf/BrT104LXOqUSt3+Aaamo8Ea+NYr6tdrQu1szVKGpkGzo89AAvQ6rjr+QyBQi/nROXc0Cl0TIZpXMTsGkufqftTuW4+gK3o4VbRjv8zxkoFOL2Tbuo7u0SYY4wx9wE/c81SVIQXFWpmatCVHdI/NxuzvU0TxlP7aeYY5CbRgfdM8a8E3LF6sUAxD/lAVeEdRGVP0ro+ivkmWj1ID2S2xvNTIPB67q6X/OUR4hfWR44GGSuQpR8r3hnV4QSRXUHgKhGsVJlaejREP94gk6XaVo3kzr3eGyL1ZdhELYXV0tCt0Ly0m0LQXu4faehxIZ0P1nvhu1GOeADfBsvljTxCL9dHSSJfoO5CHKaXnf0AZKsUB+hlcEYSYlqK5icxNO+IK7T/bKCY16MbpX8izeVUnqCYyzujRhaguESOAtLlitnCE3hfTjpGXxvFlEptj3CGoWM5Tjea5fwgWvWoO45Mja4bqZo1mqOLJYm0llP5l56q6fYRGJYCtXLHD+Ub1bINQGr5IHaMX+pdjG7y3wVF6hLhtqLUKJftMnhYZBUQhKESjNRFRjvF34g/WOy4ZaJRL2Nb5K4RjtInRUa/PKgPcN18kwBMjBp9vGwSQY4Or5RYN0ruJcHQZslAnz/AKV3jL3UzySBbtYOiidpBJinkaoCm46tMYrB6U3SLonM/9zPJIZutBLdooX1DkyTyNHCHlvZmnWumgr6jZq2/1W77H3bk4QfuvvUGc8cP6Q4YVwuu0bF0+KrQFI9asM0h591wz313X3fWgZvOGl7oPQP3enppU1sqAzY1QRAEmZXtLSs+vnBhkTFbZjhLpHM2yGazQu1GO7xW17YyfJ+xMtlUS+X1U/P83fZOPvnxP9Punmj68r7jf2UiilPXXhDrkM2G2cle2xrcdMr8dttGPq4pClfZ90eWrGApTvtfthNg0o5r09ebFXtG3rxnqxhfhphE97tqwxNMDu1SXyz0iaItX007uIgUF7fE8lgMjbou4Ki04U6mg/fv+kH+bPn+cRujXBVNjbbUj+PV2HnEl8L2MKfT9HtQNd4PBt/abLk2ehtcX52uS+M6ln6P3BVjiEfg/pKSMa/czYe1wtYrbGO2Oc9tdow0dJyHSKXBm4FiZLElNCzW1iC2XnTnIHH6vtRucZJ92nOMeJdXnNOINsHZHrtxDlnOlamthwl/QxZ8RfuI8xvvupejLHB7Go+BDKZTEWnZQpTdOygf+rDEpWxwDlJMI1mjjcpwwQXijVn7WWFHOHqTTjDCSl/Ke2L7pz5PU5EX39KAaRbbwLMYZDM0RujgHxwgRPkHhItYieVNDlfSXT+Sun20CL3fs8TNh3EmR3pXLpWg+3eUDzyphB91lfruAv96n81uH+6hrWAb9KI5n38zdB11mS+QT2LsehHhf0u52QntAbuqN1B7eJYuNlrYUrhBnMy9C6yRrK5rRcIM3iINvG8PXrq9TfX9GgcbJgVdW7Qe4OWoNK6+EdrBWDxicR4nozKdcCbwCthK4MFhpg8n1xLW+kMG2SFQQjxopjEyso6q/tzNagh+nnAhE5tzU3wzpa9vT2Z/KVHY5X/25KPvX1Tr21OZ3eURB/GxFnxKWL36ITJXYtgDDubjIHScO9iXj+V+HSOnSSkrWsgIb89GOQ6wVyPwR6D4wlps7NKJxMMr5RDP7wFs3IqO/SPD6zBkux8/7XwjD3sJmKTFkVP7ZT5e9xJgiCpofXfi4904CIZcwG0W2wPhYK/Nx9tJhOxPzRA+XkoK0HQEZiVZ/s3n45FEAf1ILVoglzLuCa+BVmoH2Y5+hIxF2pYb/i1Ckv/Qr8r3hpHJWOEkOS16fBonRcthfP0i8poebPkyJ4R/IDF+pGP1oWFlnQ7/DpVBO61tBi99f8NKe4bMBwHZL/iUdwoNr5zlKTLpItHaXLaRYaZ0qU8FukwaEYXhkx417HIKEbAE+OHXmA7Rign8DKwiik+ILAEQcoE6Ps/wy1qt3hUhCzIoXOw9bOGLRkLy76S096SJpggh+F9MKrLpSRjmf/iCKt7ArX+kKGql/qtpByMko+vIlPUB4DmpGYL79gCH6bLwIinZpB7boBhktVB9sIeRk53ayGmdQux9F0WmftnPCJK3djNhhwdXAdg3CMzBxsFBS+QSIys7dG2MyRPCDbhZqGXtYQU+XsVIy4RlAT1NhyekYdYb1axI/TTsy8uQB20mhZOMNCItd43y+c4+xgcpOKXawawgptnRPBSjsKYN8zhpa/NV3Q0loo8f+kpks/Wx2dARVouhMqHlMSICCHiJFBWorZsYf6T7Lp+62WgVyrfuAI04KjGl8OnZZTS1uH5sdeOXHF7N9SFA2eGsDkwdPtWZtIxCTWrRdpCJLQL7490/YkkSlB0xvMiCbUaJrSRMcersTeFZL2Xt+39dGZP2BujRWJEAhbd1VSubdXqvW16aabyVHuOuqXIAbT1/vmqDET8wEL8Qfsa4p2HXmFWZN0cXGBfxaYKdtvdlz/zcGhCOrv/plVtO33V6rzxj7oPujOtJ4CuGGicy0brTRZPfrphrdEjhKuvuevDhB+264diyPEKXq2AaxXYlm3KugcFLCoua7RWvrWNUy7HRdp0lieJ0qfyKExa0fCZ8X/HYPjPC/Z9uWbeVWNALdW1edo2dy3bl8+FGvfT5l2NdC66PW7r8SFQGA6L7asdrp+wt6CSu1YXLVRZdgAl8oftzrnLOQTtX5tUgTitrBOAHh9GAhomqmdYIP298GxmsQBaral0F4co0uGSaYvr9Bb3EuYlwWPzZ1OLW/8dV9HIKiLj49okaZY4c6PbWymx4jsdNZIbF6glE7pE8dzxfPX8SP3ncv5hOZ4D6EuXcApVskcLn+H1lTU4wyfBrD2laWyN9wZIJeUrggkxACFZdqPljoEKOAa4LWz9EtNylB2Iz+DtsNYNOjVPH8cQb7lFH6prfeypjyFIC/d3dlbF3Go4nAh8oW0R8oX6czvOFqtgkQCRDeUvT6invyU54nBDUDFdE8SK4O0gAYNw3V8TmQRK05Dv+tCLwtki3kC95e7EaxuCrk6OZo4b9gZWZJOFgNdwLCJdOCcLlavge2JpJEu7VQj90d5LwohYOgLYCkmIF8b4WnkkgvlRC938TiG+UMLgmMaBmuK+VMK7Zk2UTVN4XxT9RwpwUxIuaDfdXnvCmEjaDz/Kj36W+JzyphEM8otMfblbC2Z0ALyZEjzhFCddBvDiOHCadrEjtbZRwN8SLJwpDW7+qEh5KDCi1/9KyUn4EJLcXX36AH8eXGS0HEA9mQ49IzdHC5dKusmnth/ZLB2jhKD9c1SkOPb89lqeFrQKIfIY0pGUTltJ55SxjtOwRVnoASJP1lgH1PWhfN2oY1QgRT5B7Cj4AeDA/7aaH8mUQQT+B+34pMbeCdYh8XVysh7z3kMECo2SgmuYZs5+g+lGk0E66fZRRJIchzwnlR+hgMBEeaYwZkYJFuH3EaKI0JdNYonQvMOBJjKQB6WFGlbyJkOgjXb8eCJjaDotQHy4W9za6OBlbLeEmuMRbBerf4wuQNCKBw7xTAlD0UGRuIPVaZDbHBuwIycrVP/sZLGr2R7hh7uPp4HDqw/RqACPHXQkLwsipo18zSh2mao3OXaQBC8P5mbcgJfEfHGH0kf8Ytp3zc49VvL+ANuC0gDVnCRXR9j+0QKGMbiKync9L6I7nrAu8Fwg/cl1GWXBbuBlUKadksZ/43IR2MmW0AdHqqYIrdKR2aBMMl8gKh7+iXMDgpfAyfNNjpbQFcBGxiMMCJ81uyjdaZWA95QYGJ+G34uEiJwsmN5A6MliAFkwnGMWyW+QJ9P2P7SXcP941O2bXUVqGNsRIV9KC6q3COzTLOSkyQ1zHkEJonbiduwWDvrAp62JA9JZSCfvpRKNbCq6lXEJlSAzXvTU4jglltwUWGzKhf8mw2WNwZk+jUuiP/6lpywKBFJQv5NljY67mi/b80xYtq/rk2VfnmSSQA9vd0sv2soFt/6sD4psw4NkUz/KrdgejWeil7tc8y4fnFhSy2DDvmXT8B/2yT1+TGNLzupogrpMaX1iLb+pf8FhFEMeAuld3s8RN/yPGPx+vtN88uojTiMJBR/7u3Pvr8CHdDCGJcdNli1ydVPHoQegTwnpixpH3ftUc0BPT0rev3X9CuBFKKOlz479VGfrajvp/Hl4v5hsR8+MyaY/z737m5ecfvPbMveaUGxdJln8autkeN7757V+L/v7h3YfO3WO9Mfo/8v9BLf/7jwEAVlA4IAgYAACwXACdASr5AAABPhkMhUGhBMZJNAQAYSm7hc0Drkr/XfyR8JipHSfxh/d3/J/OtT/5l9yf2w/23yZ/qvZ9Gw9KfYb7V/X/2Y/vv///7fwX+w37kPcA/hv8e/vP90/zH+2/vf//+Yz1QeYD+n/3D/i/3798/l+/1H7Ae6P+yfib8AH85/r/3/94v6Af9A/w//X9m7/Yf+X/Xf9L///Rt+zX/Y/1P7//Qt/OP7R/0Pz6+QD0AOoH6zf4D8dfB/+sflV/UOzw8J+w2746mXw/6y/a/7r+1/93/cTnv9UfqC/iX8r/u/5W/mV7Tu0o1T/CegF7SfUf9R+XH9r9F79k9EvrZ/ovcA/mX9G/zX5t/3f5o/3ng7UAP5V/YP+F/ff3F/xv0q/x3+4/yv+U/Y/2s/mn95/3v+E/JP7Bv5H/R/9f/c/3m/z///+sf10/tv7HH6s/+QlFBBY0Ei/XQj4B7teDDVOM9WOHpO1NIzQSL9dCHTv1G+HP82flO2LIcQtKESEYFN8h5i30Hoab+vNntgXY9XoSprCXL8E+L7BA6jo+UTV5nzGx+illqFgAttAVNGA4TSS+K049gsBBYAXHfUU1CHoecUtR0ybIFn+1+pZg821Y6/1TKgud+0Kr94v31tHxgGrC5n69zYLKozb48aFgIbjNOpkXI98C4paqR2oDU+DIR1jzByQ4qjzAEWqmZl629nKBtR3TrhecL3UQMk6TgU2lS3vwejtOlXtJeKrTiXLX5ureNVPNkHMyAAv3S7YjOq4I67RlWKhWO4X1GUJOIQiiCVPujESUt91bwuBFbwPXHy0sheYWwCFNby/47PzPrzIlG2fhDouuVSLp+An572Ae7RDYe+a4vzbs3Csd2z5YDsT4HSbhrPi2TaF+vNnt1WFCNf/vdEPp8OCMBmap4LZ39u/rzITZjygCbU93yD8B+3Ukwd8ytjykg5ULSU2hZGm3YPc6JuwbPA4Vj377caCRfroR8BBY0Ei/XEAA/v/x94AAVTl5fNgZPssQeAljYkF84KoAKw8H/FtdbQE3nRGbSZBmrB7yZ4bDPU+o0Fm6RGuiCldqXpcTNAz4Fb8m2HwmPqsX2HqSornRSk9k0oIQ09gCpxQKFB2B9ICCA6hhHuSAj5sW3I5axDFXpxXWWga0qHlhBNkZwQiKTDntufo3/EONaqG38npiNxbYx/DwxygafFgvNRkMpBjUlCkSz9L8grG0CqqbBmhsdBJrXzFgUL+/eNnM3Z6MDAOTc9wQzbKsNRP2zJDpQE9ntZQhWatmh1alGgGqwtWn5PHmIXC5vBA4Gd7VCWgRvHPCcBLDJz2VeNJ9tcqtfWrCQT08BySL0snjTRGabNT2xHv0MuEQfPqe/hWB+wQZa2dC8GPYq8QeHqd8Ot5LawRxg+r8VOZQ7Vy38H6ZtfAAUbRglcq34hAibYCcRHkmNtaeMDE0Mpf45TRbu4ZdKTjjiAAD/Ej5l06wr4DHYUSz7qndmIsSAf93zyQnvniNpFmkb4zGiBaMyT1+ThASJJ44GRCfoelf/JG9fYxVfREaCjIXp+bnfUCaKyvSOxxjK8DWgXPKYz49TBL1T1hFqZoFZoQi5xNlBh26vNJXPSKYZgJQ0XrMsXdIolIxYq82VD+nsout9FeHcfxKgJ+MwOfNr8m7KVoRci94NZ9yDeHAQjcfWcRWIACrbqZ9kIFIBcsFoQJR3sdbTADvZiyGlbu6RfakDWwqL9cpouO0XpxDsXyFG0vi06QuedovqvljRjuSh45nwNcLLWhly4fa0zDUvX9+v/RDbQbZXV2d5F4rdtEltBBwITwEeuAz6MnVypkz4wPX7yGZTzspgjV4cY39dNipzwqmZKp5/UyVi/SATbrC9i/FFvTwBKwsL/878nu6I56DJiQgTZO9w/Vpx2PTkR7VCMK2N481GoSX3ONnSWBYx5nbvHjv+SOyAvhPSMkhleIMUHWxq59i0i70rV95hV0FEMljlEGY1A/o9CxUCad6Y53LWBDD/SEdxh6Rkb1WvYQ4xnZxmxl1NX7QmLzLhVC0KeUWKJm6UM0oVafgo2YquM9TQesvBaO2fTzNUuUiz08ZDjMnSqobeYlR7sAMdh7SA5kdAf0zizKXp8ZBhkoWzdIbofxuUG7wh5S0zb4grNWBQ3t0yPkV/iUHncX4FMfvTJLsHka40zZlvd9ExIBtF+cdeCoeqvpAKjwGUj9qUJo02qwr2ZoZQP+JxDsuBmpHkLsj7fUzd6wpvUHoF2vLLNoma8JzPVF7mjdoGya98Q1ANn8J9dvfaqr+o763LxIIjiHKkFARESiqvTMcgaHmZ++rOhJBJEYyR8gKZT6HF7i89THNk3IbGck9n/t0tE/jpZxMSJsLr/BNVkMAycbKAjNyAjtWB/C8a7IClkvbbfQpr/8+GIlpzXW4gbz0Tx1XB75+SbwEQomX3VWd6XlBS76rb3BGONHgh/gCBm4VR0/W/yFqLcREYK2iqL4TLLJm+UXkp9WsGAwNolAjRd+beKGOAQ6r7seEli3J+z/qnpS/drPDA1DB888eqawLDxLhlp4Ih+ENaNkqIH7GwWCDBa6XtK+L8qH74fX/nZhqjMOQMyzNv/u2knSmM6SdESOYzvr9GQq6nD2FtxuY09BqYQG5Xop5eFMCJT6in1br71/cr+YFjML7FeKqGiqKIT7NHo4ulpebQ/eL86jtG8rnXqpvm/wZBqWjFqzBloyomD98WbrZahvDpQ08jNz35fU/z9yxhs6Me5PUf4JPoxOFQEE6OHuX9IIwp8KBqcuSvnVgiMwkdhoTf2k8R4GnmyfwQA6JQdU5C8AxtJkhRpJiSBimGF0BD1tK2SXdEnNjTUMccao5SY8UFHDwQCBQOqfKMkw87I7JxP1UjzdY6J9iwl49LQQAL2sqcxRrXEhPdJvtKpJleV6o90BpoXWpOaW32wdjBvcBiMRWQpuo/U11KtuhWNOXhCNtuowqcAMZ96z6A6Xie1Rv/r+f8+C2RcoZWK8IbyRBqzB59olI4VChMlHHlK0c5VP04Eln0EFlDXopJxUv8HFIte72Yp0oDTmfXAlj1/nZFFzEmm+WlAPIEs8Raga/FSCfcIF7INY6AyPEQiakB7txDCMtdeWALv4enAHUibib1eGQGkilR/CSBwpO1PSgMfv3M2c+bT5+Pu0Tn2gONlUu+jYRVkavZL5RZl881JB7DWMINOeV/quAYn6F3yWdNcoruiAcGe89awQRXMsIwiPAPTJhf0SxVXGwwG+AZHX+/9WNkX4o2ISH+iu9ljW7+GdZKEPdC7cB1JbqJH4K+o3lFfwb+bOnLaosTLSldQ9vS+auG/rhB/fP6pqCbqQ9PRE+aNKasXoaje0uGW37S8IJ4By2mySPSg/xhLtqv7/8YXjU+Hr3NobNDUBvZGid/3phNfIS8Z77bQJjbfV0uxi9kzsUX1VKGd4losiA/yfu7rb7gieVGeqOs+xwO8MulhKpJAfs/UNP1smk9D6JdsTslwxqsCSTjIfR9CARfwtWt8RgAiR/G19G4RnM7KvfTTQ26pDEI0h49+pV2LJFKXylA0Jm1nSb2sEDeeyh6qiZTC0xfoN5O6MWoj4XvXJ70k4zAdKsrtujsdswW3920LtciBPi2rsVgOmCBfqdekpQrr7ePw06SJl9sfurVWL7c/EnKKBc4CwZGrbYL7CIg2cAjS6lEnS4eebCcMlKvbiYO9JHOS0gOM/17glvOvgELlAnV6pfl79Jt2tGLOQeF/iHMz+gEXOrO6H/c5hCiNLg43GpZGYT33fPoLo5wXUkEsQ47Q2WXHU72HgtWgmJyfwFwxDjZ8I3GgL0gzwITZWPoEsNAvf2V1UvrGSavUXurEeFg5RVbHTooM04ZyX4iYCGmZoOS49iVJ1yj9YUb3JsyHA/CNyQzGEL+RTIpspAFj/KkwKYj/VhzMiXAzTgeE4M/rHRDdnROVkht8VjBPv6Li9PRj1ZITq51RVnXa2Ve8OHnInKAZdDs4BVbh9CycOtLUKDPL2EpwS2BOAZVa9N/5jto5m/nKTc+8CW5PvAJ4q4XLVOmeKd0W7pUwnSn8B/eLxcgJPFQpColaidUYFPAjavrL+Wgg6nh4UNJCvkoyPCqozBUNWxEUpRfAomBng/U2ACZoj/Ta0TY5eFjocnEznsD6/dGTX/d/r5yPnCF9E5KqmGJ3vGkHi0DFyLitOnLIUsfxTxUbYXif0BUA63+X2K4Zi7BlnwMg4g+uCsNrohpYFvjz3m+E86AEdasZbnfg+uSh61LCbrSZEW+IOZ6lhHMU6oksz7qJZdJPYN0Mm5coC4uMYf9Y71b6Qer8sMTs2DoU+qPS+8/JXgCVUzk6vz4SlVOp+tR/AKbunFcXpB/gG6vpZlcfz89v3ndV3cl0BBTSlEW0jEIkIfn/laJEtwPVdyp4roIt5Mn/T6rtW0NWYULXYQVM9pHHGE5pS94vxFr1+kPBXn1qwE5bderfbQS7LWemY6veX7QHNPs+kOC8x4SeUfz3goNBw9kB/q//MJipszJCAEfuDMtjP5jw+6okcmArY4lGZMcAvJr1yRUrACFGDH/CRXBGB6yYHHdwjTkYfQ+EYv9SFCRgjiRKZV4iZ4s3806q8KXvkmuYJvRkf3lTwGY44Iyo6VNQhHWIGhw/amcZBOcH/tMdfZ+jKxnRyOhuyKIpwJvT08G/sTmH1TUwl1Usc2PlQUDLkvH1W1Tn3iUp5ilI0I2HxCzHccmOhMcp6PNr7NB9mxkKQ7ITIOIkemlg1EvMC9l/oDhrkqhSa5C72RJPkbuawVa+bvrrZseRNNpcxqI6wk0opXJI2P7Xvx8/DM781/mTXamD2+x4yKgm7EC4U4XvaC9P5065kn7ep2yGLJM6/xgK3CxB62LdAJwb1fcE3boJeAsc1r9nX7CkscfhF9qM8XnHqjDBzd4VmwdpcBwPUF68fSInihiKZiqQifGVWuR+0Xb6dN0oL0NGPyiaW5RhTAGvYqY+KrDJI6XW+6q0IhE5Rn9/mGdJbHqfG4KkKpkVZdZpDR0XKMujXxldMSAnt1GMNQCuqanvCVeuGAm7vKUdUZGR2pDhAItGMkAAJ1VxcJXV6cESUHMUaSufRnafzQomcNzsukZlAkUTbHhkyXgvkObFs/Guan8+ZyaKMXYjZWPqT8f37ycfEIgCM8xozAUlHreyKFJsdn5rP1sxkyxM0WHAoxmm3wepzrz5pULRFMGCDpaQhwLbAN4s0QCjLOSL7XBgif56bZDaQC5lI23E5dddBxygCxmg1ud9HLBKZ9WMDYCGLLjO0XGxrBoaJUpkpjYVc0DnjOdl8o+cVd3A+PIkpxUnE7t605VICdB6mKp7ccxN1SZ1LULDPhbFV0iV6YaIzC7AQ58bJySUcy7qF82VsWdc6DntxYWzYaHeluGNRl7uKGTwG2rLg2gEYKtkHnrulO+mwdb15AaHEvfXrW0z10GLMf/FJSeACYer4CtjczodICxnrveyei28SDBWWfkc//KgfoqGw/9DJsm8T0ntDEZVxxYb/0KPCT+yGrMLGLb4/F9+6VDggtTNbwcQLHIbcWMvMWSeNV4fDOFJ4KKJqPt9q13ACrdq56R/oQ82rZfMOSgx2gzW86t8EC5ZV5z6G1y37LVEwum9Pm0bkdbkEH4Y8+UxYET1QhEyGoOabIs84OkW7E3z0OUTnNHJ+TIHiEvHZtxkdqtRGVT+iy0IVZwUWHOkF5mKHkDuQEyar0tRMocLk3vP9+WY0kx2b+tiiSw70kPQybC9S3uci0Uqkv/NaHE2f0R3sbTznf2f82L8vkmqr0Y322VG85nSyJFRB6nnctGXV3QZJsA3t9iqWpXhzJK/AVVBdqTCF/134zrqf/qH8nnWmgTPMGzSujEgAcITwh3AjqLBYKQ4Kv0/kRaqvpse4KwrV7siN+rCilc8G9pPF90I9g4cLLi+v2unS+kKi+I7Gg+7dJDYDiUwFNak/kd1VxEHECMlTXPvdzf0nopF+x+GW7fCHeK5DWx2YzD+oYqt4VvSzj3sGkqXNzvgmqCppk703uZZJunVdzzssQhpvA/6UZQU7vQLBGVfRVAYXv4l/srAFKnGXt7lLu3bgqUJh6vlD6pRWfnuqblTUHaOVK9J5kURxi6aKXqFIIhPnDOmS5cikjgW8GOFvgjyx82JtQJqfsqBd+MajJfFM0rZCzEg1fYwcmdP9I5Qbs2IQxKeVnlwHtv+ojiK0F55DS7k2eFXtTBj+klj84PN4PHW5nRIpIsPmiPLJl9FWshCJv1sCc/hzsGx94PriF4Yz5pcV0//7uiWCITmZ5GakYtrVoP2LErOsNg9FTxSrjAMn/W6qs29sir3DaKCYgnMT5OWK8OBQ5YhnjbmGGp3rbALhISGjn0QUcxaZ1DC3cIWPkTowldJFdnKO9iKOTk5C/OE2F7Bfk+WgXRGB7pwYuFjpuqWKDIi7/zDToXV9ZDtcBgWSTazkbehEnqKTNEAxnflrx7heHQP+00J/GIXDp8uohqiMHv5v9Git2pOyVL54DWiv1CMGA0HH/pMuSy3sNSZtGjQZm3iRKc/4U7OLxfpPYQ9+blFc6SXO74hEtl8pghKOKPnd4R9v27IiW/w6xboufXLMZDfRp7ipdMdbrry4nwwRZ/60LR0hwtIQspFj2jcPIykgpPWe3VvIUE3QuZBVNa/O8NPpTzoudRDgSIrUgUQi0cBvUiI26H0J4WAvgmjEtsMHhVdFeHtKLTDk8i43ipLlX3o9QaH5KmrwuociYlMeO4N5/WWTJqUQE2e6U0U12zwiKfXz9DaxF9LR7KcEG6/ifQqqN/nwnDj1pyB0W51e+YRhMAw/uCl3ZD7efUtD0if8QsXaE0/LgisQyPnyFtHe6VzrVQwaj5ZE83YrTKiIh5cFNDkazyJ8ABJHT7lbr7BVv13u0PwCvJeaCLrhnKiems9tSJbSdm4B0Uv/por38yN5h5RzCKS7f09qrvRKvx9arjv3vu1Hoq1RqBL+5hmjNg+QEZeHLeAx4TvTvz5ANDIpAkjifTXcvhGH+8BPlJkS6F8uHXb0s+oOGBbcCG+9ADnm8R1pozwAEyCIVywGdTSVC0xkTaeAxT3GDv0g91VOvv0IoLtedRh9yNuPfMsqcj6olceXTARKMWfIpR56KVJC4jxPxlaWj2UUpS1lZTAjqBlbyzcc8hBJoIC90q/v5cPjf05YTEyHDKfrVIMGcnAduwT3gsg5hry9KwT6kXZ3l364xM1hn7RlPchu7xvcdXnmonDl40MXpOb+9fDdVe8o+o93NSrzZi9HC+AQXJ7qZJAHOqHKDV4WTd06kFgm4390+/BqkAWYJaWgqiWPtdh5xZIyBMJuG3jnbKFERjcZ/4F0wctxV/DVU2Te25Wm9BAKuA53joSUSLPbq9wVcG3zmgD4b+TWsTv4mrozxBNT8AwTDJ1U7qg+cCBDmnZrZMZC5wdhzOAmcEBMnXiX26esQ4kRq45i1ZyuBKEwshFJfJNTMpneQ4JyNMkSGG5R4k/VqbT6go1moaK8QoSGSZ8/ridW78n7C0HUnBjVyiG1WScR/WqE99rolxjd3PqGW7aLbFn9SZf1kh8dY+qcJGTjojRz2fb3qqv245SZ9q5EBV3GHspe/9c7wIW77Z9USvPo/2xkv8HM9b2Iw2BMZKnO1IZYKyes516huPR+9qCii8siwQPTtBe395qT13RFFhDoExglCWv0PQ/oNDRkFgeo9TyDI/cfN0Wx49jAoj/ran75DNe+k11RQ/aDjjdQL/+2wwH+j+CdkF/ZhGG2RZVy3XlbJXEw7nlKD7WoEmUYoNflxMdmwq/CYDFlRjOE6PMDLveqscdclFJEsVz3HS8YV53FoBld4oDw3NC86Kwqibz/oOhGnYSqboBTHHSrYoV4cQ4nox4BwvGfMyuvALdSs5VhrUpKgomR6LBYWSw2XefFXou53ctOWUF61NIb7sA5s1unaZWf0yupM9pskTeRgcqmkjhk7R5sB1ArOAJfEC/QH34EoCvdxRbIRtcxjS5rnneE9OF2PxvKfS7VJLHNK5VT74hoFwoWUdBGaAZB95u4EIowu2YkRbXFx4fcH5S2FFAi3hFcOMVFkrCh96QboASs9ccOOP7YdHjhTfDRFNCMlUIDAoejVi2FEGzSD7SgLMF/EFb4+AAACVAAAAAAAAA=="
+    },
+    {
+      "key": "progress.frame",
+      "filename": "progress-frame.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "avatar.abigail",
+      "filename": "abigail.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "avatar.ramona",
+      "filename": "ramona.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "feedback.correct",
+      "filename": "right-answer.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "feedback.incorrect",
+      "filename": "wrong-answer.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    },
+    {
+      "key": "avatar.beaver",
+      "filename": "beaver.webp",
+      "mimeType": "image/webp",
+      "data": "data:image/webp;base64,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"
+    }
+  ],
+  "content": {
+    "modules": [
+      {
+        "id": "cashFlow",
+        "title": "Budgeting and Cash Flow Basics",
+        "tags": [
+          "budget",
+          "cashflow",
+          "income",
+          "expenses"
+        ],
+        "metadata": {
+          "applicationName": "Sprout",
+          "author": "Sprout"
+        },
+        "characters": [
+          {
+            "characterId": "abigail",
+            "name": "Abigail",
+            "description": "Abigail is a single mom with 14 year old twins who works as a Registered Nurse.",
+            "assetKey": "avatar.abigail"
+          },
+          {
+            "characterId": "ramona",
+            "name": "Ramona",
+            "description": "Ramona is an 18 year old Freshman college student who works part-time on campus.",
+            "assetKey": "avatar.ramona"
+          },
+          {
+            "characterId": "beaver",
+            "name": "Beaver",
+            "description": "Sprout's friendly guide.",
+            "assetKey": "avatar.beaver"
+          }
+        ],
+        "budgets": [
+          {
+            "budgetId": "abigail-complete-budget",
+            "characterRef": "abigail",
+            "type": "budget-summary",
+            "title": "Abigail's Budget",
+            "showTotals": true,
+            "income": [
+              {
+                "id": "paycheck",
+                "name": "Registered Nurse Paycheck",
+                "amount": 5850
+              },
+              {
+                "id": "childSupport",
+                "name": "Child Support",
+                "amount": 1230
+              }
+            ],
+            "fixedExpenses": {
+              "needs": [
+                {
+                  "id": "rent",
+                  "name": "Rent",
+                  "amount": 1200
+                },
+                {
+                  "id": "carPayment",
+                  "name": "Car Payment",
+                  "amount": 300
+                }
+              ],
+              "wants": [
+                {
+                  "id": "sportsActivities",
+                  "name": "Sports Activities for Kids",
+                  "amount": 40
+                },
+                {
+                  "id": "rockClimbing",
+                  "name": "Rock Climbing Membership",
+                  "amount": 80
+                }
+              ]
+            },
+            "variableExpenses": {
+              "needs": [
+                {
+                  "id": "groceries",
+                  "name": "Groceries",
+                  "amount": 420
+                },
+                {
+                  "id": "gasoline",
+                  "name": "Gasoline",
+                  "amount": 14
+                },
+                {
+                  "id": "electricity",
+                  "name": "Electricity",
+                  "amount": 95
+                }
+              ],
+              "wants": []
+            },
+            "summary": {
+              "totalIncome": 7080,
+              "totalFixedExpenses": 1625,
+              "totalVariableExpenses": 529,
+              "totalExpenses": 2154,
+              "netCashFlow": 4926
+            }
+          }
+        ],
+        "tables": [
+          {
+            "tableId": "abigail-income",
+            "title": "Income Sources",
+            "headers": [
+              "Income Source",
+              "Monthly Net Pay"
+            ],
+            "rows": [
+              [
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Child Support",
+                "$1,230"
+              ]
+            ]
+          },
+          {
+            "tableId": "abigail-basic-expenses",
+            "title": "Abigail's Monthly Expenses",
+            "headers": [
+              "Expense",
+              "Cost per Month"
+            ],
+            "rows": [
+              [
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Gasoline",
+                "$14"
+              ]
+            ]
+          },
+          {
+            "tableId": "abigail-all-expenses",
+            "title": "Abigail's Monthly Expenses",
+            "headers": [
+              "Expense",
+              "Monthly Amount"
+            ],
+            "rows": [
+              [
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Gasoline",
+                "$14"
+              ]
+            ]
+          },
+          {
+            "tableId": "portable-budget-0",
+            "title": "Abigail's Budget",
+            "headers": [
+              "Category",
+              "Item",
+              "Monthly amount"
+            ],
+            "rows": [
+              [
+                "Income",
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Income",
+                "Child Support",
+                "$1,230"
+              ],
+              [
+                "Fixed expense",
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Fixed expense",
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Fixed expense",
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Fixed expense",
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Variable expense",
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Variable expense",
+                "Gasoline",
+                "$14"
+              ],
+              [
+                "Variable expense",
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Total",
+                "Income",
+                "$7,080"
+              ],
+              [
+                "Total",
+                "Fixed expenses",
+                "$1,625"
+              ],
+              [
+                "Total",
+                "Variable expenses",
+                "$529"
+              ],
+              [
+                "Total",
+                "All expenses",
+                "$2,154"
+              ]
+            ]
+          },
+          {
+            "tableId": "portable-budget-1",
+            "title": "Abigail's Budget",
+            "headers": [
+              "Category",
+              "Item",
+              "Monthly amount"
+            ],
+            "rows": [
+              [
+                "Income",
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Income",
+                "Child Support",
+                "$1,230"
+              ],
+              [
+                "Fixed need",
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Fixed need",
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Fixed want",
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Fixed want",
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Variable need",
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Variable need",
+                "Gasoline",
+                "$14"
+              ],
+              [
+                "Variable need",
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Total",
+                "Income",
+                "$7,080"
+              ],
+              [
+                "Total",
+                "Fixed expenses",
+                "$1,625"
+              ],
+              [
+                "Total",
+                "Variable expenses",
+                "$529"
+              ],
+              [
+                "Total",
+                "All expenses",
+                "$2,154"
+              ]
+            ]
+          },
+          {
+            "tableId": "portable-budget-2",
+            "title": "Abigail's Budget",
+            "headers": [
+              "Category",
+              "Item",
+              "Monthly amount"
+            ],
+            "rows": [
+              [
+                "Income",
+                "Registered Nurse Paycheck",
+                "$5,850"
+              ],
+              [
+                "Income",
+                "Child Support",
+                "$1,230"
+              ],
+              [
+                "Fixed need",
+                "Rent",
+                "$1,200"
+              ],
+              [
+                "Fixed need",
+                "Car Payment",
+                "$300"
+              ],
+              [
+                "Fixed want",
+                "Sports Activities for Kids",
+                "$40"
+              ],
+              [
+                "Fixed want",
+                "Rock Climbing Membership",
+                "$80"
+              ],
+              [
+                "Variable need",
+                "Groceries",
+                "$420"
+              ],
+              [
+                "Variable need",
+                "Gasoline",
+                "$14"
+              ],
+              [
+                "Variable need",
+                "Electricity",
+                "$95"
+              ],
+              [
+                "Total",
+                "Income",
+                "$7,080"
+              ],
+              [
+                "Total",
+                "Fixed expenses",
+                "$1,625"
+              ],
+              [
+                "Total",
+                "Variable expenses",
+                "$529"
+              ],
+              [
+                "Total",
+                "All expenses",
+                "$2,154"
+              ],
+              [
+                "Cash flow",
+                "Net cash flow",
+                "$4,926"
+              ]
+            ]
+          }
+        ],
+        "lessons": [
+          {
+            "id": "1.1",
+            "title": "What is Cash Flow and a Budget?",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll understand what a budget is, why it's important, and how to calculate basic cash flow.",
+            "estimatedMin": 5,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.1.1",
+                "title": "Meet Abigail!",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "characterId": "abigail",
+                    "text": "Meet Abigail! Abigail is a single mom with twin 14-year-olds."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She manages all her family's expenses, including paying for her children's activities."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "For fun, Abigail likes to go rock climbing and swim at her apartment complex's pool."
+                  }
+                ]
+              },
+              {
+                "id": "1.1.2",
+                "title": "What is a Budget?",
+                "microLessonContent": [
+                  {
+                    "characterId": "abigail",
+                    "type": "paragraph",
+                    "text": "Juggling everything going on in her life, Abigail feels like she isn't in control of her money."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She wishes that she had a clearer view of her spending so she could cut unnecessary spending and save up for a future vacation."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "To help her feel in control of her money, Abigail has decided to create a budget. "
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "A budget is simply a plan for your money. It's a tool you can use to help make financial decisions."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Budgets involve two main categories: income and expenses."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "text": "Budgets involve two main categories: income and expenses.",
+                    "id": "1.1.2-q1",
+                    "questionType": "multipleChoice",
+                    "question": "What is the purpose of a budget?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "To help you feel in control of your money"
+                      },
+                      {
+                        "key": "b",
+                        "text": "A plan for your money"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Includes your income and expenses"
+                      },
+                      {
+                        "key": "d",
+                        "text": "All of the above"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "The purpose of a budget helps you feel in control of your money by laying out all your income and expenses and creating a plan for your money."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.2-q2",
+                    "questionType": "trueFalse",
+                    "question": " True or False? You should create a budget to help you track where your money is going.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Creating a budget does help you track where your money is going."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.2-q3",
+                    "questionType": "multipleChoice",
+                    "question": "When creating a budget, what are the two main categories that you need to track?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Income and expenses"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Credit card debt and unused balance of credit card"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Retirement accounts and interest from a CD that will mature 5 years from now."
+                      },
+                      {
+                        "key": "d",
+                        "text": "Student loan debt"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Budgeting manages the money that you earn (income) with the expenses that you have."
+                  }
+                ]
+              },
+              {
+                "id": "1.1.3",
+                "title": "Ramona introduction",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "characterId": "ramona",
+                    "text": "Ramona: Meet Ramona! She is an 18-year-old college Freshman."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona has a part-time federal work-study job at her campus dining hall."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona receives federal student loans to cover her tuition, room, and board.\nThe money she earns from her job goes towards groceries, textbooks, fun concerts, and her bowling league. "
+                  }
+                ]
+              },
+              {
+                "id": "1.1.4",
+                "title": "Cash Flow",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Cash flow is tracking the money you earn and the money you're spending."
+                  },
+                  {
+                    "type": "formula",
+                    "text": "Money In (Income) - Money Out (Expenses) = Cash Flow"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "As a Registered Nurse (RN), Abigail earns $7,500 per month. Her total monthly expenses are $2,154.\n\n$7,500 (Income) - $2,154 (Expenses) = $5,346 (Net Cash Flow)\nSo Abigail's total cash flow each month is about $5,346."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.4-q1",
+                    "questionType": "multipleChoice",
+                    "question": "How do you calculate cash flow?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Expenses - Income = Cash Flow"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Income + Expenses = Cash Flow"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Income - Expenses = Cash Flow"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Income x Expenses = Cash Flow"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "Cash flow describes the movement of cash moving into and out of an account over a specific period. Income - Expenses = Cash Flow."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.4-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Ramona earns $1,200 per month and spends $1,000 per month. How much does Ramona have at the end of each month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$200"
+                      },
+                      {
+                        "key": "b",
+                        "text": "-$200"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$2,200"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$500"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Ramona's Cash Flow monitors how much cash is moving into and out of Ramona's account. Within the same month, Ramona's Income($1,200) - Ramona's Expenses ($1,000) = Ramona's Cash Flow ($200). Ramona has more incoming money than outgoing money so Ramona has positive Cash Flow."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.1.4-q3",
+                    "questionType": "multiSelect",
+                    "question": "What are the two numbers you need to calculate cash flow? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Credit score"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Income"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Bank Account Numbers"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Expenses"
+                      }
+                    ],
+                    "correctResponse": [
+                      "b",
+                      "d"
+                    ],
+                    "explanation": "Cash Flow considers incoming cash from all sources of income and all cash that is outgoing to pay for expenses within a period of time."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.2",
+            "title": "Income",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to identify different sources of income, calculate monthly income, and explain the difference between gross pay and net pay.",
+            "estimatedMin": 5,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.2.1",
+                "title": "Sources of Income",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "There are many different sources of income. Some common sources of income include:"
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "There are many different sources of income. Some common sources of income include:",
+                    "items": [
+                      "Paychecks from a job",
+                      "Tips",
+                      "Freelancing",
+                      "Child Support",
+                      "Alimony from a divorce or separation",
+                      "Government Benefits like Social Security or Unemployment Benefits",
+                      "Rental Income",
+                      "Investment Income"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail, our single mom of two, makes income as a Registered Nurse and receives child support from her ex-husband. So, her two sources of income are her paychecks and monthly child support."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona, on the other hand, only has income from her part-time campus position. So her sole source of income is from her paychecks."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.1-q1",
+                    "questionType": "multipleChoice",
+                    "question": "What is an example of income?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Groceries"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Paycheck"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Electric Bill"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Car Payment"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Paychecks, child support, interest earned on investments, and sales of goods are just some examples of sources of income."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.1-q2",
+                    "questionType": "trueFalse",
+                    "question": "True or False? Income only includes the money you make from a job.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "There are multiple types of income. Paychecks, child support, interest earned on investments, and sales of goods are just some examples of sources of income."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.1-q3",
+                    "questionType": "multiSelect",
+                    "question": "Select Abigail's source(s) of income (select all that apply):",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Gasoline"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Paycheck"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Child Support"
+                      }
+                    ],
+                    "correctResponse": [
+                      "c",
+                      "d"
+                    ],
+                    "explanation": "Abigail's sources of income include both her paycheck and child support payments."
+                  }
+                ]
+              },
+              {
+                "id": "1.2.2",
+                "title": "Calculating Income",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail receives a bi-weekly paycheck from her job and a monthly child support check."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Paychecks are commonly paid on a weekly, bi-weekly, or semi-monthly schedule."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail is paid bi-weekly, which means she receives a paycheck every two weeks for a total of 26 paychecks per year."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "If Abigail were paid semi-monthly, she would receive 24 paychecks per year on the same two dates each month. "
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Common semi-monthly pay dates are the 1st and 15th or the 15th and last day of the month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q1",
+                    "questionType": "multiSelect",
+                    "question": "Select the most common pay frequencies for paychecks (select all that apply):",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Weekly"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Yearly"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Semi-Monthly"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Bi-Weekly"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "c",
+                      "d"
+                    ],
+                    "explanation": "Paychecks are usually paid weekly, bi-weekly, and semi-monthly. The decision is made by the employer."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q2",
+                    "questionType": "multipleChoice",
+                    "question": "How many paychecks does Abigail receive per year since she is paid on a bi-weekly basis?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "26"
+                      },
+                      {
+                        "key": "b",
+                        "text": "24"
+                      },
+                      {
+                        "key": "c",
+                        "text": "20"
+                      },
+                      {
+                        "key": "d",
+                        "text": "30"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Bi-weekly paychecks will total to 26 paychecks per year. Semi-monthly paychecks will total to 24 paychecks per year."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false? Semi-monthly paychecks are paid on the same 2 dates every month.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": " Usually, semi-monthly paychecks are paid to employees consistently on the same 2 dates every month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.2-q4",
+                    "questionType": "multipleChoice",
+                    "question": "Let's help Abigail calculate her income.\n\nAbigail works a full-time job as a nurse at the local hospital. She makes $70,200 a year after taxes and deductions are taken out. What is her monthly income? (Hint: Divide total yearly income by 12 to get monthly income)",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$5,850"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$7,000"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$7,500"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$70,200"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Divide the total yearly income by 12. Abigail earns $70,200/12 = $5,850 per month"
+                  }
+                ]
+              },
+              {
+                "id": "1.2.3",
+                "title": "Gross vs Net Income",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "When Abigail looks at her latest paystub, she sees that she made a total of $3,462 for the past 2 weeks. However, she only receives $2,700 in her bank account. Why is that?"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "The total amount that Abigail sees on her paycheck of $3,462 is called her gross pay, which is her total income before taxes and deductions."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Gross pay is the total amount of money earned in that pay period before any deductions or taxes. The $3,462 is her gross pay."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "So then why did she receive almost $800 less in her bank account?"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "The $2,700 she received in her bank account is called her Net pay or 'take home pay'. Net pay is your gross total pay minus payroll deductions like taxes and any employer benefits that you pay into like health insurance or a retirement plan."
+                  },
+                  {
+                    "type": "formula",
+                    "text": "Gross Pay - Taxes/Benefits = Net Pay (Take Home Pay)"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Gross Pay is:",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "The amount you take home after deductions"
+                      },
+                      {
+                        "key": "b",
+                        "text": "The total amount earned before deductions"
+                      },
+                      {
+                        "key": "c",
+                        "text": "The amount deducted for taxes"
+                      },
+                      {
+                        "key": "d",
+                        "text": "The amount deposited into your bank account"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Gross pay is your total pay before you take out taxes and any employer benefits you might be paying into."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Net pay is:",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "The total amount earned before deductions"
+                      },
+                      {
+                        "key": "b",
+                        "text": "The amount received after deductions"
+                      },
+                      {
+                        "key": "c",
+                        "text": "The amount withheld for taxes"
+                      },
+                      {
+                        "key": "d",
+                        "text": "The amount earned from overtime"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Net pay is your “take home pay”. It's your total pay (gross pay) minus the payroll deductions."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q3",
+                    "questionType": "multipleChoice",
+                    "question": "If Ramona works 20 hours per week for $15 per hour, what is Ramona's gross pay for one week?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$300"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$200"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$500"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$150"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "$15 x 20 = $300"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.2.3-q4",
+                    "questionType": "multipleChoice",
+                    "question": "What is the correct formula for calculating your net pay?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Payroll Deductions - Gross Pay = Net Pay"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Gross Pay - Payroll Deductions = Net Pay"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Gross Pay + Payroll Deductions = Net Pay"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Payroll Deductions x Gross Pay = Net Pay"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Gross Pay - Payroll Deductions = Net Pay. Net pay is your “take home pay”. It's your total pay (gross pay) minus the payroll deductions."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.3",
+            "title": "Understanding Needs vs Wants",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to identify the difference between needs and wants, as well as categorizing common expenses into each group.",
+            "estimatedMin": 5,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.3.1",
+                "title": "Needs vs Wants",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Learning the difference between a need and a want empowers you to create a budget."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "Needs are essential expenses for survival or well-being such as medical care, transportation, food, and shelter."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Wants are anything non-essential that enhances your life."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Needs and wants depend on your personal situation - what is a 'want' for one person might be a 'need' for another person."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.1-q1",
+                    "questionType": "multipleChoice",
+                    "question": "What would be an example of a need?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Plushies"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Going to the Movies"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Food"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Concert Tickets"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": " As fun as plushies, going to the movies and concerts are, you will survive without these things. However, without food, you would not be able to survive."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.1-q2",
+                    "questionType": "multipleChoice",
+                    "question": "What would be an example of a want?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Food"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Shelter"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Transportation to Work"
+                      },
+                      {
+                        "key": "d",
+                        "text": "A New Boardgame"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "Food, shelter, and transportation to work are all important for survival and are basic needs. A new boardgame is fun, but you will survive without it."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.1-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false? Needs and wants are the same for everyone.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Needs and wants are different for each person. Something one person considers a need may be a want for someone else. For example, a car may be a need for someone who commutes to work, but a want for someone who has reliable public transportation."
+                  }
+                ]
+              },
+              {
+                "id": "1.3.2",
+                "title": "Categorizing Expenses",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's help Abigail and Ramona decide which of their expenses are needs and which are wants."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail lives in an apartment complex that has a gym and pool that's included in the price of rent."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Abigail's other expenses include:",
+                    "items": [
+                      "Rent",
+                      "Groceries",
+                      "Rock Climbing Membership",
+                      "Electricity Bill",
+                      "Gas for Her Car"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Ramona lives on campus. Her room and board is covered by her student loans. She has access to a free gym on campus."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Ramona's additional expenses include:",
+                    "items": [
+                      "Groceries",
+                      "Bowling League Fees",
+                      "College Textbooks",
+                      "Concert Tickets"
+                    ]
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.3.2-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Which of Abigail's expenses are a want?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Groceries"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Rock Climbing Membership"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Electricity Bill"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "For Abigail, rock climbing is a recreational activity, making it a want rather than an essential expense needed for daily living."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.4",
+            "title": "Fixed vs Variable Expenses",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to identify the difference between fixed and variable expenses, as well as categorize common expenses into each type.",
+            "estimatedMin": 10,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.4.1",
+                "title": "Fixed vs Variable Expense",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's take a look at some of Abigail's monthly expenses."
+                  },
+                  {
+                    "type": "table",
+                    "budgetId": "abigail-basic-expenses"
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Abigail notices that some expenses stay the same every month:",
+                    "items": [
+                      "Rent",
+                      "Car Payment"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "These expenses are the same amount each month and don't change."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "Abigail also notices that some expenses change from month to month:",
+                    "items": [
+                      "Groceries",
+                      "Gasoline",
+                      "Electricity"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "These expenses might fluctuate each month based on the amount used each time or fluctuating prices."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "For example, Abigail's electricity bill is higher in the summer and winter due to her A/C and heat being powered by electricity."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "During the spring and fall, she doesn't need to run the heat or A/C as much, so her bill is much lower."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "Expenses that stay the same every month are called fixed expenses.\n\n\nExpenses that change from month to month are variable expenses."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Which of these is an example of a fixed expense?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Electric Bill"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Gas for your Car"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Food"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Rent is a fixed expense because it usually stays the same amount each month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Which is an example of a variable expense?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Health Insurance Premium"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Electricity Bill"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Rent"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "Electricity is a variable expense because the amount you use each month can change."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false: A variable expense can be different each month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Variable expenses can increase or decrease, so they may be different each month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.4.1-q4",
+                    "questionType": "multipleChoice",
+                    "question": "Abigail's electric bill was $80 in April and $110 in July. Why is electricity considered a variable expense?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "It is paid once a year"
+                      },
+                      {
+                        "key": "b",
+                        "text": "The amount can change each month"
+                      },
+                      {
+                        "key": "c",
+                        "text": "It is always optional"
+                      },
+                      {
+                        "key": "d",
+                        "text": "It never changes"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Abigail's electric bill was different in April and July, showing that electricity costs can vary from month to month."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.5",
+            "title": "Creating a Budget",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to create a basic budget by listing income and expenses, categorizing expenses, and calculating monthly cash flow.",
+            "estimatedMin": 10,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.5.1",
+                "title": "Adding Income to a Budget",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's help Abigail put her budget together."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "The first step to creating a budget is adding up your monthly net income."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "For Abigail, she receives $5,850 after taxes and $1,230 for child support."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Since child support is non-taxable income, her gross and net monthly child support income is the same, $1,230."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Here's what it looks like when she adds all her sources of income to her budget:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "abigail-income"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.1-q1",
+                    "questionType": "trueFalse",
+                    "question": "True or false? To create your budget, you use your gross income.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Budgets should be based on your net income, which is the money you take home after taxes and deductions."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.1-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Which of the following income sources should be included when creating a monthly budget?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Only income from a job"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Only taxable income"
+                      },
+                      {
+                        "key": "c",
+                        "text": "All regular income sources, including non-taxable income like child support"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Only income deposited into a checking account"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "Include all regular sources of income in your budget so you have an accurate picture of your monthly money coming in."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.1-q3",
+                    "questionType": "multipleChoice",
+                    "question": "Given Abigail's net income of $5,850 from nursing and $1,230 from child support, how much is Abigail's total monthly net income?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "$4,570"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$7,080"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$6,030"
+                      },
+                      {
+                        "key": "d",
+                        "text": "$6,000"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Abigail's total monthly net income is $7,080 because $5,850 + $1,230 = $7,080"
+                  }
+                ]
+              },
+              {
+                "id": "1.5.2",
+                "title": "Adding Expenses to a Budget",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Let's take a look at Abigail's monthly expenses."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "First, Abigail lists out all of her expenses over the past month and how much she spent on each item."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "To help Abigail get accurate numbers, she checks her bank statements and finds that she pays $40 every month for her children's sports activities."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "If she's unsure of an expense or it varies each month, she can use an estimate until she tracks her spending more accurately."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Here's a list of Abigail's expenses and how much she paid the past month:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "abigail-all-expenses"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "When creating a budget, we want to categorize our expenses and then divide those expenses into two categories, fixed and variable expenses."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q1",
+                    "questionType": "multiSelect",
+                    "question": "Which of Abigail's expenses are fixed expenses? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rock Climbing Membership, Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Sports Activities for Kids"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Electricity, Groceries, Gasoline"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b",
+                      "c"
+                    ],
+                    "explanation": "These are fixed expenses because the amount is usually the same each month."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q2",
+                    "questionType": "multipleChoice",
+                    "question": "Which of Abigail's expenses are variable? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rock Climbing Membership, Rent"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Sports Activities for Kids"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Car Payment"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Electricity, Groceries, Gasoline"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "These are variable expenses because their costs can change from month to month based on usage and needs."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Now that we have categorized Abigail's expenses, here is what her budget looks like with her income:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "portable-budget-0"
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "To keep Abigail's budget more organized and easier to analyze her spending, let's categorize her expenses even further into needs and wants."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q3",
+                    "questionType": "multiSelect",
+                    "question": "Within Abigail's fixed expenses, which ones could be categorized as needs? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Rock Climbing Membership"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Rent"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Sports Activities for Kids"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Car Payment"
+                      }
+                    ],
+                    "correctResponse": [
+                      "b",
+                      "d"
+                    ],
+                    "explanation": "Rent and a car payment are typically necessary expenses for housing and transportation, so they can be considered needs."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q4",
+                    "questionType": "multiSelect",
+                    "question": "Within Abigail's variable expenses, which ones could be categorized as needs? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Electricity"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Groceries"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Gasoline"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b",
+                      "c"
+                    ],
+                    "explanation": "Electricity, groceries, and gasoline are often needed for daily living, making them examples of variable expenses that can also be needs."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Great! Now here's Abigail's budget organized by needs and wants:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "portable-budget-1"
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q5",
+                    "questionType": "multipleChoice",
+                    "question": "Now that we have Abigail's total income and expenses, what is the formula to calculate her cash flow?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Expenses - Income  = Cash Flow"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Income + Expenses = Cash Flow"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Expenses x Income = Cash Flow"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Income - Expenses = Cash Flow"
+                      }
+                    ],
+                    "correctResponse": "d",
+                    "explanation": "Income - Expenses = Cash Flow. Cash flow is calculated by subtracting your expenses from your income to see how much money you have left over."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.5.2-q6",
+                    "questionType": "multipleChoice",
+                    "question": "What would Abigail's cash flow be if her income totals to $7,080 and all her expenses total to $2,154?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "-$4,926"
+                      },
+                      {
+                        "key": "b",
+                        "text": "$4,926"
+                      },
+                      {
+                        "key": "c",
+                        "text": "$9,234"
+                      },
+                      {
+                        "key": "d",
+                        "text": "-$9,234"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Abigail's cash flow is $4,876 because $7,080 (income) - $2,154 (expenses) = $4,926."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Great job helping Abigail with her budget! Here's her completed budget:"
+                  },
+                  {
+                    "type": "table",
+                    "tableId": "portable-budget-2"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "1.6",
+            "title": "Tracking Your Expenses",
+            "accuracy_reviewed_by": "BytesOfStrength",
+            "accuracy_reviewed_at": "2026-08-01",
+            "learningGoal": "By the end of this lesson, you'll be able to track your expenses, compare your spending to your budget, and make adjustments based on your spending habits.",
+            "estimatedMin": 10,
+            "passingScore": 70,
+            "microLessons": [
+              {
+                "id": "1.6.1",
+                "title": "Tracking Expenses",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Now that Abigail has her budget, the next step is to track her spending over the next 2 months to see if her budget is accurate and learn about her spending habits."
+                  },
+                  {
+                    "type": "unorderedList",
+                    "intro": "There's several different ways that Abigail can track her spending including:",
+                    "items": [
+                      "Pen and Paper",
+                      "Spreadsheets",
+                      "An App"
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail decides that the best method for her is an app on her phone."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Using the app, Abigail is able to categorize each of her purchases and can see where each cent is going."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Her categories include things like:"
+                  },
+                  {
+                    "type": "unorderedList",
+                    "items": [
+                      "Groceries",
+                      "Gasoline",
+                      "Rock Climbing Membership"
+                    ]
+                  },
+                  {
+                    "type": "callout",
+                    "text": "The key to expense tracking is consistency and choosing a tracking method that works best for you."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Each week, Abigail sets aside time to review her purchases to make sure they are categorized correctly in the app and to keep an eye on her spending."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q1",
+                    "questionType": "multiSelect",
+                    "question": "What are different ways to keep track of your spending? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Pen and Paper"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Spreadsheets"
+                      },
+                      {
+                        "key": "c",
+                        "text": "In your Brain"
+                      },
+                      {
+                        "key": "d",
+                        "text": "An App"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b",
+                      "d"
+                    ],
+                    "explanation": "Pen and paper, spreadsheets, and apps can all help you track your spending, while relying only on memory is not reliable."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q2",
+                    "questionType": "trueFalse",
+                    "question": "True or false? The best way to keep track of your spending is just in your head.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Tracking expenses in your head can make it easy to forget purchases or miss important details."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q3",
+                    "questionType": "trueFalse",
+                    "question": "True or false? The method you choose to track your expenses at the beginning is the method you need to stick with the rest of your life.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Choose a method that works best for you and don't be afraid to change it if it is no longer working."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q4",
+                    "questionType": "multiSelect",
+                    "question": "What is the key to success when tracking your expenses? Select all that apply.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Choosing a method that works best for you"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Consistency"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Hopes and prayers"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Never looking at your expenses"
+                      }
+                    ],
+                    "correctResponse": [
+                      "a",
+                      "b"
+                    ],
+                    "explanation": "Successful expense tracking depends on using a method you like and keeping up with it regularly."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.1-q5",
+                    "questionType": "trueFalse",
+                    "question": "True or false? Tracking your spending is enough.",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "True"
+                      },
+                      {
+                        "key": "b",
+                        "text": "False"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Tracking your spending is important, but you also need to review and use that information to make informed financial decisions."
+                  }
+                ]
+              },
+              {
+                "id": "1.6.2",
+                "title": "Compare Spending to Budget",
+                "microLessonContent": [
+                  {
+                    "type": "paragraph",
+                    "text": "Now that Abigail has been tracking her spending for a month, it's time for her monthly budget review."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Abigail compares her budget line by line with her categorized spending that she's been tracking in her app."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "After comparing her budget and spending habits, she notices that she spends closer to $500 on groceries per month."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She readjusts her budget to increase the amount of money she spends on groceries to $500."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "She also notices that she's not using the rock climbing membership as much as she thought she would, so she decides to cancel her monthly membership for now."
+                  },
+                  {
+                    "type": "callout",
+                    "text": "Tip: Review your budget monthly."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "By tracking and reviewing your spending month-by-month, you'll be able to identify trends in your spending habits."
+                  },
+                  {
+                    "type": "paragraph",
+                    "text": "Understanding your habits is the first step in making a change to your money management habits."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.2-q1",
+                    "questionType": "multipleChoice",
+                    "question": "Why is it important to compare your actual spending to your budget each month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "To make sure your paycheck was deposited"
+                      },
+                      {
+                        "key": "b",
+                        "text": "To see if you are staying on track with your spending and make adjustments if needed"
+                      },
+                      {
+                        "key": "c",
+                        "text": "To increase all of your budget categories"
+                      },
+                      {
+                        "key": "d",
+                        "text": "To calculate your gross income"
+                      }
+                    ],
+                    "correctResponse": "b",
+                    "explanation": "Comparing your spending to your budget helps you identify differences and make changes to stay on track."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.2-q2",
+                    "questionType": "multipleChoice",
+                    "question": "What is one benefit of tracking your expenses and reviewing your budget every month?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "It helps you identify spending trends and habits over time"
+                      },
+                      {
+                        "key": "b",
+                        "text": "It guarantees you'll never overspend"
+                      },
+                      {
+                        "key": "c",
+                        "text": "It automatically increases your income"
+                      },
+                      {
+                        "key": "d",
+                        "text": "It eliminates all unexpected expenses"
+                      }
+                    ],
+                    "correctResponse": "a",
+                    "explanation": "Regularly reviewing your spending helps you understand where your money goes and spot patterns over time."
+                  },
+                  {
+                    "type": "knowledgeCheck",
+                    "id": "1.6.2-q3",
+                    "questionType": "multipleChoice",
+                    "question": "After reviewing her spending, Abigail noticed she was spending about $500 per month on groceries instead of the amount she originally budgeted. What should she do?",
+                    "answerChoices": [
+                      {
+                        "key": "a",
+                        "text": "Ignore the difference and keep her budget the same"
+                      },
+                      {
+                        "key": "b",
+                        "text": "Stop buying groceries altogether"
+                      },
+                      {
+                        "key": "c",
+                        "text": "Adjust her grocery budget to better match her actual spending"
+                      },
+                      {
+                        "key": "d",
+                        "text": "Remove groceries from her budget"
+                      }
+                    ],
+                    "correctResponse": "c",
+                    "explanation": "If Abigail consistently spends more on groceries than planned, she should update her budget to reflect her actual expenses."
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "glossary": [
+          {
+            "term": "APR (Annual Percentage Rate)",
+            "definition": "The cost of borrowing money on a yearly basis, expressed as a percentage rate."
+          },
+          {
+            "term": "Budget",
+            "definition": "A plan that outlines what money you expect to earn or receive (your income) and how you will save it or spend it (your expenses) for a given period of time; also called a spending plan."
+          },
+          {
+            "term": "Compound interest",
+            "definition": "When you earn interest on both the money you save and the interest you earn."
+          },
+          {
+            "term": "Credit",
+            "definition": "Borrowing money, or having the right to borrow money, to buy something. Usually it means you're using a credit card, but it might also mean that you got a loan"
+          },
+          {
+            "term": "Debt",
+            "definition": "Money you owe another person or a business."
+          },
+          {
+            "term": "Earned income",
+            "definition": "Money made from working for someone who pays you or from running a business or farm. This includes all the income, wages, and tips you get from working."
+          },
+          {
+            "term": "Fixed expenses",
+            "definition": "Expenses, like bills, that must be paid each month and generally cost the same amount. Some fixed expenses, like a utility bill, may also be variable because the amount changes each month depending on usage."
+          },
+          {
+            "term": "Income",
+            "definition": "Money earned or received such as wages or salaries, tips, commissions, contracted pay, government transfer payments, dividends on investments, tax refunds, gifts, and inheritances."
+          },
+          {
+            "term": "Needs",
+            "definition": "Basic things people must have to survive (such as food, clothing, and shelter), resources they may need to do their jobs (such as reliable transportation and the tools of the trade), and resources to help build and protect their money and property so they can meet future needs (such as emergency savings and insurance)."
+          },
+          {
+            "term": "Principal",
+            "definition": "In the lending context, principal is the amount of money that you originally received from the lender and agreed to pay back on the loan with interest. In the investment context, it is the amount of money you contribute with the expectation of receiving income."
+          },
+          {
+            "term": "Savings",
+            "definition": "Money you have set aside in a secure place, such as in a bank account, that you can use for future emergencies or to make specific purchases."
+          },
+          {
+            "term": "Variable expenses",
+            "definition": "Expenses that change in amount from month to month."
+          },
+          {
+            "term": "Wants",
+            "definition": "Upgrades and other things that would be nice to have but aren't necessary for living, income, or protecting what you have."
+          }
+        ],
+        "worksCited": [
+          {
+            "id": "adp-nc-paycheck-calculator",
+            "title": "North Carolina Paycheck Calculator",
+            "author": "ADP",
+            "citation": "ADP. \"North Carolina Paycheck Calculator.\"",
+            "url": "https://www.adp.com/resources/tools/calculators/states/north-carolina-salary-paycheck-calculator.aspx"
+          },
+          {
+            "id": "ivey-glen-apartment-community",
+            "title": "Ivey Glen Apartment Community",
+            "author": "Apartments.com",
+            "citation": "Apartments.com. \"Ivey Glen Apartment Community.\"",
+            "url": "https://www.apartments.com/ivey-glen-apartment-community-graham-nc/n1fre0m/"
+          },
+          {
+            "id": "cfpb-youth-glossary",
+            "title": "Youth Financial Education Glossary",
+            "author": "Consumer Financial Protection Bureau (CFPB)",
+            "citation": "Consumer Financial Protection Bureau. \"Youth Financial Education Glossary.\"",
+            "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/glossary/#b"
+          },
+          {
+            "id": "fnb-financial-literacy",
+            "title": "Financial Literacy",
+            "author": "First National Bank (FNB)",
+            "citation": "First National Bank (FNB). \"Financial Literacy.\" Udemy.",
+            "url": "https://www.udemy.com/course/fnb-financial-literacy/"
+          },
+          {
+            "id": "mit-living-wage-calculator",
+            "title": "Living Wage Calculator",
+            "author": "Massachusetts Institute of Technology (MIT)",
+            "citation": "Massachusetts Institute of Technology. \"Living Wage Calculator.\"",
+            "url": "https://livingwage.mit.edu/"
+          },
+          {
+            "id": "nc-child-support-calculator",
+            "title": "North Carolina Child Support Guidelines",
+            "author": "North Carolina Department of Health and Human Services (NCDHHS)",
+            "citation": "North Carolina Department of Health and Human Services. \"North Carolina Child Support Guidelines.\"",
+            "url": "https://ncchildsupport.ncdhhs.gov/ecoa/index.jsp?timeout=true"
+          }
+        ]
+      }
+    ]
+  },
+  "manifest": {
+    "includes": {
+      "theme": true,
+      "content": true
+    },
+    "counts": {
+      "assets": 8,
+      "avatars": 3,
+      "modules": 1,
+      "lessons": 6,
+      "knowledgeChecks": 42
+    }
+  }
+}

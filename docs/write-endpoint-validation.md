@@ -18,12 +18,12 @@ Invalid input returns HTTP `400` with this response shape:
 
 Request body:
 
-- `moduleId`: optional; defaults to `cashFlow`
+- `moduleId`: optional; when omitted, uses the first installed module
 - `lessonId`: optional non-empty string
 - `microLessonId`: optional non-empty string
 
 At least one of `lessonId` or `microLessonId` is required. Unknown fields and
-incorrectly typed values are rejected.
+incorrectly typed values are rejected. If no module is installed, the request returns `404`.
 
 ## Start Quiz
 
@@ -32,7 +32,7 @@ incorrectly typed values are rejected.
 Request body:
 
 - `microLessonId`: required non-empty string
-- `moduleId`: optional; defaults to `cashFlow`
+- `moduleId`: required non-empty string
 
 The micro-lesson ID is validated before the lesson ID is derived, so an empty
 request cannot reach ID parsing or cause a server error.
@@ -45,7 +45,7 @@ The `id` route parameter must be a non-empty micro-lesson ID. The request body
 supports:
 
 - `attemptId`: optional 24-character hexadecimal MongoDB ID
-- `moduleId`: optional; defaults to `cashFlow`
+- `moduleId`: optional non-empty string
 - `started_at`: optional ISO date
 - `answers`: optional object containing string or string-array answers
 
@@ -54,10 +54,9 @@ access.
 
 ## Immediate Quiz Feedback
 
-`POST /api/v1/quizzes/check` accepts a required `microLessonId`, `questionId`, and `choiceIds`,
-with an optional `moduleId` that defaults to `cashFlow`. This is an intentional immediate-feedback
-endpoint: once a caller submits an answer, its response includes `isCorrect`, `correctChoiceIds`,
-and `explanation`.
+`POST /api/v1/quizzes/check` accepts a required `moduleId`, `microLessonId`, `questionId`, and
+`choiceIds`. This is an intentional immediate-feedback endpoint: once a caller submits an answer,
+its response includes `isCorrect`, `correctChoiceIds`, and `explanation`.
 
 ## Password Recovery
 

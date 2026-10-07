@@ -1,6 +1,8 @@
+import { useAppName } from "../../app/instanceAssets";
+
 const STEP_CONTENT = {
   0: {
-    title: "Welcome to Sprout!",
+    title: "Welcome to {appName}!",
     text: "Your email has been successfully verified! This is your dashboard where you can see your achievements.Let's kick things off with a quick tour. Click 'Next Step' to hop straight over to your profile manager layout.",
   },
   1: {
@@ -26,7 +28,11 @@ export default function OnboardingOverlay({
   onStart,
   onSkip,
 }) {
-  const tourContent = STEP_CONTENT[currentStep] || {};
+  const appName = useAppName();
+  const stepContent = STEP_CONTENT[currentStep];
+  const tourContent = stepContent
+    ? { ...stepContent, title: stepContent.title.replace("{appName}", appName) }
+    : {};
   //render floating step popup if step is active and matches the current route
   const showTourPopup = currentStep !== null && activePage === pageName && !hasCompleted;
 
@@ -46,7 +52,7 @@ export default function OnboardingOverlay({
       )}
 
       {showTourPopup && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-sm rounded-xl border border-neutral-200 bg-white p-5 shadow-2xl animate-fade-in">
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm rounded-xl border border-neutral-200 bg-surface-raised p-5 shadow-2xl animate-fade-in">
           <div className="flex items-center gap-2">
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
               {currentStep + 1}

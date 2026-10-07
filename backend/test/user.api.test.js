@@ -30,6 +30,7 @@ describe("user API integration", () => {
       token: expect.any(String),
       verifyUrl: expect.stringContaining("/verify?token="),
     });
+    expect(registerRes.body.verificationUrl).toBe(registerRes.body.devVerification.verifyUrl);
 
     // Make sure registering the user does not automatically verify their email.
     const createdUser = await User.findOne({ email: payload.email });

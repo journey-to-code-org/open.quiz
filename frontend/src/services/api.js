@@ -2,7 +2,8 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").trim().replace(/\
 const AUTH_BASE_PATH = `${API_BASE_URL}/api/v1/auth`;
 const USERS_BASE_PATH = `${API_BASE_URL}/api/v1/users`;
 const DASHBOARD_BASE_PATH = `${API_BASE_URL}/api/v1/dashboard`;
-const DASHBOARD_CACHE_KEY_PREFIX = "sprout.dashboard.";
+const LEADERBOARD_BASE_PATH = `${API_BASE_URL}/api/v1/leaderboard`;
+const DASHBOARD_CACHE_KEY_PREFIX = "openquiz.dashboard.";
 const LESSONS_BASE_PATH = `${API_BASE_URL}/api/v1/lessons`;
 const QUIZZES_BASE_PATH = `${API_BASE_URL}/api/v1/quizzes`;
 const ONBOARDING_BASE_PATH = `${API_BASE_URL}/api/v1/onboarding`;
@@ -16,9 +17,17 @@ const ACCOUNT_INVALIDATING_CODES = new Set([
   "ACCOUNT_DELETED",
   "SESSION_INVALIDATED",
 ]);
+
+export const resolveAssetUrl = (assetPath) => {
+  if (typeof assetPath !== "string" || !assetPath) return null;
+  if (/^(https?:|data:|blob:)/i.test(assetPath)) return assetPath;
+  if (!assetPath.startsWith("/api/")) return assetPath;
+  return `${API_BASE_URL}${assetPath}`;
+};
+
 let currentCsrfToken = null;
-export const AUTH_EXPIRED_EVENT = "sprout:auth-expired";
-export const CSRF_TOKEN_UPDATED_EVENT = "sprout:csrf-token-updated";
+export const AUTH_EXPIRED_EVENT = "openquiz:auth-expired";
+export const CSRF_TOKEN_UPDATED_EVENT = "openquiz:csrf-token-updated";
 
 export const setCsrfToken = (csrfToken) => {
   currentCsrfToken = csrfToken ?? null;
@@ -195,6 +204,12 @@ export const getDashboard = () =>
     cache: "no-store",
   });
 
+export const getLeaderboard = () =>
+  apiRequest("", {
+    method: "GET",
+    basePath: LEADERBOARD_BASE_PATH,
+  });
+
 export const getProfile = () =>
   apiRequest("", {
     basePath: PROFILE_BASE_PATH,
@@ -296,18 +311,148 @@ export const reactivateUserAcct = (userId, csrfToken) =>
 export const getAdminModules = () =>
   apiRequest("/modules", { method: "GET", basePath: ADMIN_BASE_PATH });
 
+export const getAdminAvatarAssets = () =>
+  apiRequest("/assets/avatars", { method: "GET", basePath: ADMIN_BASE_PATH });
+
+export const getAdminPackages = () =>
+  apiRequest("/packages", { method: "GET", basePath: ADMIN_BASE_PATH });
+
+export const importAdminPackage = ({ file, mode, csrfToken }) => {
+  const body = new FormData();
+  body.append("file", file);
+  body.append("mode", mode);
+  return apiRequest("/packages/import", {
+    method: "POST",
+    csrfToken,
+    body,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export const inspectAdminPackage = ({ file, csrfToken }) => {
+  const body = new FormData();
+  body.append("file", file);
+  return apiRequest("/packages/inspect", {
+    method: "POST",
+    csrfToken,
+    body,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export const activateAdminPackage = ({
+  packageId,
+  includeContent = false,
+  applySiteContent = true,
+  csrfToken,
+}) => {
+  const body = {
+    ...(includeContent ? { includeContent: true } : {}),
+    ...(applySiteContent ? {} : { applySiteContent: false }),
+  };
+  return apiRequest(`/packages/${encodeURIComponent(packageId)}/activate`, {
+    method: "PATCH",
+    csrfToken,
+    body: Object.keys(body).length ? body : undefined,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export const installAdminPackageContent = ({ packageId, csrfToken }) =>
+  apiRequest(`/packages/${encodeURIComponent(packageId)}/content`, {
+    method: "POST",
+    csrfToken,
+    basePath: ADMIN_BASE_PATH,
+  });
+
+export const activateDefaultAdminTheme = (csrfToken) =>
+  apiRequest("/packages/default/activate", {
+    method: "POST",
+    csrfToken,
+    basePath: ADMIN_BASE_PATH,
+  });
+
+export const deleteAdminPackage = ({ packageId, csrfToken }) =>
+  apiRequest(`/packages/${encodeURIComponent(packageId)}`, {
+    method: "DELETE",
+    csrfToken,
+    basePath: ADMIN_BASE_PATH,
+  });
+
+export async function downloadAdminPackage({
+  packageId,
+  mode,
+  moduleIds = [],
+  includeSite = false,
+}) {
+  const query = new URLSearchParams({ mode });
+  if (mode !== "theme") query.set("moduleIds", moduleIds.join(","));
+  if (includeSite) query.set("includeSite", "true");
+  await downloadFile(
+    `${ADMIN_BASE_PATH}/packages/${encodeURIComponent(packageId)}/export?${query}`,
+    `${packageId}.openquiz.json`,
+    "Package export failed.",
+  );
+}
+
+export const downloadAdminSiteExport = () =>
+  downloadFile(`${ADMIN_BASE_PATH}/site-export`, "openquiz-site.openquiz.json", "Export failed.");
+
+export const getAdminSiteSettings = () =>
+  apiRequest("/site-settings", { method: "GET", basePath: ADMIN_BASE_PATH });
+
+export const updateAdminSiteSettings = ({ appName, landing, colorMode, csrfToken }) => {
+  const body = {};
+  if (appName !== undefined) body.appName = appName?.trim() ? appName.trim() : null;
+  if (landing !== undefined) body.landing = landing;
+  if (colorMode !== undefined) body.colorMode = colorMode;
+  return apiRequest("/site-settings", {
+    method: "PATCH",
+    csrfToken,
+    body,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
+export function saveBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+async function downloadFile(url, fallbackFilename, failureMessage) {
+  const response = await fetch(url, { credentials: "include" });
+  if (!response.ok) {
+    const payload = response.headers.get("content-type")?.includes("application/json")
+      ? await response.json()
+      : null;
+    throw new Error(payload?.message || failureMessage);
+  }
+  const disposition = response.headers.get("content-disposition") || "";
+  const filename = /filename="([^"]+)"/.exec(disposition)?.[1] || fallbackFilename;
+  saveBlob(await response.blob(), filename);
+}
+
+export const uploadAdminAvatar = ({ file, csrfToken }) => {
+  const body = new FormData();
+  body.append("file", file);
+
+  return apiRequest("/assets/avatars", {
+    method: "POST",
+    csrfToken,
+    body,
+    basePath: ADMIN_BASE_PATH,
+  });
+};
+
 export const seedAdminRandomUsers = (csrfToken, count = 10) =>
   apiRequest("/users/seed-random", {
     method: "POST",
     csrfToken,
     body: { count },
-    basePath: ADMIN_BASE_PATH,
-  });
-
-export const seedAdminBudgetingModule = (csrfToken) =>
-  apiRequest("/modules/seed-budgeting", {
-    method: "POST",
-    csrfToken,
     basePath: ADMIN_BASE_PATH,
   });
 
@@ -412,7 +557,7 @@ export const importAdminLessonModule = ({ file, csrfToken }) => {
 };
 
 export const notifyProfileChange = (detail = {}) => {
-  window.dispatchEvent(new CustomEvent("sprout:profile-updated", { detail }));
+  window.dispatchEvent(new CustomEvent("openquiz:profile-updated", { detail }));
 };
 
 export const notifyDashboardProgressChanged = (detail = {}) => {
@@ -427,7 +572,7 @@ export const notifyDashboardProgressChanged = (detail = {}) => {
     // Browser storage can be unavailable without affecting the progress refresh event.
   }
 
-  window.dispatchEvent(new CustomEvent("sprout:progress-updated", { detail }));
+  window.dispatchEvent(new CustomEvent("openquiz:progress-updated", { detail }));
 };
 
 export const trackDashboardEvent = async ({ type, csrfToken, ...payload }) => {
@@ -442,7 +587,7 @@ export const trackDashboardEvent = async ({ type, csrfToken, ...payload }) => {
 };
 
 export const clearDashboardCache = (userId) => {
-  window.sessionStorage.removeItem(`sprout.dashboard.${userId}`);
+  window.sessionStorage.removeItem(`${DASHBOARD_CACHE_KEY_PREFIX}${userId}`);
 };
 
 export const getLesson = (moduleId, lessonId) =>
@@ -453,6 +598,9 @@ export const getLesson = (moduleId, lessonId) =>
 
 export const getLessonModules = () =>
   apiRequest("/modules", { method: "GET", basePath: LESSONS_BASE_PATH });
+
+export const getPublicLessonModules = () =>
+  apiRequest("/public/modules", { method: "GET", basePath: LESSONS_BASE_PATH });
 
 export const getPublicLesson = (moduleId, lessonId) =>
   apiRequest(`/public/${encodeURIComponent(moduleId)}/${encodeURIComponent(lessonId)}`, {

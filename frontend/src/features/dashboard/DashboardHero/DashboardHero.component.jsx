@@ -23,8 +23,8 @@ const fallbackHero = {
     isMet: false,
   },
   primaryAction: {
-    label: "Start Budgeting Basics",
-    href: "/learn/cashFlow/1.1",
+    label: "Start learning",
+    href: "/learn",
   },
 };
 

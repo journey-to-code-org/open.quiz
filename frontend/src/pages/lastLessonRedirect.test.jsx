@@ -66,20 +66,20 @@ describe("last lesson redirect", () => {
     });
   });
 
-  it("starts at the first lesson when the learner has no lesson history", async () => {
+  it("returns to the learning path when the learner has no lesson history", async () => {
     mockApi.getLastLesson.mockResolvedValue({ lastLessonPath: null });
 
     render(
       <MemoryRouter initialEntries={["/learn/last-lesson"]}>
         <Routes>
           <Route path="/learn/last-lesson" element={<LastLessonRedirect />} />
-          <Route path="/learn/cashFlow/1.1" element={<div>First lesson</div>} />
+          <Route path="/learn" element={<div>Learning path</div>} />
         </Routes>
       </MemoryRouter>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText("First lesson")).toBeInTheDocument();
+      expect(screen.getByText("Learning path")).toBeInTheDocument();
     });
   });
 });

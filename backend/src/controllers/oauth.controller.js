@@ -1,6 +1,8 @@
 const { getAuthenticationFailure, issueAuthenticatedSession } = require("../utils/authSession.js");
+const { bootstrapLoginAdmin } = require("../services/adminBootstrap.service");
 
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+const CLIENT_URL =
+  process.env.CLIENT_URL || process.env.RENDER_EXTERNAL_URL || "http://localhost:5173";
 
 const OAUTH_PUBLIC_ERROR_CODES = Object.freeze({
   OAUTH_VERIFIED_EMAIL_REQUIRED: "oauth_email_required",
@@ -14,19 +16,24 @@ const getOAuthFailureRedirect = (errorCode) => {
   return `${CLIENT_URL}/login?error=${publicErrorCode}`;
 };
 
-const completeOAuthLogin = (req, res) => {
+const completeOAuthLogin = async (req, res, next) => {
   const user = req.user;
   const authenticationFailure = getAuthenticationFailure(user);
   if (authenticationFailure) {
     return res.redirect(getOAuthFailureRedirect());
   }
 
-  issueAuthenticatedSession({ req, res, user });
+  try {
+    await bootstrapLoginAdmin(user);
+    issueAuthenticatedSession({ req, res, user });
 
-  const callbackUrl = new URL("/oauth/callback", CLIENT_URL);
-  if (req.oauth?.next) callbackUrl.searchParams.set("next", req.oauth.next);
+    const callbackUrl = new URL("/oauth/callback", CLIENT_URL);
+    if (req.oauth?.next) callbackUrl.searchParams.set("next", req.oauth.next);
 
-  return res.redirect(callbackUrl.toString());
+    return res.redirect(callbackUrl.toString());
+  } catch (error) {
+    return next(error);
+  }
 };
 
 const oauthFailureRedirect = getOAuthFailureRedirect();

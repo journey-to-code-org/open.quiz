@@ -225,7 +225,9 @@ describe("auth pages", () => {
     const user = userEvent.setup();
 
     // Return a successful registration response without making a real API request.
-    mockAuth.register.mockResolvedValue({ ok: true });
+    mockAuth.register.mockResolvedValue({
+      verificationUrl: "http://localhost:5173/verify?token=test-token",
+    });
 
     render(
       <MemoryRouter initialEntries={["/register"]}>
@@ -262,10 +264,14 @@ describe("auth pages", () => {
       });
     });
 
-    // Successful registration should tell the user to verify their email.
+    // Without configured email delivery, successful registration shows a direct verification link.
     await waitFor(() => {
-      expect(screen.getByText("Check your email")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: "Verify your email" })).toBeInTheDocument();
     });
+    expect(screen.getByRole("link", { name: "Verify your email address" })).toHaveAttribute(
+      "href",
+      "http://localhost:5173/verify?token=test-token",
+    );
   });
 
   it("shows a field-level email error when registration conflicts", async () => {

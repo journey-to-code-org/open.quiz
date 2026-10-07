@@ -47,8 +47,8 @@ describe("useLessonContent", () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     expect(result.current).toMatchObject({
-      moduleId: "cashFlow",
-      lessonId: "1.1",
+      moduleId: null,
+      lessonId: null,
       error: "",
     });
     expect(api.getLesson).not.toHaveBeenCalled();

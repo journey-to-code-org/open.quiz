@@ -13,19 +13,19 @@ describe("notifyDashboardProgressChanged", () => {
   });
 
   it("clears dashboard caches even when no dashboard page is mounted", () => {
-    window.sessionStorage.setItem("sprout.dashboard.learner-1", "cached");
-    window.sessionStorage.setItem("sprout.dashboard.learner-2", "cached");
-    window.sessionStorage.setItem("sprout.auth", "active-session");
+    window.sessionStorage.setItem("openquiz.dashboard.learner-1", "cached");
+    window.sessionStorage.setItem("openquiz.dashboard.learner-2", "cached");
+    window.sessionStorage.setItem("openquiz.auth", "active-session");
     const listener = (event) => {
       expect(event.detail).toEqual({ type: "lesson_complete" });
     };
-    window.addEventListener("sprout:progress-updated", listener, { once: true });
+    window.addEventListener("openquiz:progress-updated", listener, { once: true });
 
     notifyDashboardProgressChanged({ type: "lesson_complete" });
 
-    expect(window.sessionStorage.getItem("sprout.dashboard.learner-1")).toBeNull();
-    expect(window.sessionStorage.getItem("sprout.dashboard.learner-2")).toBeNull();
-    expect(window.sessionStorage.getItem("sprout.auth")).toBe("active-session");
+    expect(window.sessionStorage.getItem("openquiz.dashboard.learner-1")).toBeNull();
+    expect(window.sessionStorage.getItem("openquiz.dashboard.learner-2")).toBeNull();
+    expect(window.sessionStorage.getItem("openquiz.auth")).toBe("active-session");
   });
 });
 

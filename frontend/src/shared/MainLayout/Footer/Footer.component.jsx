@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router";
+import { useAppName } from "../../../app/instanceAssets";
+import ColorModeToggle from "../../ColorModeToggle/ColorModeToggle.component";
 import GlossaryModal from "../../../features/learn/GlossaryModal/GlossaryModal.component.jsx";
 import glossaryIcon from "../../../assets/glossary_icon.svg";
 
@@ -9,7 +11,7 @@ const footerNavLinks = [
   { label: "Terms", to: "/terms" },
   {
     label: "GitHub",
-    href: "https://github.com/Code-the-Dream-School/summer-26-js-practicum-team2",
+    href: "https://github.com/journey-to-code-org/open.quiz",
   },
 ];
 
@@ -17,6 +19,7 @@ export default function Footer({ glossary = [], worksCited = [] }) {
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
   const [copyrightYear] = useState(() => new Date().getFullYear());
   const location = useLocation();
+  const appName = useAppName();
 
   const showGlossary = /^\/learn\/[^/]+\/[^/]+/.test(location.pathname);
   const glossaryList = Array.isArray(glossary) ? glossary : [];
@@ -53,8 +56,7 @@ export default function Footer({ glossary = [], worksCited = [] }) {
         </nav>
 
         <p className="max-w-3xl rounded-2xl border border-neutral-200 bg-surface-raised px-4 py-3 text-sm leading-6 text-neutral-700 shadow-sm">
-          Disclaimer: Sprout is an educational product and not financial advice. Use the lessons to
-          build knowledge, but consult a qualified professional for personal financial decisions.
+          Learning materials are provided for educational purposes.
         </p>
 
         {showGlossary && (
@@ -78,9 +80,10 @@ export default function Footer({ glossary = [], worksCited = [] }) {
           />
         )}
 
+        <ColorModeToggle placement="footer" />
+
         <p className="text-xs text-neutral-400">
-          &copy; {copyrightYear} Sprout — Code the Dream Summer Practicum '26 | Counting Cents and
-          Making Sense.
+          &copy; {copyrightYear} {appName}
         </p>
       </div>
     </footer>

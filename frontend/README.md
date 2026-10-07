@@ -59,7 +59,7 @@ Avoid putting fetch logic directly in UI-heavy components.
 ```jsx
 function LessonPreview() {
   useEffect(() => {
-    fetch("/api/v1/lessons/public/cashFlow/1.1").then(...)
+    fetch("/api/v1/lessons/public/openQuizIntroduction/1.1").then(...)
   }, []);
 }
 ```
@@ -69,7 +69,7 @@ function LessonPreview() {
 ```js
 // services/lessonApi.js
 export const getPublicLesson = async () => {
-  const res = await fetch("/api/v1/lessons/public/cashFlow/1.1");
+  const res = await fetch("/api/v1/lessons/public/openQuizIntroduction/1.1");
   return res.json();
 };
 ```

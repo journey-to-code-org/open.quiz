@@ -1,18 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getLesson, getPublicLesson } from "../services/api";
 
-export const DEFAULT_MODULE_ID = "cashFlow";
-export const DEFAULT_LESSON_ID = "1.1";
-
 export default function useLessonContent({ moduleId, lessonId, enabled = true, isPublic = false }) {
   const [payload, setPayload] = useState(null);
-  const [isLoading, setIsLoading] = useState(enabled);
+  const [isLoading, setIsLoading] = useState(enabled && Boolean(moduleId && lessonId));
   const [error, setError] = useState("");
-  // Keep the hook usable when routing has not supplied lesson identifiers yet.
-  const resolvedModuleId = moduleId || DEFAULT_MODULE_ID;
-  const resolvedLessonId = lessonId || DEFAULT_LESSON_ID;
+  const resolvedModuleId = moduleId ?? null;
+  const resolvedLessonId = lessonId ?? null;
   const fetchLesson = useCallback(async () => {
-    if (!enabled) {
+    if (!enabled || !resolvedModuleId || !resolvedLessonId) {
       setPayload(null);
       setIsLoading(false);
       setError("");

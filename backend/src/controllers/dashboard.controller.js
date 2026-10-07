@@ -4,13 +4,10 @@ const UserProgress = require("../models/UserProgress.model");
 const QuizAttempt = require("../models/QuizAttempt.model");
 const LessonModule = require("../models/LessonModule.model");
 const { buildLearningPath, pickCurrentNode } = require("../utils/learningPath");
-const { getModule } = require("../utils/content");
 const { getLearningMotivation } = require("../utils/learningStats");
 const { dashboardEventSchema, validateRequest } = require("../validation/userValidation");
 const { getUserXpTotal } = require("../services/xp.service");
 const { getDisplayStreak } = require("../utils/streaks");
-
-const DEFAULT_MODULE_ID = "cashFlow";
 
 function invalidateDashboardCache() {}
 
@@ -207,8 +204,7 @@ exports.getDashboard = async (req, res, next) => {
     const xpTotal = await getUserXpTotal(userId);
 
     const databaseModules = await LessonModule.find({}).lean();
-    const defaultModule = databaseModules.length === 0 ? await getModule(DEFAULT_MODULE_ID) : null;
-    const modules = defaultModule ? [defaultModule] : databaseModules;
+    const modules = databaseModules;
     const moduleIds = modules.map((module) => module.id);
     await reconcileProgressFromPassedAttempts(userId, modules);
     const progressRecords = await UserProgress.find({

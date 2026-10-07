@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useReducer } from "react";
 import authReducer, { actions, initialState } from "../reducers/auth.reducer";
 import * as api from "../services/api";
 
-const STORAGE_KEY = "sprout.auth";
+const STORAGE_KEY = "openquiz.auth";
 
 // Prefer the session store for a normal browser session, but fall back to persistent storage
 // so a previously remembered user can still be restored on a refresh.
@@ -133,8 +133,8 @@ export function useAuth() {
       commitAuth({ user, csrfToken: stored.csrfToken }, isRemembered);
     };
 
-    window.addEventListener("sprout:profile-updated", handleProfileUpdated);
-    return () => window.removeEventListener("sprout:profile-updated", handleProfileUpdated);
+    window.addEventListener("openquiz:profile-updated", handleProfileUpdated);
+    return () => window.removeEventListener("openquiz:profile-updated", handleProfileUpdated);
   }, [commitAuth]);
 
   const refreshSession = useCallback(
@@ -174,8 +174,8 @@ export function useAuth() {
       void syncProfileAfterProgress();
     };
 
-    window.addEventListener("sprout:progress-updated", handleProgressUpdate);
-    return () => window.removeEventListener("sprout:progress-updated", handleProgressUpdate);
+    window.addEventListener("openquiz:progress-updated", handleProgressUpdate);
+    return () => window.removeEventListener("openquiz:progress-updated", handleProgressUpdate);
   }, [syncProfileAfterProgress]);
 
   const clearError = useCallback(() => {

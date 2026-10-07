@@ -2,10 +2,10 @@ const { StatusCodes } = require("http-status-codes");
 const { updateOnboardingProgressSchema } = require("../validation/userValidation.js");
 const User = require("../models/User.model.js");
 const UserProgress = require("../models/UserProgress.model.js");
+const { getDefaultModule } = require("../utils/content");
 
 const { calculateXpDelta } = require("../utils/coreRules");
-const XpEvent = require("../models/XpEvent.model");
-const { getXpEarnedToday } = require("../services/xp.service");
+const { awardXp } = require("../services/xpAward.service");
 const { invalidateDashboardCache } = require("./dashboard.controller");
 
 const TOUR_KEYS = ["dashboardPage", "profilePage", "lessonPage", "learningPath"];
@@ -171,26 +171,30 @@ const updateOnboardingProgress = async (req, res, next) => {
       //points awards for full complete onboarding with zero skipping
 
       if (noSkippedTours && !user.onboarding.xp_awarded) {
-        const currentTotal = await getXpEarnedToday(userId);
-        xpAwarded = calculateXpDelta({
+        const requestedXp = calculateXpDelta({
           eventType: "onboarding_complete",
           isFirstTime: true,
-          currentTotal,
         }).amount;
-        if (xpAwarded > 0) {
+        const award = await awardXp({
+          userId,
+          eventType: "onboarding_complete",
+          sourceKey: "onboarding:v1",
+          requestedXp,
+        });
+        xpAwarded = award.duplicate ? 0 : (award.event?.awarded_xp ?? 0);
+        if (!award.duplicate) {
           user.onboarding.xp_awarded = true;
-          await XpEvent.create({
-            user_id: userId,
-            event_type: "onboarding_complete",
-            amount: xpAwarded,
-            reference_id: "onboarding",
-          });
+          if (xpAwarded > 0) {
+            const defaultModule = await getDefaultModule();
+            if (defaultModule) {
+              await UserProgress.findOneAndUpdate(
+                { user_id: userId, module_id: defaultModule.id },
+                { $inc: { xp: xpAwarded } },
+                { upsert: true, returnDocument: "after" },
+              );
+            }
+          }
         }
-        await UserProgress.findOneAndUpdate(
-          { user_id: userId },
-          { $inc: { xp: xpAwarded } },
-          { upsert: true, returnDocument: "after" },
-        );
       }
     }
     user.markModified("onboarding");

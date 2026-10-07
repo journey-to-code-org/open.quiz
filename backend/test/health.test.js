@@ -9,7 +9,7 @@ describe("health endpoint", () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         status: "healthy",
-        service: "sprout-api",
+        service: "openquiz-api",
         uptime: expect.any(Number),
         timestamp: expect.any(String),
       }),

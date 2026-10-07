@@ -2,10 +2,16 @@ const jwt = require("jsonwebtoken");
 const request = require("supertest");
 const { useTestDb } = require("./setup");
 const app = require("../src/app");
+const LessonModule = require("../src/models/LessonModule.model");
 const { createAuthedUser } = require("./helpers/authTestHelpers");
 const { withAuth, withSessionCsrf } = require("./helpers/requestTestHelpers");
+const cashFlow = require("./fixtures/budgetingModule.json");
 
 useTestDb();
+
+beforeEach(async () => {
+  await LessonModule.create(cashFlow);
+});
 
 describe("backend API negative paths", () => {
   it("rejects protected routes when no authentication is provided", async () => {

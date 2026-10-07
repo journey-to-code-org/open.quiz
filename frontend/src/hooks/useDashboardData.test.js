@@ -41,14 +41,14 @@ describe("useDashboardData", () => {
     });
 
     expect(getDashboardMock).toHaveBeenCalledTimes(1);
-    expect(JSON.parse(sessionStorage.getItem("sprout.dashboard.user-123"))).toMatchObject({
+    expect(JSON.parse(sessionStorage.getItem("openquiz.dashboard.user-123"))).toMatchObject({
       payload,
     });
   });
 
   it("uses the current session cache without another dashboard request", async () => {
     window.sessionStorage.setItem(
-      "sprout.dashboard.learner-1",
+      "openquiz.dashboard.learner-1",
       JSON.stringify({
         payload: cachedDashboard,
         expiresAt: Date.now() + 30_000,
@@ -74,7 +74,7 @@ describe("useDashboardData", () => {
     };
 
     sessionStorage.setItem(
-      "sprout.dashboard.user-123",
+      "openquiz.dashboard.user-123",
       JSON.stringify({
         payload: cachedPayload,
         expiresAt: Date.now() + 30_000,
@@ -99,7 +99,7 @@ describe("useDashboardData", () => {
     expect(getDashboardMock).not.toHaveBeenCalled();
 
     act(() => {
-      window.dispatchEvent(new Event("sprout:progress-updated"));
+      window.dispatchEvent(new Event("openquiz:progress-updated"));
     });
 
     await waitFor(() => {
@@ -111,7 +111,7 @@ describe("useDashboardData", () => {
     const freshPayload = { hero: { title: "Fresh" }, units: [], recentActivity: [] };
     getDashboardMock.mockResolvedValue(freshPayload);
 
-    sessionStorage.setItem("sprout.dashboard.user-123", "not-json");
+    sessionStorage.setItem("openquiz.dashboard.user-123", "not-json");
 
     const malformed = renderHook(() =>
       useDashboardData({ userId: "user-123", isAuthenticated: true }),
@@ -120,7 +120,7 @@ describe("useDashboardData", () => {
     await waitFor(() => expect(malformed.result.current.dashboard).toEqual(freshPayload));
 
     sessionStorage.setItem(
-      "sprout.dashboard.user-456",
+      "openquiz.dashboard.user-456",
       JSON.stringify({ payload: { hero: { title: "Expired" } }, expiresAt: Date.now() - 1 }),
     );
 
@@ -151,7 +151,7 @@ describe("useDashboardData", () => {
     });
 
     act(() => {
-      window.dispatchEvent(new Event("sprout:progress-updated"));
+      window.dispatchEvent(new Event("openquiz:progress-updated"));
     });
 
     await waitFor(() => {

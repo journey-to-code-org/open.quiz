@@ -2,13 +2,16 @@ const request = require("supertest");
 const { useTestDb } = require("./setup");
 const app = require("../src/app");
 const QuizAttempt = require("../src/models/QuizAttempt.model");
+const LessonModule = require("../src/models/LessonModule.model");
 const UserProgress = require("../src/models/UserProgress.model");
 const { createAuthedUser } = require("./helpers/authTestHelpers");
+const cashFlow = require("./fixtures/budgetingModule.json");
 
 useTestDb();
 
 describe("lesson and dashboard API integration", () => {
   it("returns progress data and updates the active lesson cursor", async () => {
+    await LessonModule.create(cashFlow);
     const { authHeader } = await createAuthedUser("Lesson Reader", "lesson-progress@example.com");
 
     // A new user should start at the beginning of the module.
@@ -57,13 +60,12 @@ describe("lesson and dashboard API integration", () => {
     expect(lessonRes.body.progress.currentMicroLessonId).toBe("1.1.2");
   });
 
-  it("falls back to bundled Cash Flow content when MongoDB has no seeded modules", async () => {
+  it("does not load example content when MongoDB has no modules", async () => {
     const { authHeader } = await createAuthedUser(
       "Dashboard Learner",
       "dashboard-example@example.com",
     );
 
-    // With no LessonModule records seeded in the test database, the default bundled module is used.
     const dashboardRes = await request(app)
       .get("/api/v1/dashboard")
       .set("Authorization", authHeader);
@@ -75,22 +77,11 @@ describe("lesson and dashboard API integration", () => {
       state: "new_user",
     });
 
-    // The dashboard should point a new learner toward their first lesson.
     expect(dashboardRes.body.nextAction).toMatchObject({
-      href: expect.stringContaining("/learn/cashFlow/1.1"),
-      ctaLabel: expect.stringContaining("Start"),
+      title: "Content coming soon",
+      href: "/learn",
     });
-
-    // Make sure the dashboard includes the module without caring
-    // about every other field returned with it.
-    expect(dashboardRes.body.units).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: "cashFlow",
-          totalLessons: expect.any(Number),
-        }),
-      ]),
-    );
+    expect(dashboardRes.body.units).toEqual([]);
 
     // A new learner should not have anything in their activity history yet.
     expect(dashboardRes.body.recentActivity).toEqual([]);
@@ -114,6 +105,7 @@ describe("lesson and dashboard API integration", () => {
   });
 
   it("resolves passed quiz attempts into dashboard progress data", async () => {
+    await LessonModule.create(cashFlow);
     const { user, authHeader } = await createAuthedUser(
       "Progress Resolver",
       "progress-resolver@example.com",
@@ -157,6 +149,7 @@ describe("lesson and dashboard API integration", () => {
   });
 
   it("marks a lesson complete when all of its quizzes have passed", async () => {
+    await LessonModule.create(cashFlow);
     const { user, authHeader } = await createAuthedUser(
       "Lesson Completer",
       "lesson-completer@example.com",

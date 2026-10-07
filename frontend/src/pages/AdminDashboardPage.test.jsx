@@ -5,12 +5,16 @@ import AdminDashboardPage from "./AdminDashboardPage";
 import { useAuthContext } from "../context/AuthContext";
 import {
   approveDeleteAccount,
+  getAdminAvatarAssets,
+  getAdminPackages,
+  getAdminSiteSettings,
   getAdminModules,
   getAdminUsers,
   getPendingDeleteAccount,
   rejectDeleteAccount,
   setAdminUserDisabled,
   setAdminUserDeleted,
+  uploadAdminAvatar,
 } from "../services/api";
 
 vi.mock("../context/AuthContext", () => ({
@@ -23,25 +27,36 @@ vi.mock("../services/api", () => ({
   createAdminModule: vi.fn(),
   deleteAdminLesson: vi.fn(),
   deleteAdminModule: vi.fn(),
+  deleteAdminPackage: vi.fn(),
+  downloadAdminPackage: vi.fn(),
+  getAdminAvatarAssets: vi.fn(),
+  getAdminPackages: vi.fn(),
+  getAdminSiteSettings: vi.fn(),
+  updateAdminSiteSettings: vi.fn(),
+  inspectAdminPackage: vi.fn(),
   getAdminModules: vi.fn(),
   getAdminUsers: vi.fn(),
   getPendingDeleteAccount: vi.fn(),
   hardDeleteAdminUser: vi.fn(),
   importAdminLessonModule: vi.fn(),
+  importAdminPackage: vi.fn(),
+  activateAdminPackage: vi.fn(),
+  activateDefaultAdminTheme: vi.fn(),
   rejectDeleteAccount: vi.fn(),
   resetAdminUserProgress: vi.fn(),
-  seedAdminBudgetingModule: vi.fn(),
   seedAdminRandomUsers: vi.fn(),
   setAdminUserDisabled: vi.fn(),
   setAdminUserDeleted: vi.fn(),
   updateAdminLesson: vi.fn(),
   updateAdminModule: vi.fn(),
   updateAdminUserRole: vi.fn(),
+  uploadAdminAvatar: vi.fn(),
   verifyAdminUserEmail: vi.fn(),
 }));
 
 describe("AdminDashboardPage", () => {
   beforeEach(() => {
+    window.history.replaceState(null, "", "/admin/dashboard");
     useAuthContext.mockReturnValue({ csrfToken: "csrf-token", user: { id: "admin-123" } });
     getAdminUsers.mockResolvedValue({
       users: [
@@ -57,6 +72,9 @@ describe("AdminDashboardPage", () => {
       ],
     });
     getAdminModules.mockResolvedValue({ modules: [] });
+    getAdminPackages.mockResolvedValue({ packages: [], activePackageId: null });
+    getAdminSiteSettings.mockResolvedValue({ appName: null, landing: null });
+    getAdminAvatarAssets.mockResolvedValue({ assets: [] });
     getPendingDeleteAccount.mockResolvedValue({
       users: [
         {
@@ -80,6 +98,70 @@ describe("AdminDashboardPage", () => {
       },
     });
     rejectDeleteAccount.mockResolvedValue({});
+  });
+
+  it("shows a copyable lesson schema and lets admins upload avatars", async () => {
+    const user = userEvent.setup();
+    const uploadedAvatar = {
+      id: "avatar-1",
+      name: "nova.webp",
+      url: "/api/v1/assets/avatar-1",
+    };
+    uploadAdminAvatar.mockResolvedValue(uploadedAvatar);
+    getAdminAvatarAssets.mockResolvedValue({ assets: [uploadedAvatar] });
+
+    render(<AdminDashboardPage />);
+
+    await user.click(await screen.findByRole("tab", { name: /Lessons/ }));
+    await user.click(await screen.findByText("Lesson JSON schema and example"));
+    expect(screen.getByText(/"microLessonContent"/, { selector: "pre" })).toBeInTheDocument();
+
+    const avatarFile = new File(["image"], "nova.webp", { type: "image/webp" });
+    await user.upload(screen.getByLabelText("Upload avatar"), avatarFile);
+
+    await waitFor(() => {
+      expect(uploadAdminAvatar).toHaveBeenCalledWith({
+        file: avatarFile,
+        csrfToken: "csrf-token",
+      });
+      expect(screen.getByText("/api/v1/assets/avatar-1")).toBeInTheDocument();
+    });
+  });
+
+  it("organizes the dashboard into users, lessons, and theming tabs", async () => {
+    const user = userEvent.setup();
+    getAdminUsers.mockResolvedValue({ users: [], demoMode: true });
+    render(<AdminDashboardPage />);
+
+    const usersTab = await screen.findByRole("tab", { name: /Users/ });
+    expect(usersTab).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByLabelText("1 pending deletion request")).toBeInTheDocument();
+    expect(await screen.findByRole("note")).toHaveTextContent(/everyone who signs in is an admin/);
+    expect(screen.getByRole("heading", { name: "Pending deletions" })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "Appearance and packages" })).toBeNull();
+
+    await user.click(screen.getByRole("tab", { name: /Theming/ }));
+    expect(screen.getByRole("tab", { name: /Theming/ })).toHaveAttribute("aria-selected", "true");
+    expect(
+      await screen.findByRole("heading", { name: "Appearance and packages" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Pending deletions" })).toBeNull();
+    expect(window.location.hash).toBe("#theming");
+
+    await user.keyboard("{ArrowLeft}");
+    expect(screen.getByRole("tab", { name: /Lessons/ })).toHaveFocus();
+    expect(screen.getByRole("heading", { name: "Lesson modules" })).toBeInTheDocument();
+    await user.keyboard("{Home}");
+    expect(screen.getByRole("tab", { name: /Users/ })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("reopens the tab named in the URL hash", async () => {
+    window.history.replaceState(null, "", "/admin/dashboard#lessons");
+    render(<AdminDashboardPage />);
+    expect(await screen.findByRole("tab", { name: /Lessons/ })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
   });
 
   it("passes the pending user's ID and CSRF token to deletion approval", async () => {

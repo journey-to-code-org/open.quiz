@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { getLastLesson } from "../services/api";
-import { FIRST_LESSON_LINK } from "../app/router/routes";
+import { ROUTES } from "../app/router/routes";
 import Skeleton from "../shared/Skeleton/Skeleton.component";
 const STORAGE_KEY = "lastLessonPath";
 
@@ -17,10 +17,10 @@ export default function LastLessonRedirect() {
         const path = data?.lastLessonPath;
         if (!isMounted) return;
         if (path) localStorage.setItem(STORAGE_KEY, path);
-        setTarget(path || FIRST_LESSON_LINK);
+        setTarget(path || ROUTES.LEARN);
       } catch {
         const cached = localStorage.getItem(STORAGE_KEY);
-        if (isMounted) setTarget(cached || FIRST_LESSON_LINK);
+        if (isMounted) setTarget(cached || ROUTES.LEARN);
       }
     })();
 

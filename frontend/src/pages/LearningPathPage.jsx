@@ -3,13 +3,12 @@ import { useNavigate } from "react-router";
 import { useAuthContext } from "../context/AuthContext";
 import { getLesson, getLessonModules, getLessonProgress } from "../services/api";
 import LearningPathNode from "../features/learn/LearningPathNode/LearningPathNode.component";
+import LearningPathTrail from "../features/learn/LearningPathTrail/LearningPathTrail.component";
+import { useInstanceAssets, useInstanceTrail } from "../app/instanceAssets";
 import Button from "../shared/Button/Button.component";
 import EmptyState from "../shared/EmptyState/EmptyState.component";
 import Modal from "../shared/Modal/Modal.component";
 import Skeleton from "../shared/Skeleton/Skeleton.component";
-import dabbingBeaverImg from "../assets/dabbingBeaver.svg";
-import abigailImg from "../assets/abigail.webp";
-import ramonaImg from "../assets/ramona.webp";
 
 // Vertical distance between node centers, in rem.
 const NODE_SPACING_REM = 8.75;
@@ -35,6 +34,8 @@ function LearningPathPage() {
   const navigate = useNavigate();
 
   const { isAuthenticated } = useAuthContext();
+  const trail = useInstanceTrail();
+  const { trailDecoration } = useInstanceAssets();
 
   const [progress, setProgress] = useState(null);
   const [currentModule, setCurrentModule] = useState(null);
@@ -242,39 +243,6 @@ function LearningPathPage() {
     };
   }
 
-  function getVineGeometry(points, index) {
-    const xDistance = points.x2 - points.x1;
-    const yDistance = points.y2 - points.y1;
-    const length = Math.hypot(xDistance, yDistance) || 1;
-    const curveDirection = index % 2 === 0 ? 1 : -1;
-    const curve = Math.min(18, length * 0.12) * curveDirection;
-    const normalX = (-yDistance / length) * curve;
-    const normalY = (xDistance / length) * curve;
-
-    return {
-      path: `M ${points.x1} ${points.y1} C ${points.x1 + xDistance * 0.3 + normalX} ${
-        points.y1 + yDistance * 0.3 + normalY
-      }, ${points.x1 + xDistance * 0.7 + normalX} ${
-        points.y1 + yDistance * 0.7 + normalY
-      }, ${points.x2} ${points.y2}`,
-      angle: (Math.atan2(yDistance, xDistance) * 180) / Math.PI,
-      leaves: [
-        {
-          id: "early",
-          x: points.x1 + xDistance * 0.34 + normalX * 0.72,
-          y: points.y1 + yDistance * 0.34 + normalY * 0.72,
-          scale: 0.78,
-        },
-        {
-          id: "late",
-          x: points.x1 + xDistance * 0.68 + normalX * 0.72,
-          y: points.y1 + yDistance * 0.68 + normalY * 0.72,
-          scale: 0.92,
-        },
-      ],
-    };
-  }
-
   // Function to navigate to the selected lesson when a node is clicked
   function openLesson(node) {
     if (!node) {
@@ -304,7 +272,7 @@ function LearningPathPage() {
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
           <EmptyState
             className="border-primary/20 bg-surface-inset py-16"
-            icon={<img src={dabbingBeaverImg} alt="" className="h-14 w-14 object-contain" />}
+            icon="📚"
             title="Content coming soon"
             message="New lessons are being prepared. Check back soon for something new to explore."
           />
@@ -326,43 +294,22 @@ function LearningPathPage() {
   return (
     <div className="min-h-screen bg-learning-path-surface text-learning-path-text">
       <main className="mx-auto flex min-h-screen max-w-[22rem] flex-col px-4 pb-28 pt-5 sm:max-w-[24rem] sm:px-6 md:max-w-4xl lg:max-w-6xl lg:px-8">
-        <div className="relative overflow-hidden rounded-[2rem] border border-primary/20 bg-white/70 px-5 pb-5 pt-7 text-center shadow-[0_18px_45px_rgba(20,73,61,0.1)] sm:px-8 md:min-h-52 md:px-48 md:py-8">
+        <div className="relative overflow-hidden rounded-[2rem] border border-primary/20 bg-surface-raised/70 px-5 pb-5 pt-7 text-center shadow-[0_18px_45px_rgba(20,73,61,0.1)] sm:px-8 md:min-h-52 md:px-48 md:py-8">
           <div className="pointer-events-none absolute -left-8 -top-8 h-28 w-28 rounded-full bg-accent/15" />
-          <div className="pointer-events-none absolute -bottom-12 -right-8 h-36 w-36 rounded-full bg-circle-completed/20" />
+          <div className="pointer-events-none absolute -bottom-12 -right-8 h-36 w-36 rounded-full bg-primary-alt/20" />
 
-          <img
-            src={abigailImg}
-            alt=""
-            aria-hidden="true"
-            className="absolute -bottom-2 left-5 hidden w-28 drop-shadow-sm md:block lg:left-12 lg:w-32"
-          />
-          <img
-            src={ramonaImg}
-            alt=""
-            aria-hidden="true"
-            className="absolute -bottom-2 right-5 hidden w-28 drop-shadow-sm md:block lg:right-12 lg:w-32"
-          />
-
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-            Your learning adventure
-          </p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Learning path</p>
           <h1 className="mt-2 font-heading text-[2rem] font-bold leading-tight tracking-tight text-learning-path-heading sm:text-[2.5rem]">
-            Personal Finance
+            {currentModule.title}
           </h1>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-learning-path-muted">
-            Follow the trail, grow your skills, and build money confidence one quick lesson at a
-            time.
+            {currentModule.description || "Choose a lesson to continue learning."}
           </p>
 
-          <div className="mx-auto mt-5 flex max-w-sm items-center gap-3 rounded-full bg-white/80 p-2 pr-4 shadow-sm">
-            <img
-              src={dabbingBeaverImg}
-              alt="Sprout, your learning guide"
-              className="h-11 w-11 object-contain"
-            />
+          <div className="mx-auto mt-5 flex max-w-sm items-center gap-3 rounded-lg bg-surface-raised/80 p-3 shadow-sm">
             <div className="min-w-0 flex-1 text-left">
               <div className="flex items-center justify-between gap-3 text-xs font-semibold text-learning-path-heading">
-                <span>{isModuleComplete ? "Trail complete!" : "Keep growing!"}</span>
+                <span>{isModuleComplete ? "Module complete" : "Keep going"}</span>
                 <span>{progressPercent}%</span>
               </div>
               <div
@@ -403,77 +350,24 @@ function LearningPathPage() {
           className="relative mx-auto mt-5 w-full max-w-[18rem] md:max-w-[34rem] lg:max-w-[44rem]"
           style={{ height: `${pathHeight}rem` }}
         >
-          {/* Leafy vines connecting the learning path nodes */}
-          <svg
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-            viewBox={`0 0 ${svgSize.width} ${svgSize.height}`}
-            fill="none"
-          >
-            {learningPath.slice(0, -1).map((node, index) => {
-              const nextNode = learningPath[index + 1];
-
+          <LearningPathTrail
+            segments={learningPath.slice(0, -1).flatMap((node, index) => {
               const startPoint = nodeCenters[index];
               const endPoint = nodeCenters[index + 1];
-
-              if (!startPoint || !endPoint) {
-                return null;
-              }
-
-              const points = getPathPoints(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
-              const vine = getVineGeometry(points, index);
-
-              return (
-                <g key={`${node.microLessonId}-${nextNode.microLessonId}`}>
-                  <path
-                    d={vine.path}
-                    stroke="var(--color-learning-path-line)"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                    opacity="0.12"
-                  />
-                  <path
-                    d={vine.path}
-                    stroke="var(--color-learning-path-line)"
-                    strokeWidth="2.25"
-                    strokeLinecap="round"
-                  />
-                  {vine.leaves.map((leaf, leafIndex) => (
-                    <g
-                      key={leaf.id}
-                      transform={`translate(${leaf.x} ${leaf.y}) rotate(${
-                        vine.angle + (leafIndex === 0 ? -5 : 6)
-                      }) scale(${leaf.scale} ${leafIndex === 0 ? leaf.scale : -leaf.scale})`}
-                      fill="var(--color-learning-path-line)"
-                    >
-                      <path
-                        d="M 0 0 C -2 -4 -4 -7 -6 -10"
-                        fill="none"
-                        stroke="var(--color-learning-path-line)"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M -6 -9 C -11 -8 -15 -10 -18 -14 L -13 -15 L -16 -21 L -10 -19 L -8 -26 L -4 -20 L 1 -24 L 0 -17 L 6 -17 C 3 -12 -1 -9 -6 -9 Z"
-                        opacity="0.88"
-                        stroke="var(--color-learning-path-line)"
-                        strokeWidth="0.75"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M -6 -10 L -7 -20 M -7 -15 L -12 -18 M -7 -16 L -2 -20"
-                        fill="none"
-                        stroke="var(--color-learning-path-surface)"
-                        strokeWidth="0.8"
-                        strokeLinecap="round"
-                        opacity="0.55"
-                      />
-                    </g>
-                  ))}
-                </g>
-              );
+              if (!startPoint || !endPoint) return [];
+              return [
+                {
+                  key: `${node.microLessonId}-${learningPath[index + 1].microLessonId}`,
+                  points: getPathPoints(startPoint.x, startPoint.y, endPoint.x, endPoint.y),
+                },
+              ];
             })}
-          </svg>
+            width={svgSize.width}
+            height={svgSize.height}
+            style={trail.style}
+            decorationCount={trail.decorationCount}
+            decorationImage={trailDecoration}
+          />
 
           {/* Rendering the learning path */}
           {learningPath.map((node, index) => {

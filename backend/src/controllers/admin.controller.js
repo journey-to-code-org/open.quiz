@@ -5,6 +5,7 @@ const User = require("../models/User.model");
 const UserProgress = require("../models/UserProgress.model");
 const LessonModule = require("../models/LessonModule.model");
 const { clearModuleCache } = require("../utils/content");
+const { isDemoMode, maskDemoUser } = require("../config/demoMode");
 const { hashPassword } = require("../utils/password");
 const {
   getScheduledDeletionFields,
@@ -25,7 +26,6 @@ const {
   adminLessonSchema,
   validateRequest,
 } = require("../validation/userValidation");
-const budgetingModule = require("../../../shared/content/budgeting.json");
 
 const safeUser = (user) => ({
   _id: user._id,
@@ -64,11 +64,13 @@ const countOtherActiveAdmins = (userId) =>
 
 const getAllAdminUsers = async (req, res, next) => {
   try {
-    const users = await User.find({ role: "admin" }).select("_id name email role created_at");
+    const users = await User.find({ role: "admin" })
+      .select("_id name email role created_at")
+      .lean();
     return res.status(StatusCodes.OK).json({
       success: true,
       count: users.length,
-      users,
+      users: users.map((user) => maskDemoUser(user, req.user.id)),
     });
   } catch (error) {
     return next(error);
@@ -79,6 +81,7 @@ const getAdminStatus = (req, res) => {
   return res.status(StatusCodes.OK).json({
     isAdmin: true,
     userId: req.user.id,
+    demoMode: isDemoMode(),
   });
 };
 
@@ -95,10 +98,13 @@ const listUsers = async (req, res, next) => {
       filters.email_verified_at = query.emailVerified ? { $ne: null } : null;
     }
     if (query.search) {
-      filters.$or = [
-        { email: { $regex: query.search, $options: "i" } },
-        { name: { $regex: query.search, $options: "i" } },
-      ];
+      // Demo admins cannot probe for other people's email addresses.
+      filters.$or = isDemoMode()
+        ? [{ name: { $regex: query.search, $options: "i" } }]
+        : [
+            { email: { $regex: query.search, $options: "i" } },
+            { name: { $regex: query.search, $options: "i" } },
+          ];
     }
     const [users, total] = await Promise.all([
       User.find(filters)
@@ -113,10 +119,11 @@ const listUsers = async (req, res, next) => {
     return res.status(StatusCodes.OK).json({
       success: true,
       count: users.length,
-      users: users.map(safeUser),
+      users: users.map((user) => maskDemoUser(safeUser(user), req.user.id)),
       page: query.page,
       limit: query.limit,
       total,
+      demoMode: isDemoMode(),
     });
   } catch (error) {
     return next(error);
@@ -155,11 +162,13 @@ const getPendingDeleteAccount = async (req, res, next) => {
   try {
     const pendingDeletionRequests = await User.find({
       deletion_status: "pending",
-    }).select("name email deletion_status deletion_requested_at created_at");
+    })
+      .select("name email deletion_status deletion_requested_at created_at")
+      .lean();
     return res.status(StatusCodes.OK).json({
       success: true,
       count: pendingDeletionRequests.length,
-      users: pendingDeletionRequests,
+      users: pendingDeletionRequests.map((user) => maskDemoUser(user, req.user.id)),
     });
   } catch (error) {
     return next(error);
@@ -504,19 +513,6 @@ const deleteModule = async (req, res, next) => {
   }
 };
 
-const seedBudgetingModule = async (req, res, next) => {
-  try {
-    if (await LessonModule.exists({ id: budgetingModule.id })) {
-      return res.status(StatusCodes.CONFLICT).json({ message: "Lesson module already exists." });
-    }
-    const module = await LessonModule.create(budgetingModule);
-    clearModuleCache(budgetingModule.id);
-    return res.status(StatusCodes.CREATED).json(module);
-  } catch (error) {
-    return next(error);
-  }
-};
-
 const createLesson = async (req, res, next) => {
   try {
     const body = validateRequest(res, adminLessonSchema, req.body);
@@ -602,7 +598,6 @@ module.exports = {
   createModule,
   updateModule,
   deleteModule,
-  seedBudgetingModule,
   createLesson,
   updateLesson,
   deleteLesson,

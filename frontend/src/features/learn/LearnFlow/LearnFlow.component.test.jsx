@@ -10,12 +10,18 @@ const completeLessonMock = vi.fn(() => Promise.resolve({}));
 const completeMicroLessonMock = vi.fn(() => Promise.resolve({}));
 const updateLessonProgressMock = vi.fn(() => Promise.resolve({}));
 const restartLessonProgressMock = vi.fn(() => Promise.resolve({}));
+const instanceAssetsMock = vi.fn(() => ({ avatars: {} }));
+const currentQuestionMock = vi.fn(() => null);
+
+vi.mock("../../../app/instanceAssets", () => ({
+  useInstanceAssets: () => instanceAssetsMock(),
+}));
 
 // Mock the quiz hook since these regression tests do not need to run through a real quiz.
 vi.mock("../../../hooks/useQuiz", () => ({
   useQuiz: () => ({
     questionIndex: 0,
-    currentQuestion: null,
+    currentQuestion: currentQuestionMock(),
     selectedChoiceIds: [],
     review: false,
     status: "idle",
@@ -43,6 +49,7 @@ vi.mock("../../../services/api", () => ({
   completeLesson: (...args) => completeLessonMock(...args),
   updateLessonProgress: (...args) => updateLessonProgressMock(...args),
   restartLessonProgress: (...args) => restartLessonProgressMock(...args),
+  resolveAssetUrl: (url) => url,
 }));
 
 vi.mock("../Quiz/encouragingCopy", () => ({
@@ -77,7 +84,12 @@ vi.mock("../../../shared/ProgressBar/ProgressBar.component", () => ({
 }));
 
 vi.mock("../Lesson/Lesson.component", () => ({
-  default: ({ title }) => <div>{title || "Lesson Body"}</div>,
+  default: ({ title, characterImage, characterAlt }) => (
+    <div>
+      {title || "Lesson Body"}
+      {characterImage ? <img src={characterImage} alt={characterAlt} /> : null}
+    </div>
+  ),
 }));
 
 // Use a small two-step lesson so resume and restart behavior is easy to control.
@@ -129,6 +141,73 @@ describe("LearnFlow regressions", () => {
     completeMicroLessonMock.mockResolvedValue({});
     updateLessonProgressMock.mockClear();
     restartLessonProgressMock.mockClear();
+    instanceAssetsMock.mockReturnValue({ avatars: {} });
+    currentQuestionMock.mockReturnValue(null);
+  });
+
+  it("does not let a quiz character override the current lesson character", () => {
+    currentQuestionMock.mockReturnValue({ id: "question", characterId: "ramona" });
+    instanceAssetsMock.mockReturnValue({
+      avatars: {
+        abigail: { name: "Abigail", url: "/abigail.webp" },
+        ramona: { name: "Ramona", url: "/ramona.webp" },
+      },
+    });
+    renderLearnFlow({
+      learnData: {
+        ...baseLearnData,
+        lessonSteps: [{ id: "intro", characterId: "abigail", content: [] }],
+      },
+    });
+    expect(screen.getByRole("img", { name: "Abigail" })).toHaveAttribute("src", "/abigail.webp");
+    expect(screen.queryByRole("img", { name: "Ramona" })).not.toBeInTheDocument();
+  });
+
+  it("uses active theme artwork for content characters instead of bundled or module images", () => {
+    instanceAssetsMock.mockReturnValue({
+      avatars: { abigail: { name: "Custom Abigail", url: "/theme-abigail.webp" } },
+    });
+    renderLearnFlow({
+      characterImages: { abigail: "/bundled-abigail.webp" },
+      learnData: {
+        ...baseLearnData,
+        module: { characters: [{ characterId: "abigail", imagePath: "/module-abigail.webp" }] },
+        lessonSteps: [{ id: "intro", characterId: "abigail", content: [] }],
+      },
+    });
+    expect(screen.getByRole("img", { name: "Custom Abigail" })).toHaveAttribute(
+      "src",
+      "/theme-abigail.webp",
+    );
+  });
+
+  it("uses the reserved guide avatar when content has no character", () => {
+    instanceAssetsMock.mockReturnValue({
+      avatars: { guide: { name: "Custom guide", url: "/theme-guide.webp" } },
+    });
+    renderLearnFlow();
+    expect(screen.getByRole("img", { name: "Custom guide" })).toHaveAttribute(
+      "src",
+      "/theme-guide.webp",
+    );
+  });
+
+  it("preserves module character artwork when the theme has no matching avatar", () => {
+    renderLearnFlow({
+      learnData: {
+        ...baseLearnData,
+        module: {
+          characters: [
+            { characterId: "abigail", name: "Abigail", imagePath: "/module-abigail.webp" },
+          ],
+        },
+        lessonSteps: [{ id: "intro", characterId: "abigail", content: [] }],
+      },
+    });
+    expect(screen.getByRole("img", { name: "Abigail" })).toHaveAttribute(
+      "src",
+      "/module-abigail.webp",
+    );
   });
 
   it("shows resume banner only when resuming from saved progress on mount", () => {

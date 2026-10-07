@@ -5,6 +5,7 @@ const QuizAttempt = require("../models/QuizAttempt.model");
 const { invalidateDashboardCache } = require("./dashboard.controller");
 const {
   getModule,
+  getDefaultModule,
   getLesson,
   sanitizeLessonData,
   sanitizeModuleData,
@@ -19,8 +20,6 @@ const {
 const { updateUserStreak } = require("../services/streak.service");
 const { awardEligibleBadges } = require("../services/badge.service");
 const { getCurrentLessonId, isLessonAccessible } = require("../utils/learningPath");
-
-const DEFAULT_MODULE_ID = "cashFlow";
 
 // Shape a UserProgress document into the fields the frontend needs to render the learning path.
 function shapeProgress(progressRecord) {
@@ -84,6 +83,22 @@ exports.getLessonModules = async (req, res, next) => {
   }
 };
 
+exports.getPublicLessonModules = async (_req, res, next) => {
+  try {
+    const modules = await LessonModule.find({}).select("id title lessons").sort({ id: 1 }).lean();
+
+    return res.status(StatusCodes.OK).json({
+      modules: modules.map(({ id, title, lessons }) => ({
+        id,
+        title,
+        firstLessonId: lessons?.[0]?.id ?? null,
+      })),
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // GET /api/v1/lessons/last
 // Returns the path to the learner's most recently touched, currently-unlocked lesson.
 exports.getLastLesson = async (req, res, next) => {
@@ -97,7 +112,7 @@ exports.getLastLesson = async (req, res, next) => {
     // A brand-new learner has no progress yet, so fall back to the
     // first lesson in the default module instead of returning a dead end.
     if (!progressRecord) {
-      const firstModule = await getModule(DEFAULT_MODULE_ID);
+      const firstModule = await getDefaultModule();
       const firstLessonId = firstModule?.lessons?.[0]?.id;
 
       return res.status(StatusCodes.OK).json({
@@ -237,7 +252,8 @@ exports.getLessonProgress = async (req, res, next) => {
 // POST /api/v1/lessons/complete
 exports.completeMicroLesson = async (req, res, next) => {
   try {
-    const { moduleId = DEFAULT_MODULE_ID, microLessonId } = req.body ?? {};
+    const { moduleId: requestedModuleId, microLessonId } = req.body ?? {};
+    const moduleId = requestedModuleId || (await getDefaultModule())?.id;
 
     if (
       typeof moduleId !== "string" ||
@@ -349,12 +365,18 @@ exports.updateLessonProgress = async (req, res, next) => {
 
     if (!validatedBody) return;
 
+    const moduleId = validatedBody.moduleId ?? (await getDefaultModule())?.id;
     const {
-      moduleId = DEFAULT_MODULE_ID,
       lessonId: validatedLessonId,
       microLessonId: validatedMicroLessonId,
       currentChunkIndex,
     } = validatedBody;
+
+    if (!moduleId) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "No lesson modules are available." });
+    }
 
     if (!(await getModule(moduleId))) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -574,7 +596,12 @@ exports.completeLesson = async (req, res, next) => {
 // This resets position only; it does not erase completion history.
 exports.restartLessonProgress = async (req, res, next) => {
   try {
-    const { moduleId = DEFAULT_MODULE_ID } = req.body;
+    const moduleId = req.body?.moduleId || (await getDefaultModule())?.id;
+    if (!moduleId) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "No lesson modules are available." });
+    }
 
     const moduleData = await getModule(moduleId);
 

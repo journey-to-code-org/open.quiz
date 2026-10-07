@@ -1,15 +1,15 @@
 import { expect, test } from "./fixtures/network.js";
-import budgetingModule from "../shared/content/budgeting.json" with { type: "json" };
+import introductionModule from "../shared/content/examples/openquiz-introduction/openquiz-introduction.json" with { type: "json" };
 
-const sampleLessonUrl = "/learn/cashFlow/1.1?sample=true";
-const sampleLesson = budgetingModule.lessons.find(({ id }) => id === "1.1");
+const sampleLessonUrl = "/learn/openQuizIntroduction/1.1?sample=true";
+const sampleLesson = introductionModule.lessons.find(({ id }) => id === "1.1");
 
 const mockSampleLesson = (page) =>
-  page.route("**/api/v1/lessons/public/cashFlow/1.1", (route) =>
+  page.route("**/api/v1/lessons/public/openQuizIntroduction/1.1", (route) =>
     route.fulfill({
       contentType: "application/json",
       body: JSON.stringify({
-        moduleData: budgetingModule,
+        moduleData: introductionModule,
         lessonData: sampleLesson,
         progress: null,
       }),
@@ -34,6 +34,8 @@ test("learners can view glossary resources without changing their lesson state",
 
   const lesson = page.locator("#main-content");
   await expect(lesson.getByText("This is a sample of a lesson.")).toBeVisible();
+  // Let async theme and asset requests settle so the baseline text is stable.
+  await page.waitForLoadState("networkidle");
   const lessonState = await lesson.innerText();
   const opener = page.getByRole("button", {
     name: "Open glossary and references",
@@ -43,14 +45,14 @@ test("learners can view glossary resources without changing their lesson state",
 
   const dialog = page.getByRole("dialog", { name: "Glossary and References" });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByText("Budget", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("Instance", { exact: true })).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Close dialog" }),
   ).toBeFocused();
 
   await dialog.getByRole("button", { name: "Works Cited" }).click();
   await expect(
-    dialog.getByText("Youth Financial Education Glossary", { exact: true }),
+    dialog.getByText("open.quiz README", { exact: true }),
   ).toBeVisible();
   await dialog.getByRole("button", { name: "Glossary" }).click();
 

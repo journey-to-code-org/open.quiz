@@ -1,39 +1,42 @@
 @theme {
-  /* Brand colors */
-  --color-primary: #18816a;
-  --color-primary-hover: #105647;
-  --color-primary-alt: #41e3c0;
-  --color-accent: #54dec0;
-  --color-circle-completed: #eac66e;
-  --color-circle-current: #f1ab2d;
-  --color-circle-disabled: #eac66e;
-  --color-circle-border: #16614f;
-  --color-circle-border-current: #000000;
-  --color-circle-text: #000000;
-  --color-circle-hover-completed: #e3bd58;
-  --color-circle-hover-current: #ef9f0f;
-  --color-circle-shadow-completed: rgba(22, 97, 79, 0.12);
-  --color-circle-shadow: rgba(0, 0, 0, 0.16);
-  --shadow-circle-completed: 0 10px 18px var(--color-circle-shadow-completed);
-  --shadow-circle-current: 0 12px 20px var(--color-circle-shadow);
-  --shadow-quiz: 0 8px 16px rgba(16, 86, 71, 0.2);
+  /* Instance theme values can be supplied through the --instance-* properties. */
+  --color-primary: var(--instance-primary, #315f9e);
+  --color-primary-hover: var(--instance-primary-hover, #244a7d);
+  --color-primary-alt: var(--instance-primary-alt, #e8b34c);
+  --color-accent: var(--instance-accent, #d8795f);
+  --color-progress-start: var(--instance-progress-start, #ffbf1f);
+  --color-progress-end: var(--instance-progress-end, #ffd254);
+  --color-progress-near-start: var(--instance-progress-near-start, #ffc618);
+  --color-progress-near-end: var(--instance-progress-near-end, #ffdd4f);
+  --color-progress-complete-start: var(--instance-progress-complete-start, #ea6fee);
+  --color-progress-complete-end: var(--instance-progress-complete-end, #c989f7);
+  --color-learning-path-node-completed: var(
+    --instance-learning-path-node-completed,
+    var(--instance-surface-app, #f5f7fa)
+  );
+  --color-learning-path-node-current: var(
+    --instance-learning-path-node-current,
+    var(--instance-primary, #315f9e)
+  );
+  --color-learning-path-node-border: var(--instance-learning-path-node-border, #b4c7c2);
+  --shadow-quiz: 0 8px 16px rgba(36, 74, 125, 0.2);
   --shadow-quiz-secondary: 0 6px 12px rgba(6, 30, 25, 0.08);
-  --color-learning-path-surface: #e8f7f2;
-  --color-learning-path-text: #195d50;
-  --color-learning-path-heading: #1a6b58;
-  --color-learning-path-divider: #8aa39a;
-  --color-learning-path-muted: #45665d;
-  --color-learning-path-line: #263e39;
-  --color-learning-path-footer-border: #81cfc0;
-  --color-learning-path-footer-surface: #9ee6d7;
-  --color-learning-path-button: #1c896f;
-  --color-learning-path-button-hover: #18755f;
-  --shadow-learning-path-button: 0 6px 14px rgba(18, 57, 49, 0.24);
-  --color-learning-path-callout-surface: #eafaf4;
-  --color-learning-path-callout-border: #a9e0cd;
-  --color-learning-path-callout-text: #14493d;
-  --shadow-learning-path-callout: 0 10px 20px rgba(20, 73, 61, 0.18);
-  --color-learning-path-label: #1f5a4c;
+  --color-learning-path-surface: var(--instance-learning-path-surface, #f1f5fa);
+  --color-learning-path-text: var(--instance-learning-path-text, #334760);
+  --color-learning-path-heading: var(--instance-learning-path-heading, #23446f);
+  --color-learning-path-divider: var(--instance-learning-path-divider, #98a6b8);
+  --color-learning-path-muted: var(--instance-learning-path-muted, #53657a);
+  --color-learning-path-line: var(--instance-learning-path-line, #34475f);
+  --color-learning-path-footer-border: var(--instance-learning-path-footer-border, #c0cddd);
+  --color-learning-path-footer-surface: var(--instance-learning-path-footer-surface, #e0e8f2);
+  --color-learning-path-button: var(--instance-primary, #315f9e);
+  --color-learning-path-button-hover: var(--instance-primary-hover, #244a7d);
+  --shadow-learning-path-button: 0 6px 14px rgba(36, 74, 125, 0.2);
+  --color-learning-path-callout-surface: var(--instance-callout-surface, #fdf2e7);
+  --color-learning-path-callout-border: var(--instance-callout-border, #f2c7a3);
+  --color-learning-path-callout-text: var(--instance-callout-text, #6b422d);
+  --shadow-learning-path-callout: 0 10px 20px rgba(78, 53, 36, 0.14);
+  --color-learning-path-label: var(--instance-learning-path-label, #344b6a);
   --color-shadow: rgba(0, 0, 0, 0.16);
 
   /* Post-it note modal */
@@ -46,23 +49,23 @@
   --shadow-post-it: 0 18px 34px rgba(74, 59, 18, 0.28);
 
   /* Status colors */
-  --color-success: #18816a;
+  --color-success: var(--instance-success, #287a65);
   --color-warning: #ffddd8;
   --color-danger: #b42318;
 
   /* Text colors */
-  --color-foreground: #061e19;
-  --color-heading: #105647;
-  --color-on-primary: #f2fcfa;
+  --color-foreground: var(--instance-foreground, #263244);
+  --color-heading: var(--instance-heading, #213c60);
+  --color-on-primary: var(--instance-on-primary, #ffffff);
 
   /* Surface colors */
-  --color-surface-app: #f2fcfa;
-  --color-surface-raised: #eafbf7;
-  --color-surface-inset: #d4f7ef;
-  --color-surface-input: #ffffff;
+  --color-surface-app: var(--instance-surface-app, #f5f7fa);
+  --color-surface-raised: var(--instance-surface-raised, #ffffff);
+  --color-surface-inset: var(--instance-surface-inset, #edf1f6);
+  --color-surface-input: var(--instance-surface-input, #ffffff);
 
   /* Focus */
-  --color-focus: #105647;
+  --color-focus: var(--instance-focus, #244a7d);
 
   /* Neutral scale */
   --color-neutral-50: #f4faf8;
@@ -76,30 +79,30 @@
   --color-neutral-800: #061e19;
 
   /* Fonts */
-  --font-heading: "Poppins", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-heading: var(--instance-font-heading, "Poppins", sans-serif);
+  --font-body: var(--instance-font-body, "Inter", sans-serif);
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Fonts sizes */
-  --text-h1: 2.25rem;
+  --text-h1: var(--instance-font-size-h1, 2.25rem);
   --text-h1--line-height: 1.2;
 
-  --text-h2: 1.875rem;
+  --text-h2: var(--instance-font-size-h2, 1.875rem);
   --text-h2--line-height: 1.2;
 
-  --text-h3: 1.5rem;
+  --text-h3: var(--instance-font-size-h3, 1.5rem);
   --text-h3--line-height: 1.2;
 
-  --text-h4: 1.25rem;
+  --text-h4: var(--instance-font-size-h4, 1.25rem);
   --text-h4--line-height: 1.2;
 
-  --text-body: 1rem;
+  --text-body: var(--instance-font-size-body, 1rem);
   --text-body--line-height: 1.5;
 
-  --text-small: 0.875rem;
+  --text-small: var(--instance-font-size-small, 0.875rem);
   --text-small--line-height: 1.5;
 
-  --text-caption: 0.75rem;
+  --text-caption: var(--instance-font-size-caption, 0.75rem);
   --text-caption--line-height: 1.5;
 
   /* Fonts weights */
@@ -114,10 +117,10 @@
   --leading-loose: 1.75;
 
   /* Border radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-pill: 9999px;
+  --radius-sm: var(--instance-radius-sm, 4px);
+  --radius-md: var(--instance-radius-md, 8px);
+  --radius-lg: var(--instance-radius-lg, 12px);
+  --radius-pill: var(--instance-radius-pill, 9999px);
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgb(17 24 39 / 6%);
@@ -125,6 +128,101 @@
   --shadow-lg: 0 12px 24px rgb(17 24 39 / 12%);
 
   /* Default tailwind spacing can be used they are the same we dont need to add enything specific */
+}
+
+:root {
+  color-scheme: light;
+}
+
+/*
+ * Dark mode defaults. Theme packages may override any color with theme.darkTokens,
+ * which are applied as inline --instance-* properties and therefore win over these.
+ */
+:root[data-color-mode="dark"] {
+  color-scheme: dark;
+  --instance-primary: #6d9be0;
+  --instance-primary-hover: #8fb4ec;
+  --instance-primary-alt: #e8b34c;
+  --instance-accent: #e8907a;
+  --instance-success: #4fbf9f;
+  --instance-heading: #dce7f7;
+  --instance-foreground: #c9d4e3;
+  --instance-on-primary: #0d1828;
+  --instance-surface-app: #0f1724;
+  --instance-surface-raised: #172234;
+  --instance-surface-inset: #1f2c41;
+  --instance-surface-input: #121c2b;
+  --instance-focus: #8fb4ec;
+  --instance-learning-path-surface: #131d2c;
+  --instance-learning-path-text: #c9d4e3;
+  --instance-learning-path-heading: #dce7f7;
+  --instance-learning-path-line: #8fa3bf;
+  --instance-learning-path-muted: #9aabc2;
+  --instance-learning-path-label: #c3d3ea;
+  --instance-learning-path-divider: #3a4b63;
+  --instance-learning-path-footer-surface: #1a2537;
+  --instance-learning-path-footer-border: #2d3c53;
+  --instance-learning-path-node-completed: #1f2c41;
+  --instance-learning-path-node-current: var(--instance-primary);
+  --instance-learning-path-node-border: #4a5d78;
+  --instance-callout-surface: #3a2a1f;
+  --instance-callout-border: #7a5338;
+  --instance-callout-text: #f3d2b8;
+
+  --color-warning: #4a2522;
+  --color-danger: #f0605a;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --shadow-quiz: 0 8px 16px rgba(0, 0, 0, 0.45);
+  --shadow-quiz-secondary: 0 6px 12px rgba(0, 0, 0, 0.35);
+  --shadow-learning-path-button: 0 6px 14px rgba(0, 0, 0, 0.4);
+  --shadow-learning-path-callout: 0 10px 20px rgba(0, 0, 0, 0.4);
+
+  /* The neutral scale is derived from the active palette so borders and muted text stay legible. */
+  --color-neutral-50: color-mix(
+    in srgb,
+    var(--instance-foreground) 4%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-100: color-mix(
+    in srgb,
+    var(--instance-foreground) 8%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-200: color-mix(
+    in srgb,
+    var(--instance-foreground) 16%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-300: color-mix(
+    in srgb,
+    var(--instance-foreground) 24%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-400: color-mix(
+    in srgb,
+    var(--instance-foreground) 45%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-500: color-mix(
+    in srgb,
+    var(--instance-foreground) 60%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-600: color-mix(
+    in srgb,
+    var(--instance-foreground) 75%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-700: color-mix(
+    in srgb,
+    var(--instance-foreground) 88%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-800: color-mix(
+    in srgb,
+    var(--instance-foreground) 95%,
+    var(--instance-surface-app)
+  );
 }
 
 @keyframes callout-pop {

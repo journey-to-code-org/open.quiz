@@ -7,8 +7,13 @@ const User = require("../src/models/User.model");
 const UserProgress = require("../src/models/UserProgress.model");
 const LessonModule = require("../src/models/LessonModule.model");
 const QuizAttempt = require("../src/models/QuizAttempt.model");
+const cashFlow = require("./fixtures/budgetingModule.json");
 
 useTestDb();
+
+beforeEach(async () => {
+  await LessonModule.create(cashFlow);
+});
 
 // Create a learner and return the authentication values needed for progress requests.
 async function createAuthedUser(email) {
@@ -244,7 +249,6 @@ describe("micro-lesson completion rewards", () => {
     expect(await UserProgress.countDocuments({ user_id: userId })).toBe(0);
   });
   it("awards a streak and badge only on the first reading completion", async () => {
-    const LessonModule = require("../src/models/LessonModule.model");
     await LessonModule.create({
       id: "reading",
       title: "Reading",

@@ -129,8 +129,8 @@ describe("learning path page", () => {
       "aria-valuenow",
       "0",
     );
-    expect(screen.getByText("Keep growing!")).toBeInTheDocument();
-    expect(screen.queryByText("Trail complete!")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Keep going")).toHaveLength(2);
+    expect(screen.queryByText("Module complete")).not.toBeInTheDocument();
   });
 
   it("shows step details in the note and navigates to the selected lesson", async () => {

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router";
 import { useAuthContext } from "../context/AuthContext";
 import { ROUTES } from "../app/router/routes";
+import { useAppName } from "../app/instanceAssets";
 import { registerSchema } from "../features/auth/schemas";
 import { getPasswordHelperText } from "../features/auth/passwordHelperText";
 import { pickPlaceholderIdentity } from "../features/auth/placeholderIdentities";
@@ -29,8 +30,10 @@ export function AuthTermsNotice({ action = "signing up" }) {
 }
 
 export default function RegisterPage() {
+  const appName = useAppName();
   const { register: registerUser } = useAuthContext();
   const [isRegistered, setIsRegistered] = useState(false);
+  const [verificationUrl, setVerificationUrl] = useState(null);
   const placeholder = useMemo(() => pickPlaceholderIdentity(), []);
   const detectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
@@ -61,7 +64,8 @@ export default function RegisterPage() {
 
   const onSubmit = async (values) => {
     try {
-      await registerUser(values);
+      const response = await registerUser(values);
+      setVerificationUrl(response?.verificationUrl || null);
       setIsRegistered(true);
     } catch (err) {
       // Only the server can know an email is already taken.
@@ -77,10 +81,22 @@ export default function RegisterPage() {
     return (
       <div className="mx-auto max-w-md py-8">
         <Card>
-          <h1 className="font-heading text-h2 font-bold text-heading">Check your email</h1>
-          <p className="mt-2 text-neutral-600">
-            We sent a verification link. Open it to finish setting up your account.
-          </p>
+          <h1 className="font-heading text-h2 font-bold text-heading">
+            {verificationUrl ? "Verify your email" : "Check your email"}
+          </h1>
+          {verificationUrl ? (
+            <p className="mt-2 text-neutral-600">
+              Email delivery isn&apos;t configured. Verify your account using this link:{" "}
+              <a href={verificationUrl} className="font-semibold text-primary underline">
+                Verify your email address
+              </a>
+              .
+            </p>
+          ) : (
+            <p className="mt-2 text-neutral-600">
+              We sent a verification link. Open it to finish setting up your account.
+            </p>
+          )}
           <Link to={ROUTES.LOGIN} className="mt-4 inline-block text-primary underline">
             Back to login
           </Link>
@@ -93,7 +109,7 @@ export default function RegisterPage() {
     <div className="mx-auto max-w-2xl py-8">
       <Card>
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">Create account</p>
-        <h1 className="mt-1 font-heading text-h2 font-bold text-heading">Join Sprout</h1>
+        <h1 className="mt-1 font-heading text-h2 font-bold text-heading">Join {appName}</h1>
         <p className="mt-2 text-small text-neutral-700">
           Create an account to save your progress and keep a record of your lessons.
         </p>

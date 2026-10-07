@@ -78,7 +78,7 @@ describe("dashboard page", () => {
       nextAction: {
         title: "Start learning",
         description: "Begin your first lesson.",
-        href: "/learn/cashFlow/1.1",
+        href: "/learn",
         ctaLabel: "Begin",
       },
       units: [
@@ -101,6 +101,7 @@ describe("dashboard page", () => {
 
     // With no completed lessons, the learner should see the first-time dashboard state.
     expect(screen.getByText("Welcome to your progress dashboard")).toBeInTheDocument();
-    expect(screen.getByText("Begin with Budgeting Basics")).toBeInTheDocument();
+    expect(screen.getByText("Ready to start? Choose a lesson to begin.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Explore lessons" })).toHaveAttribute("href", "/learn");
   });
 });

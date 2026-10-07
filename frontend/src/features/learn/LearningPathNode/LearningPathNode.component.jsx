@@ -31,7 +31,7 @@ function LearningPathNode({ node, status, stepNumber, style, tooltipText, onSele
 
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border border-circle-border bg-learning-path-surface text-[0.7rem] leading-none text-learning-path-heading shadow-sm"
+          className="pointer-events-none absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border border-learning-path-node-border bg-learning-path-surface text-[0.7rem] leading-none text-learning-path-heading shadow-sm"
         >
           {badge.icon}
         </span>

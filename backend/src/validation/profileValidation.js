@@ -17,6 +17,9 @@ const updateProfileSchema = Joi.object({
   notifications: Joi.boolean().optional().messages({
     "boolean.base": "Notifications setting must be true or false.",
   }),
+  leaderboard_opt_in: Joi.boolean().optional().messages({
+    "boolean.base": "Leaderboard opt-in must be true or false.",
+  }),
 
   timezone: Joi.string().trim().optional(),
 })

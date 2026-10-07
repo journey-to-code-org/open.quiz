@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" role="img" aria-labelledby="title">
+  <title id="title">open.quiz</title>
+  <rect x="2" y="4" width="48" height="48" rx="10" fill="#18816a"/>
+  <path d="M12 17h10c4 0 7 3 7 7v18c0-4-3-7-7-7H12z" fill="#fff"/>
+  <path d="M40 17H30c-4 0-7 3-7 7v18c0-4 3-7 7-7h10z" fill="#d4f7ef"/>
+  <path d="M28 23v19" fill="none" stroke="#105647" stroke-width="2"/>
+  <text x="62" y="38" fill="#105647" font-family="Poppins, sans-serif" font-size="28" font-weight="700">open.quiz</text>
+</svg>

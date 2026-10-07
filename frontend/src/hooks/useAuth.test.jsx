@@ -5,8 +5,8 @@ import { AUTH_EXPIRED_EVENT } from "../services/api";
 import * as api from "../services/api";
 
 vi.mock("../services/api", () => ({
-  AUTH_EXPIRED_EVENT: "sprout:auth-expired",
-  CSRF_TOKEN_UPDATED_EVENT: "sprout:csrf-token-updated",
+  AUTH_EXPIRED_EVENT: "openquiz:auth-expired",
+  CSRF_TOKEN_UPDATED_EVENT: "openquiz:csrf-token-updated",
   clearCsrfToken: vi.fn(),
   getProfile: vi.fn(),
   setCsrfToken: vi.fn(),
@@ -28,7 +28,7 @@ describe("useAuth", () => {
 
   it("refreshes an incomplete stored user from the authenticated profile", async () => {
     sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({
         user: { id: "user-id", email: "maya@example.com", role: "learner" },
         csrfToken: "csrf-token",
@@ -41,7 +41,7 @@ describe("useAuth", () => {
 
     expect(api.getProfile).toHaveBeenCalledTimes(1);
     expect(result.current.user).toEqual(expect.objectContaining({ name: "Maya", role: "learner" }));
-    expect(JSON.parse(sessionStorage.getItem("sprout.auth"))).toEqual(
+    expect(JSON.parse(sessionStorage.getItem("openquiz.auth"))).toEqual(
       expect.objectContaining({
         csrfToken: "csrf-token",
         user: expect.objectContaining({ name: "Maya", role: "learner" }),
@@ -53,7 +53,7 @@ describe("useAuth", () => {
     "clears stored authentication for %s during hydration",
     async (code) => {
       sessionStorage.setItem(
-        "sprout.auth",
+        "openquiz.auth",
         JSON.stringify({
           user: { id: "user-id", email: "maya@example.com", role: "learner" },
           csrfToken: "csrf-token",
@@ -70,13 +70,13 @@ describe("useAuth", () => {
       expect(result.current.isAuthenticated).toBe(false);
       expect(result.current.user).toBeNull();
       expect(result.current.csrfToken).toBeNull();
-      expect(sessionStorage.getItem("sprout.auth")).toBeNull();
+      expect(sessionStorage.getItem("openquiz.auth")).toBeNull();
     },
   );
 
   it("logs out when the API reports an expired authentication session", async () => {
     sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({
         user: { id: "user-id", email: "maya@example.com", role: "learner" },
         csrfToken: "csrf-token",
@@ -93,12 +93,12 @@ describe("useAuth", () => {
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.user).toBeNull();
     expect(result.current.csrfToken).toBeNull();
-    expect(sessionStorage.getItem("sprout.auth")).toBeNull();
+    expect(sessionStorage.getItem("openquiz.auth")).toBeNull();
   });
 
   it("updates the persisted CSRF token after a stale-token recovery", async () => {
     sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({
         user: { id: "user-id", email: "maya@example.com", role: "learner" },
         csrfToken: "stale-csrf-token",
@@ -110,19 +110,19 @@ describe("useAuth", () => {
 
     act(() => {
       window.dispatchEvent(
-        new CustomEvent("sprout:csrf-token-updated", { detail: { csrfToken: "fresh-csrf-token" } }),
+        new CustomEvent("openquiz:csrf-token-updated", { detail: { csrfToken: "fresh-csrf-token" } }),
       );
     });
 
     expect(result.current.csrfToken).toBe("fresh-csrf-token");
-    expect(JSON.parse(sessionStorage.getItem("sprout.auth"))).toEqual(
+    expect(JSON.parse(sessionStorage.getItem("openquiz.auth"))).toEqual(
       expect.objectContaining({ csrfToken: "fresh-csrf-token" }),
     );
   });
 
   it("synchronizes profile update events into stored auth state", async () => {
     sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({
         user: { id: "user-id", name: "Maya", email: "maya@example.com", role: "learner" },
         csrfToken: "csrf-token",
@@ -133,7 +133,7 @@ describe("useAuth", () => {
     await waitFor(() => expect(result.current.isHydrating).toBe(false));
     act(() => {
       window.dispatchEvent(
-        new CustomEvent("sprout:profile-updated", {
+        new CustomEvent("openquiz:profile-updated", {
           detail: { user: { name: "Zoe" }, avatarUrl: "https://example.com/zoe.png" },
         }),
       );
@@ -142,14 +142,14 @@ describe("useAuth", () => {
     expect(result.current.user).toEqual(
       expect.objectContaining({ name: "Zoe", avatar_url: "https://example.com/zoe.png" }),
     );
-    expect(JSON.parse(sessionStorage.getItem("sprout.auth")).user).toEqual(
+    expect(JSON.parse(sessionStorage.getItem("openquiz.auth")).user).toEqual(
       expect.objectContaining({ name: "Zoe", avatar_url: "https://example.com/zoe.png" }),
     );
   });
 
   it("preserves profile-derived stats when refreshing a password-change session", async () => {
     sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({
         user: {
           id: "user-id",
@@ -186,7 +186,7 @@ describe("useAuth", () => {
 
   it("refreshes stored profile values after learning progress changes", async () => {
     sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({
         user: { id: "user-id", email: "maya@example.com", role: "learner", streak: 0 },
         csrfToken: "csrf-token",
@@ -200,10 +200,10 @@ describe("useAuth", () => {
     });
 
     act(() => {
-      window.dispatchEvent(new Event("sprout:progress-updated"));
+      window.dispatchEvent(new Event("openquiz:progress-updated"));
     });
 
     await waitFor(() => expect(result.current.user.streak).toBe(1));
-    expect(JSON.parse(sessionStorage.getItem("sprout.auth")).user.streak).toBe(1);
+    expect(JSON.parse(sessionStorage.getItem("openquiz.auth")).user.streak).toBe(1);
   });
 });

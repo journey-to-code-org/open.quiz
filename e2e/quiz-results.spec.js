@@ -84,11 +84,12 @@ async function completeQuiz(page, choices) {
     await page.getByRole("radio", { name: choice }).click();
     await page.getByRole("button", { name: "Check answer" }).click();
     await expect(
-      page.getByAltText(
-        choice === "The correct answer" || choice === "Another correct answer"
-          ? "Correct answer"
-          : "Incorrect answer",
-      ),
+      page.getByRole("img", {
+        name:
+          choice === "The correct answer" || choice === "Another correct answer"
+            ? "Correct answer"
+            : "Incorrect answer",
+      }),
     ).toBeVisible();
 
     await page

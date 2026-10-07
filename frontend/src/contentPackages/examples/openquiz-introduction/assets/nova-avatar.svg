@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Nova avatar">
+  <circle cx="64" cy="64" r="62" fill="#d8eee5" />
+  <path d="M24 120c3-24 18-37 40-37s37 13 40 37" fill="#287a65" />
+  <path d="M37 54c0-22 12-35 29-35 19 0 29 14 27 38l-6 22H43z" fill="#243344" />
+  <ellipse cx="64" cy="58" rx="24" ry="29" fill="#b97752" />
+  <path d="M39 51c2-22 13-33 29-33 14 0 24 9 27 25-10-2-18-8-22-15-7 11-19 19-34 23" fill="#243344" />
+  <circle cx="55" cy="58" r="2" fill="#243344" />
+  <circle cx="73" cy="58" r="2" fill="#243344" />
+  <path d="M58 70q6 5 12 0" fill="none" stroke="#7d4539" stroke-linecap="round" stroke-width="2.5" />
+</svg>

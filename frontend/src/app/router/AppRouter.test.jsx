@@ -70,6 +70,6 @@ describe("AppRouter", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "Nothing sprouted here" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Page not found" })).toBeInTheDocument();
   });
 });

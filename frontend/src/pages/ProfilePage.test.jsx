@@ -37,6 +37,7 @@ describe("ProfilePage", () => {
       email: "maya@example.com",
       goals: "Build a monthly budget",
       notifications: true,
+      leaderboard_opt_in: false,
       xp: 125,
       streak: 3,
       avatar_url: null,
@@ -59,7 +60,7 @@ describe("ProfilePage", () => {
       profile = { ...profile, avatar_url: avatarUrl };
       return { message: "Avatar URL saved.", avatar_url: avatarUrl };
     });
-    window.localStorage.removeItem("sprout-quiz-feedback-preference");
+    window.localStorage.removeItem("openquiz-quiz-feedback-preference");
   });
 
   it("saves identity, goals, and preferences with refreshed values and toasts", async () => {
@@ -93,16 +94,21 @@ describe("ProfilePage", () => {
     expect(screen.getByDisplayValue("Pay off credit card debt")).toBeInTheDocument();
 
     const notifications = screen.getByRole("checkbox", { name: /Learning notifications/i });
+    const leaderboard = screen.getByRole("checkbox", { name: /Join the weekly leaderboard/i });
+    expect(leaderboard).not.toBeChecked();
     await user.click(notifications);
+    await user.click(leaderboard);
     await user.click(screen.getByRole("button", { name: "Save preferences" }));
     await waitFor(() => {
       expect(updateProfile).toHaveBeenLastCalledWith({
         notifications: false,
+        leaderboard_opt_in: true,
         csrfToken: "csrf-token",
       });
     });
     expect(await screen.findByRole("status")).toHaveTextContent("Preferences saved.");
     expect(notifications).not.toBeChecked();
+    expect(leaderboard).toBeChecked();
     expect(getProfile).toHaveBeenCalledTimes(4);
   });
 
@@ -193,7 +199,7 @@ describe("ProfilePage", () => {
     await user.click(screen.getByRole("button", { name: "Toggle" }));
 
     expect(screen.getByText("Feedback: At the end")).toBeInTheDocument();
-    expect(window.localStorage.getItem("sprout-quiz-feedback-preference")).toBe("end");
+    expect(window.localStorage.getItem("openquiz-quiz-feedback-preference")).toBe("end");
   });
 
   it("shows a retryable load error instead of placeholder profile details", async () => {

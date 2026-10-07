@@ -1,4 +1,4 @@
-const STORAGE_KEY = "sprout-quiz-feedback-preference";
+const STORAGE_KEY = "openquiz-quiz-feedback-preference";
 
 function resolveStorage(storage) {
   if (storage) return storage;

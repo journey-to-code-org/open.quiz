@@ -3,7 +3,9 @@ const { useTestDb } = require("./setup");
 const app = require("../src/app");
 const User = require("../src/models/User.model");
 const UserProgress = require("../src/models/UserProgress.model");
+const LessonModule = require("../src/models/LessonModule.model");
 const { createAuthedUser } = require("./helpers/authTestHelpers");
+const cashFlow = require("./fixtures/budgetingModule.json");
 
 useTestDb();
 
@@ -48,6 +50,7 @@ describe("onboarding API", () => {
   });
 
   it("awards 50 XP for completing every tour and does not award it again on retry", async () => {
+    await LessonModule.create(cashFlow);
     const { user, authHeader } = await createAuthedUser();
     for (const [index, tourKey] of tourKeys.entries()) {
       const result = await request(app)

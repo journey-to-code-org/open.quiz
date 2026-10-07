@@ -1,7 +1,10 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const contentDirectory = path.resolve(__dirname, "../../shared/content");
+const contentDirectory = path.resolve(
+  __dirname,
+  "../../shared/content/examples/openquiz-introduction",
+);
 
 // Discover content files dynamically so new lesson modules are covered automatically.
 const contentFiles = fs

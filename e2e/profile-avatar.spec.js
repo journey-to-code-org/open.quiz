@@ -15,7 +15,7 @@ test("saving a display name updates the header avatar", async ({ page }) => {
   // Seed the authenticated session before the app loads so the test starts on the profile page as a logged-in learner.
   await page.addInitScript((user) => {
     window.sessionStorage.setItem(
-      "sprout.auth",
+      "openquiz.auth",
       JSON.stringify({ user, csrfToken: "test-csrf-token" }),
     );
   }, profile);
@@ -60,7 +60,9 @@ test("saving a display name updates the header avatar", async ({ page }) => {
 
   await expect(avatar).toHaveText("M");
 
-  await page.getByLabel("Display Name").fill("Zoe");
+  await page
+    .getByRole("textbox", { name: "Display Name", exact: true })
+    .fill("Zoe");
   await page.getByRole("button", { name: "Save display name" }).click();
 
   await expect(page.getByText("Display name saved.")).toBeVisible();

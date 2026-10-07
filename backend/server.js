@@ -8,6 +8,9 @@ if (process.env.NODE_ENV === "production" && !process.env.JWT_SECRET) {
 const { setServers } = require("node:dns");
 const app = require("./src/app");
 const connectMongo = require("./src/config/db.mongo.js");
+const { startLeaderboardScheduler } = require("./src/jobs/leaderboardScheduler.js");
+const { ensureBundledThemes } = require("./src/services/bundledThemes.service");
+const { ensureInstructionalContent } = require("./src/services/bundledContent.service");
 
 const PORT = process.env.PORT || 8080;
 
@@ -30,13 +33,20 @@ const startServer = async () => {
     process.exit(1);
   });
 
+  await ensureBundledThemes();
+  await ensureInstructionalContent();
+  startLeaderboardScheduler();
+
   app.listen(PORT, () => {
-    console.log(`Sprout API listening on http://localhost:${PORT}`);
+    console.log(`open.quiz API listening on http://localhost:${PORT}`);
   });
 };
 
 if (process.env.NODE_ENV !== "test") {
-  startServer();
+  startServer().catch((error) => {
+    console.error("Failed to initialize the application:", error);
+    process.exit(1);
+  });
 }
 
 module.exports = { startServer };

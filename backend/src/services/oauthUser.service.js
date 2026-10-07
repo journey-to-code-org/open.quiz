@@ -77,7 +77,7 @@ const findOrCreateOAuthUser = async ({
   if (!email) {
     throw new OAuthUserError(
       "OAUTH_VERIFIED_EMAIL_REQUIRED",
-      `We need a verified email address from ${provider === "github" ? "GitHub" : "Google"} to create your Sprout account.`,
+      `We need a verified email address from ${provider === "github" ? "GitHub" : "Google"} to create your account.`,
     );
   }
 
@@ -86,7 +86,7 @@ const findOrCreateOAuthUser = async ({
     if (emailUser[providerField] && emailUser[providerField] !== normalizedProviderId) {
       throw new OAuthUserError(
         "OAUTH_IDENTITY_CONFLICT",
-        "This provider identity is already linked to a different Sprout account.",
+        "This provider identity is already linked to a different account.",
       );
     }
 
@@ -104,7 +104,7 @@ const findOrCreateOAuthUser = async ({
   }
 
   return User.create({
-    name: typeof name === "string" && name.trim() ? name.trim() : "Sprout User",
+    name: typeof name === "string" && name.trim() ? name.trim() : "Learner",
     email,
     [providerField]: normalizedProviderId,
     role: "learner",

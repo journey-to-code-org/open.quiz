@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open.quiz/schemas/openquiz-package-v1.schema.json",
+  "title": "open.quiz Portable Package",
+  "description": "A portable experience package with an optional visual theme and optional canonical lesson modules.",
+  "type": "object",
+  "required": ["schemaVersion", "package"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "package": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$"
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[\\w.-]+)?$"
+        },
+        "description": { "type": "string", "maxLength": 1000 },
+        "author": { "type": "string", "maxLength": 120 },
+        "homepage": { "type": ["string", "null"], "maxLength": 500 }
+      },
+      "additionalProperties": false
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "tokens": {
+          "type": "object",
+          "properties": {
+            "primary": { "$ref": "#/$defs/color" },
+            "primaryHover": { "$ref": "#/$defs/color" },
+            "primaryAlt": { "$ref": "#/$defs/color" },
+            "accent": { "$ref": "#/$defs/color" },
+            "success": { "$ref": "#/$defs/color" },
+            "progressStart": { "$ref": "#/$defs/color" },
+            "progressEnd": { "$ref": "#/$defs/color" },
+            "progressNearStart": { "$ref": "#/$defs/color" },
+            "progressNearEnd": { "$ref": "#/$defs/color" },
+            "progressCompleteStart": { "$ref": "#/$defs/color" },
+            "progressCompleteEnd": { "$ref": "#/$defs/color" },
+            "heading": { "$ref": "#/$defs/color" },
+            "foreground": { "$ref": "#/$defs/color" },
+            "onPrimary": { "$ref": "#/$defs/color" },
+            "surfaceApp": { "$ref": "#/$defs/color" },
+            "surfaceRaised": { "$ref": "#/$defs/color" },
+            "surfaceInset": { "$ref": "#/$defs/color" },
+            "surfaceInput": { "$ref": "#/$defs/color" },
+            "focus": { "$ref": "#/$defs/color" },
+            "learningPathSurface": { "$ref": "#/$defs/color" },
+            "learningPathText": { "$ref": "#/$defs/color" },
+            "learningPathHeading": { "$ref": "#/$defs/color" },
+            "learningPathLine": { "$ref": "#/$defs/color" },
+            "learningPathMuted": { "$ref": "#/$defs/color" },
+            "learningPathLabel": { "$ref": "#/$defs/color" },
+            "learningPathDivider": { "$ref": "#/$defs/color" },
+            "learningPathFooterSurface": { "$ref": "#/$defs/color" },
+            "learningPathFooterBorder": { "$ref": "#/$defs/color" },
+            "learningPathNodeCompleted": { "$ref": "#/$defs/color" },
+            "learningPathNodeCurrent": { "$ref": "#/$defs/color" },
+            "learningPathNodeBorder": { "$ref": "#/$defs/color" },
+            "fontHeading": { "$ref": "#/$defs/fontStack" },
+            "fontBody": { "$ref": "#/$defs/fontStack" },
+            "fontSizeH1": { "$ref": "#/$defs/fontSize" },
+            "fontSizeH2": { "$ref": "#/$defs/fontSize" },
+            "fontSizeH3": { "$ref": "#/$defs/fontSize" },
+            "fontSizeH4": { "$ref": "#/$defs/fontSize" },
+            "fontSizeBody": { "$ref": "#/$defs/fontSize" },
+            "fontSizeSmall": { "$ref": "#/$defs/fontSize" },
+            "fontSizeCaption": { "$ref": "#/$defs/fontSize" },
+            "radiusSm": { "$ref": "#/$defs/radius" },
+            "radiusMd": { "$ref": "#/$defs/radius" },
+            "radiusLg": { "$ref": "#/$defs/radius" },
+            "radiusPill": { "$ref": "#/$defs/radius" }
+          },
+          "additionalProperties": false
+        },
+        "darkTokens": {
+          "type": "object",
+          "description": "Optional color overrides used when the site is shown in dark mode. Only color tokens are allowed; fonts and radii always come from tokens.",
+          "properties": {
+            "primary": { "$ref": "#/$defs/color" },
+            "primaryHover": { "$ref": "#/$defs/color" },
+            "primaryAlt": { "$ref": "#/$defs/color" },
+            "accent": { "$ref": "#/$defs/color" },
+            "success": { "$ref": "#/$defs/color" },
+            "progressStart": { "$ref": "#/$defs/color" },
+            "progressEnd": { "$ref": "#/$defs/color" },
+            "progressNearStart": { "$ref": "#/$defs/color" },
+            "progressNearEnd": { "$ref": "#/$defs/color" },
+            "progressCompleteStart": { "$ref": "#/$defs/color" },
+            "progressCompleteEnd": { "$ref": "#/$defs/color" },
+            "heading": { "$ref": "#/$defs/color" },
+            "foreground": { "$ref": "#/$defs/color" },
+            "onPrimary": { "$ref": "#/$defs/color" },
+            "surfaceApp": { "$ref": "#/$defs/color" },
+            "surfaceRaised": { "$ref": "#/$defs/color" },
+            "surfaceInset": { "$ref": "#/$defs/color" },
+            "surfaceInput": { "$ref": "#/$defs/color" },
+            "focus": { "$ref": "#/$defs/color" },
+            "learningPathSurface": { "$ref": "#/$defs/color" },
+            "learningPathText": { "$ref": "#/$defs/color" },
+            "learningPathHeading": { "$ref": "#/$defs/color" },
+            "learningPathLine": { "$ref": "#/$defs/color" },
+            "learningPathMuted": { "$ref": "#/$defs/color" },
+            "learningPathLabel": { "$ref": "#/$defs/color" },
+            "learningPathDivider": { "$ref": "#/$defs/color" },
+            "learningPathFooterSurface": { "$ref": "#/$defs/color" },
+            "learningPathFooterBorder": { "$ref": "#/$defs/color" },
+            "learningPathNodeCompleted": { "$ref": "#/$defs/color" },
+            "learningPathNodeCurrent": { "$ref": "#/$defs/color" },
+            "learningPathNodeBorder": { "$ref": "#/$defs/color" }
+          },
+          "additionalProperties": false
+        },
+        "trail": {
+          "type": "object",
+          "description": "Learning path connectors between lesson nodes. vine is Sprout's leafy trail; dashed is the open.quiz default. Line color comes from the learningPathLine token.",
+          "properties": {
+            "style": {
+              "enum": ["vine", "dashed", "dotted", "solid", "double"]
+            },
+            "decorationCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3,
+              "description": "Decorations drawn along each connector: built-in leaves for vine, or the trailDecoration image when supplied."
+            }
+          },
+          "additionalProperties": false
+        },
+        "appName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Site name applied on activation (browser title, header, footer, alt text, manifest)."
+        },
+        "landing": {
+          "type": "object",
+          "description": "Plain-text landing page copy applied on activation. Omitted sections use defaults; an empty items list hides a section.",
+          "properties": {
+            "hero": {
+              "type": "object",
+              "properties": {
+                "heading": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "body": { "type": "string", "minLength": 1, "maxLength": 500 },
+                "showAvatars": { "type": "boolean" }
+              },
+              "required": ["heading", "body"],
+              "additionalProperties": false
+            },
+            "benefits": {
+              "$ref": "#/$defs/landingList",
+              "properties": {
+                "items": {
+                  "maxItems": 6,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "icon": { "type": "string", "maxLength": 8 },
+                      "title": { "type": "string", "maxLength": 80 },
+                      "body": { "type": "string", "maxLength": 600 }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            },
+            "steps": {
+              "$ref": "#/$defs/landingList",
+              "properties": {
+                "items": {
+                  "maxItems": 6,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": { "type": "string", "maxLength": 80 },
+                      "body": { "type": "string", "maxLength": 600 }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            },
+            "faq": {
+              "$ref": "#/$defs/landingList",
+              "properties": {
+                "items": {
+                  "maxItems": 10,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "question": { "type": "string", "maxLength": 200 },
+                      "answer": { "type": "string", "maxLength": 1200 }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "assets": {
+          "type": "object",
+          "properties": {
+            "logo": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Header wordmark. Recommend transparent PNG/WebP, 512x216, displayed at 112-144 px wide without cropping."
+            },
+            "favicon": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Browser icon. Recommend a square 64x64 or 128x128 image."
+            },
+            "hero": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Homepage illustration. Recommend 1200x800 with the subject centered; not a lesson character."
+            },
+            "progressBar": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Moving illustrated progress marker, not the full bar. Recommend a transparent square PNG/WebP at 256x256."
+            },
+            "progressFrame": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Optional progress-bar outline. Recommend transparent PNG/WebP, 900x147 (6.1:1), with a transparent center so the animated gradient shows through. Null uses the built-in outline."
+            },
+            "trailDecoration": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Optional learning path decoration repeated along each connector (for example a leaf, footprint, or star). Recommend a transparent square PNG/WebP at 128x128, drawn at about 28 CSS px and rotated to follow the trail."
+            },
+            "answerCorrect": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Mark shown beside a correctly answered quiz choice. Recommend a transparent square PNG/WebP at 128x128, drawn at 40-48 CSS px. Null uses the built-in check badge."
+            },
+            "answerIncorrect": {
+              "$ref": "#/$defs/assetKeyOrNull",
+              "description": "Mark shown beside an incorrectly answered quiz choice. Recommend a transparent square PNG/WebP at 128x128, drawn at 40-48 CSS px. Null uses the built-in cross badge."
+            },
+            "avatars": {
+              "type": "array",
+              "description": "Lesson/quiz character artwork, keyed by content characterId. Recommend transparent square PNG/WebP at 352x352 or larger. The reserved key guide supplies the default lesson guide. Images are contained, not cropped.",
+              "maxItems": 20,
+              "items": {
+                "type": "object",
+                "required": ["key", "name", "assetKey"],
+                "properties": {
+                  "key": { "$ref": "#/$defs/stableKey" },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "assetKey": { "$ref": "#/$defs/stableKey" }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/asset" }
+    },
+    "content": {
+      "type": "object",
+      "required": ["modules"],
+      "properties": {
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "title", "lessons"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "title": { "type": "string", "minLength": 1 },
+              "lessons": { "type": "array", "items": { "type": "object" } }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "manifest": {
+      "type": "object",
+      "description": "Inspection metadata. Importers recalculate counts from actual package contents.",
+      "properties": {
+        "includes": { "type": "object" },
+        "counts": { "type": "object" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "anyOf": [{ "required": ["theme"] }, { "required": ["content"] }],
+  "$defs": {
+    "landingList": {
+      "type": "object",
+      "properties": {
+        "heading": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "items": { "type": "array" }
+      },
+      "required": ["heading", "items"]
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?$"
+    },
+    "fontStack": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[\\w\\s,\\\"'-]+$"
+    },
+    "fontSize": {
+      "type": "string",
+      "pattern": "^[0-9]{1,2}(?:\\.[0-9]+)?(?:px|rem)$"
+    },
+    "radius": {
+      "type": "string",
+      "pattern": "^(?:[0-9]{1,3}px|[0-9]{1,2}(?:\\.[0-9]+)?rem|9999px)$"
+    },
+    "stableKey": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$"
+    },
+    "assetKeyOrNull": {
+      "oneOf": [{ "$ref": "#/$defs/stableKey" }, { "type": "null" }]
+    },
+    "asset": {
+      "type": "object",
+      "required": ["key", "filename", "mimeType", "data"],
+      "properties": {
+        "key": { "$ref": "#/$defs/stableKey" },
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[^/\\\\]+$"
+        },
+        "mimeType": { "enum": ["image/png", "image/jpeg", "image/webp"] },
+        "data": {
+          "type": "string",
+          "pattern": "^data:image/(?:png|jpeg|webp);base64,"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

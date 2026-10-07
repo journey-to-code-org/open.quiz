@@ -1,29 +1,30 @@
 const LessonModule = require("../models/LessonModule.model");
-const defaultModule = require("../../../shared/content/budgeting.json");
+const { isDemoMode } = require("../config/demoMode");
+
+// The daily demo reset rewrites lessons from outside this process, so demo caches expire.
+const DEMO_MODULE_CACHE_TTL_MS = 60 * 1000;
 
 let moduleCache = new Map();
 
 const getModule = async (moduleId) => {
-  if (moduleCache.has(moduleId)) {
-    return moduleCache.get(moduleId);
+  const cached = moduleCache.get(moduleId);
+  if (cached && (!isDemoMode() || Date.now() - cached.cachedAt < DEMO_MODULE_CACHE_TTL_MS)) {
+    return cached.data;
   }
 
-  const databaseModule = await LessonModule.findOne({ id: moduleId }).lean();
-  const moduleData = databaseModule
-    ? moduleId === defaultModule.id
-      ? {
-          ...databaseModule,
-          glossary: databaseModule.glossary ?? defaultModule.glossary,
-          worksCited: databaseModule.worksCited ?? defaultModule.worksCited,
-        }
-      : databaseModule
-    : moduleId === defaultModule.id
-      ? defaultModule
-      : null;
+  const moduleData = await LessonModule.findOne({ id: moduleId }).lean();
   if (moduleData) {
-    moduleCache.set(moduleId, moduleData);
+    moduleCache.set(moduleId, { data: moduleData, cachedAt: Date.now() });
+  } else {
+    moduleCache.delete(moduleId);
   }
   return moduleData;
+};
+
+const getDefaultModule = async () => {
+  const configuredModuleId = process.env.DEFAULT_MODULE_ID?.trim();
+  const query = configuredModuleId ? { id: configuredModuleId } : {};
+  return LessonModule.findOne(query).sort({ id: 1 }).lean();
 };
 
 const getLesson = async (moduleId, lessonId) => {
@@ -64,9 +65,11 @@ const sanitizeModuleData = (moduleData) => ({
 
 module.exports = {
   getModule,
+  getDefaultModule,
   getLesson,
   sanitizeLessonData,
   sanitizeModuleData,
   clearCache,
   clearModuleCache,
+  DEMO_MODULE_CACHE_TTL_MS,
 };

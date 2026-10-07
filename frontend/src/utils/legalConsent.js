@@ -1,4 +1,4 @@
-const STORAGE_KEY = "sprout-consent-preference";
+const STORAGE_KEY = "openquiz-consent-preference";
 
 // Helper function to resolve the storage object. If storage is provided, use it. If not, check if window.localStorage is available. If neither is available, return null.
 function resolveStorage(storage) {

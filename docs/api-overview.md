@@ -16,6 +16,8 @@ POST   /api/v1/users/reset-password
 GET    /api/v1/dashboard
 POST   /api/v1/dashboard/events
 
+GET    /api/v1/leaderboard
+
 GET    /api/v1/quizzes/progress
 GET    /api/v1/quizzes/attempts
 POST   /api/v1/quizzes/check
@@ -29,11 +31,44 @@ POST   /api/v1/profile/progress/reset
 POST   /api/v1/profile/password
 POST   /api/v1/profile/request-deletion
 
-GET    /api/v1/lessons/cashFlow/1.1
-GET    /api/v1/lessons/progress?moduleId=cashFlow
+GET    /api/v1/lessons/:moduleId/:lessonId
+GET    /api/v1/lessons/progress?moduleId=:moduleId
 PATCH  /api/v1/lessons/progress
 PATCH  /api/v1/lessons/progress/restart
 ```
+
+## Theme And Site Settings
+
+```text
+GET    /api/v1/theme                         public: { theme, appName, landing, colorMode }
+GET    /api/v1/admin/site-settings           { appName, landing, colorMode }
+PATCH  /api/v1/admin/site-settings           partial: { appName?, landing?, colorMode? }; null resets
+PATCH  /api/v1/admin/packages/:id/activate   { includeContent?, applySiteContent? }
+GET    /api/v1/admin/packages/:id/export?mode=theme|content|all&includeSite=true
+GET    /api/v1/admin/site-export
+```
+
+`applySiteContent` defaults to `true`: activating a theme that carries `appName` or
+`landing` copies them into the site settings. `includeSite=true` embeds the site's current
+name and landing page in an exported theme. Limits are listed in
+[themes.md](themes.md#app-name-and-landing-page).
+
+`colorMode` is `{ default: "light" | "dark" | "system", showToggle: boolean,
+togglePosition: "header" | "footer" | "bottom-right" | "bottom-left" }`. The public theme
+includes the active package's `darkTokens` when it has them. See
+[themes.md](themes.md#dark-mode).
+
+## Admin Status And Demo Mode
+
+```text
+GET    /api/v1/admin/status                  { isAdmin, userId, demoMode }
+GET    /api/v1/admin/users                   { users, page, limit, total, demoMode }
+```
+
+When `DEMO_MODE=true`, other users' `email` values are returned as `hidden in demo`, `search`
+matches names only, and user-targeted admin routes (`/admin/users/:userId/*`,
+`DELETE /admin/users/:userId`, `/admin/deletions/*/:userId`) return `403` unless `:userId`
+is the signed-in admin. See [public demo mode](development-setup.md#public-demo-mode).
 
 ## OAuth Browser Routes
 
@@ -87,9 +122,17 @@ invalidate a session.
 send `null` or an empty string to return to the initials-based avatar. File uploads are not part
 of this endpoint.
 
-## Lesson Content Fallback
+## Weekly Leaderboard
 
-MongoDB lesson modules are preferred. When no module has been seeded, dashboard and direct
-`cashFlow` lesson requests can use the bundled default Cash Flow content. Learning-path module
-discovery remains database-driven, so an unseeded learning path clearly asks an administrator to
-seed or import content.
+`GET /api/v1/leaderboard` requires authentication and returns the current UTC leaderboard week,
+the top 20 opted-in learners, and the current learner's entry separately. An opted-out learner
+receives empty rankings. Public entries contain only an internal user ID, display name, avatar URL,
+weekly XP, and rank; email addresses are never included.
+
+## Lesson Content
+
+Lesson modules are loaded from the instance database. Server startup installs the bundled
+`openQuizIntroduction` instructional module if it is missing, so a fresh installation has
+orientation lessons available immediately. Existing modules are not overwritten. Administrators
+can create or import additional modules; other example curricula under `shared/content/examples`
+are opt-in.

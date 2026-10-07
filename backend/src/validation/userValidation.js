@@ -85,7 +85,7 @@ const moduleIdSchema = Joi.string().trim().min(1).required();
 const microLessonIdSchema = Joi.string().trim().min(1);
 
 const lessonProgressSchema = Joi.object({
-  moduleId: Joi.string().trim().min(1).strict().default("cashFlow"),
+  moduleId: Joi.string().trim().min(1).strict(),
   lessonId: Joi.string().trim().min(1),
   microLessonId: microLessonIdSchema,
   currentChunkIndex: Joi.number().integer().min(0),

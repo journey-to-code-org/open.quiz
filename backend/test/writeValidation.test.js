@@ -5,7 +5,7 @@ const { useTestDb } = require("./setup");
 const app = require("../src/app");
 const User = require("../src/models/User.model");
 const LessonModule = require("../src/models/LessonModule.model");
-const budgetingModule = require("../../shared/content/budgeting.json");
+const budgetingModule = require("./fixtures/budgetingModule.json");
 const {
   registerSchema,
   passwordSchema,
@@ -339,13 +339,22 @@ describe("write endpoint input validation", () => {
 });
 
 describe("public lesson content endpoint", () => {
+  test("lists previewable modules without authentication", async () => {
+    const response = await request(app).get("/api/v1/lessons/public/modules");
+
+    expect(response.status).toBe(200);
+    expect(response.body.modules).toEqual([
+      expect.objectContaining({ id: "cashFlow", firstLessonId: "1.1" }),
+    ]);
+  });
+
   test("does not load unseeded lesson modules from repository JSON", async () => {
     const response = await request(app).get("/api/v1/lessons/public/not-seeded/1.1");
 
     expect(response.status).toBe(404);
   });
 
-  test("falls back to the bundled Cash Flow lesson when MongoDB has no seeded modules", async () => {
+  test("serves the installed finance example lesson", async () => {
     const response = await request(app).get("/api/v1/lessons/public/cashFlow/1.1");
 
     expect(response.status).toBe(200);

@@ -2,7 +2,7 @@ import Card from "../../../shared/Card/Card.component";
 import ProgressBar from "../../../shared/ProgressBar/ProgressBar.component";
 
 export default function UnitProgressRow({ unit }) {
-  const unitIcon = unit.icon || (unit.id === "cashFlow" ? "$" : unit.name.charAt(0).toUpperCase());
+  const unitIcon = unit.icon || unit.name.charAt(0).toUpperCase();
 
   return (
     <Card className="px-4 py-3 sm:px-5 sm:py-4">

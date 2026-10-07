@@ -57,15 +57,22 @@ describe("account deletion workflow", () => {
     const updateResponse = await request(app)
       .patch("/api/v1/profile")
       .set("Authorization", authorization)
-      .send({ goals: "Build a reliable monthly budget", notifications: false });
+      .send({
+        goals: "Build a reliable monthly budget",
+        notifications: false,
+        leaderboard_opt_in: true,
+      });
 
     expect(updateResponse.status).toBe(200);
     expect(updateResponse.body.user).toEqual(
       expect.objectContaining({
         goals: "Build a reliable monthly budget",
         notifications: false,
+        leaderboard_opt_in: true,
       }),
     );
+
+    expect(await User.findById(user._id)).toMatchObject({ leaderboard_opt_in: true });
 
     const unsupportedFieldResponse = await request(app)
       .patch("/api/v1/profile")
@@ -129,6 +136,7 @@ describe("account deletion workflow", () => {
 
     expect(profileResponse.status).toBe(200);
     expect(profileResponse.body.user.email).toBe(user.email);
+    expect(profileResponse.body.user.leaderboard_opt_in).toBe(false);
 
     const firstRequest = await request(app)
       .post("/api/v1/profile/request-deletion")

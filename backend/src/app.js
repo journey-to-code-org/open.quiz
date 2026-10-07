@@ -1,4 +1,6 @@
 const express = require("express");
+const fs = require("node:fs");
+const path = require("node:path");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -11,6 +13,7 @@ const errorHandlerMiddleware = require("./middleware/errorHandler");
 const notFoundMiddleware = require("./middleware/notFound");
 const { apiLimiter } = require("./middleware/rateLimiter");
 const requireAdmin = require("./middleware/requireAdmin");
+const { createSiteShellHandlers } = require("./services/siteShell.service");
 
 // Route imports
 const healthRoutes = require("./routes/health.routes");
@@ -20,11 +23,14 @@ const oauthRoutes = require("./routes/oauth.routes");
 const lessonRoutes = require("./routes/lesson.routes");
 const lessonPublicRoutes = require("./routes/lessonPublic.routes");
 const lessonImportRoutes = require("./routes/lessonImport.routes");
+const contentAssetRoutes = require("./routes/contentAsset.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
+const leaderboardRoutes = require("./routes/leaderboard.routes");
 const profileRoutes = require("./routes/profile.routes");
 const quizRoutes = require("./routes/quiz.routes");
 const quizPublicRoutes = require("./routes/quizPublic.routes");
 const onboardingRoutes = require("./routes/onboarding.routes");
+const themeRoutes = require("./routes/theme.routes");
 
 // Create Express app
 const app = express();
@@ -36,7 +42,11 @@ const parseAllowedOrigins = () => {
     .map((origin) => origin.trim())
     .filter(Boolean);
 
-  const fallbackOrigins = [process.env.CLIENT_URL, "http://localhost:5173"].filter(Boolean);
+  const fallbackOrigins = [
+    process.env.CLIENT_URL,
+    process.env.RENDER_EXTERNAL_URL,
+    "http://localhost:5173",
+  ].filter(Boolean);
 
   return [...new Set([...configuredOrigins, ...fallbackOrigins])];
 };
@@ -76,18 +86,38 @@ app.use("/api/v1/health", healthRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/lessons", lessonImportRoutes);
 app.use("/api/v1/lessons", lessonPublicRoutes);
+app.use("/api/v1/assets", contentAssetRoutes);
+app.use("/api/v1/theme", themeRoutes);
 app.use("/api/v1/lessons", jwtMiddleware, lessonRoutes);
 app.use("/api/v1/dashboard", jwtMiddleware, dashboardRoutes);
+app.use("/api/v1/leaderboard", jwtMiddleware, leaderboardRoutes);
 app.use("/api/v1/profile", jwtMiddleware, profileRoutes);
 app.use("/api/v1/quizzes", quizPublicRoutes);
 app.use("/api/v1/quizzes", jwtMiddleware, quizRoutes);
 app.use("/api/v1/onboarding", onboardingRoutes);
 app.use("/api/v1/admin", jwtMiddleware, requireAdmin, adminRoutes);
-// Root route
-app.get("/", (req, res) => {
-  // Redirect to the frontend application
-  res.redirect(process.env.CLIENT_URL);
-});
+const frontendBuildPath = path.resolve(__dirname, "../../frontend/dist");
+if (process.env.NODE_ENV === "production" && fs.existsSync(frontendBuildPath)) {
+  const siteShell = createSiteShellHandlers(frontendBuildPath);
+  app.get("/site.webmanifest", siteShell.sendManifest);
+  app.use(express.static(frontendBuildPath, { index: false }));
+  app.get(/.*/, (req, res, next) => {
+    if (
+      req.path === "/api" ||
+      req.path.startsWith("/api/") ||
+      req.path === "/health" ||
+      !req.accepts("html")
+    ) {
+      return next();
+    }
+
+    return siteShell.sendIndex(req, res, next);
+  });
+} else if (process.env.NODE_ENV !== "production") {
+  app.get("/", (req, res) => {
+    res.redirect(process.env.CLIENT_URL || "http://localhost:5173");
+  });
+}
 
 // Error Handling Middleware
 app.use(notFoundMiddleware);

@@ -2,8 +2,8 @@ const BREVO_URL = process.env.BREVO_API_URL || "https://api.brevo.com/v3/smtp/em
 
 const sendVerificationEmail = async (to, subject, text, html) => {
   const apiKey = process.env.BREVO_API_KEY;
-  const fromEmail = process.env.FROM_EMAIL || "sprout@example.com";
-  const fromName = process.env.FROM_NAME || "Sprout";
+  const fromEmail = process.env.FROM_EMAIL || "noreply@example.com";
+  const fromName = process.env.FROM_NAME || "open.quiz";
 
   if (!apiKey) {
     if (process.env.NODE_ENV !== "test") {

@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: open-quiz
+    runtime: node
+    buildCommand: npm ci --omit=dev --prefix backend && npm ci --include=dev --prefix frontend && npm run build
+    startCommand: npm run start:backend
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production

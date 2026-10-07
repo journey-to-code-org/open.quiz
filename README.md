@@ -1,18 +1,18 @@
-# Sprout
+# open.quiz
 
-**Plant your money. Watch it grow.**
+open.quiz is an open-source learning platform for creating and delivering structured lessons,
+interactive quizzes, and learner progress tracking. Content modules are managed independently from
+the core authentication, assessment, and progress services.
 
-Sprout is a friendly, gamified money-basics app for college freshmen and
-recent grads. Bite-sized lessons (3–5 min) with instant-feedback quizzes
-and a per-lesson plant-growth reward loop help first-paycheck learners
-feel in control of their money — without a lecture.
+## Project Areas
 
-## 🚀 Live Demo
-
-- **Frontend Live Site:** https://sprout-ctd.netlify.app/
-- **Frontend Repo:** https://github.com/Code-the-Dream-School/summer-26-js-practicum-team2/tree/main/frontend
-- **Backend Live Site:** https://sprout-backend-x46w.onrender.com
-- **Backend Repo:** https://github.com/Code-the-Dream-School/summer-26-js-practicum-team2/tree/main/backend
+- **Core:** accounts, roles, lesson delivery, quiz scoring, and progress.
+- **Content:** create modules in the admin area or import a package. The open.quiz instructional
+  module is installed automatically; other example curricula under `shared/content/examples`
+  remain opt-in.
+- **Presentation:** the frontend accepts instance-level app-name and theme CSS overrides.
+- **Dark mode:** every theme has a light and a dark palette. Administrators pick the default (light, dark, or follow the device) and whether learners get a light/dark toggle, and where it sits. See [dark mode](docs/themes.md#dark-mode).
+- **Portable experiences:** administrators can import and export `.openquiz.json` packages containing a runtime theme and optional canonical lesson modules. See [portable package documentation](docs/themes.md).
 
 ## 🤝 Community Standards
 
@@ -26,20 +26,11 @@ feel in control of their money — without a lecture.
 - [Content Accuracy Policy](docs/content-accuracy-policy.md)
 - [Content Accuracy Checklist](docs/content-accuracy-checklist.md)
 
-## 🧠 Problem Statement
+## Purpose
 
-Most young adults handle their first checking account, paycheck, and rent
-payment with no formal money education. Existing personal-finance apps
-either lecture, push wealth-management products, or assume the user already
-speaks fluent finance — none of which fits a college freshman or a
-first-paycheck recent grad.
-
-- **Who is this for?** Single moms (Persona A, "Working Single Mom of Two") and Freshman in College (Persona B, "College Freshman").
-- **Pain point:** They want to feel smarter about money but don't want a
-  lecture, an advisor pitch, or a 30-minute reading assignment. They want a way to learn in between classes or shifts
-- **Why this matters:** Small, confident money habits formed early
-  compound. Sprout keeps the learning loop short (3–5 min per lesson) and
-  makes the reward visible via the plant-growth mechanic.
+The platform supports different subjects and visual identities without requiring source changes for
+each curriculum. The included open.quiz orientation package demonstrates the platform; deployments
+can import their own content packages.
 
 ## 🎯 Features
 
@@ -104,6 +95,27 @@ folder and file breakdown.
 
 ## ⚙️ Setup & Installation
 
+### Deploy to Render with a Blueprint
+
+open.quiz includes a [Render Blueprint](render.yaml) for easy deployment as a single Node.js
+Web Service. No separate frontend hosting service is needed: Render installs dependencies,
+builds the Vite frontend, and starts Express, which serves both the frontend and API.
+
+1. Fork this repository if you want your own deployment and connect it to your Render account.
+2. In the Render dashboard, choose **New > Blueprint**, select the repository and branch,
+   and deploy using the included `render.yaml`.
+3. In the created service's **Environment** settings, add `MONGO_URI` and `JWT_SECRET`,
+   plus any email or OAuth credentials you use, then redeploy.
+
+The Blueprint does not provision MongoDB or prompt for these secrets. Have a production MongoDB
+database ready and allow connections from your Render service. The application cannot start
+successfully until its required environment variables are configured.
+
+See [Render deployment instructions](docs/development-setup.md#render-deployment) for details,
+manual service settings, and OAuth configuration. To host a public showcase where every visitor
+can sign in as an admin and the site resets daily, see
+[public demo mode](docs/development-setup.md#public-demo-mode).
+
 ### Quick Start
 
 ```bash
@@ -113,6 +125,13 @@ npm run dev
 
 - Frontend runs on: http://localhost:5173
 - Backend runs on: http://localhost:8080
+
+The first successful password, Google, or GitHub sign-in initializes administrator access
+on a fresh installation. Complete your own initial sign-in before opening it to the public.
+Learning Garden and Sprout are preinstalled as inactive themes; an administrator can choose
+one in the admin dashboard's **Theming** tab without finding or uploading a package. The open.quiz
+instructional lessons are installed automatically for new learners to explore. See
+[initial setup details](docs/development-setup.md#first-sign-in-and-built-in-themes).
 
 Before opening a pull request, run the full check:
 
@@ -135,7 +154,7 @@ For full setup, scripts, testing, and API details, see:
 ## 🙌 Acknowledgments
 
 - Code the Dream mentors and practicum staff for guidance and review support
-- The Sprout contributor team for collaborative design, implementation, and testing
+- Contributors for collaborative design, implementation, and testing
 - The maintainers of key open-source tools used in this project, including React, Vite, Express, MongoDB, Jest, Vitest, and Postman
 
 ## 📄 License

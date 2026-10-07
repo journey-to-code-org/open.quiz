@@ -39,6 +39,7 @@ export default function ProfilePage() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [goals, setGoals] = useState("");
   const [notifications, setNotifications] = useState(true);
+  const [leaderboardOptIn, setLeaderboardOptIn] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -68,6 +69,7 @@ export default function ProfilePage() {
     setAvatarUrl(user.avatar_url ?? "");
     setGoals(user.goals ?? "");
     setNotifications(user.notifications ?? true);
+    setLeaderboardOptIn(user.leaderboard_opt_in ?? false);
   }, []);
 
   const reloadProfile = useCallback(async () => {
@@ -316,7 +318,12 @@ export default function ProfilePage() {
         <h2 className="font-heading text-h4 font-bold text-heading">Preferences</h2>
         <form
           onSubmit={(event) =>
-            void saveProfile(event, { notifications }, "preferences", "Preferences saved.")
+            void saveProfile(
+              event,
+              { notifications, leaderboard_opt_in: leaderboardOptIn },
+              "preferences",
+              "Preferences saved.",
+            )
           }
           className="max-w-md space-y-4"
         >
@@ -332,6 +339,22 @@ export default function ProfilePage() {
               <span className="block font-semibold text-heading">Learning notifications</span>
               <span className="block text-neutral-600">
                 Receive updates about your lessons and progress.
+              </span>
+            </span>
+          </label>
+          <label className="flex items-start gap-3 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={leaderboardOptIn}
+              disabled={pending === "preferences"}
+              onChange={(event) => setLeaderboardOptIn(event.target.checked)}
+              className="mt-0.5 h-4 w-4 accent-primary"
+            />
+            <span>
+              <span className="block font-semibold text-heading">Join the weekly leaderboard</span>
+              <span className="block text-neutral-600">
+                Show your display name, avatar, weekly XP, and rank to other learners. Leave this
+                off to stay hidden and not see rankings.
               </span>
             </span>
           </label>

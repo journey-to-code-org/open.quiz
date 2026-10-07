@@ -6,9 +6,15 @@ const { useTestDb } = require("./setup");
 const app = require("../src/app");
 const User = require("../src/models/User.model");
 const UserProgress = require("../src/models/UserProgress.model");
+const LessonModule = require("../src/models/LessonModule.model");
 const { createAuthedUser } = require("./helpers/authTestHelpers");
+const cashFlow = require("./fixtures/budgetingModule.json");
 
 useTestDb();
+
+beforeEach(async () => {
+  await LessonModule.create(cashFlow);
+});
 
 describe("quiz submission grading (backend)", () => {
   it("returns the current user progress record for quiz tracking", async () => {

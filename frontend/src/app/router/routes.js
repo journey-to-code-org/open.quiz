@@ -1,3 +1,5 @@
+import { getAppName } from "../instanceTheme";
+
 export const ROUTES = {
   HOME: "/",
   LOGIN: "/login",
@@ -15,31 +17,26 @@ export const ROUTES = {
   ADMIN_DASHBOARD: "/admin/dashboard",
 };
 
-// Link target, not a <Route path> — the query string opts into the unauthenticated preview.
-export const FIRST_LESSON_LINK = "/learn/cashFlow/1.1";
-export const SAMPLE_LESSON_LINK = `${FIRST_LESSON_LINK}?sample=true`;
-
 // External link for the "Report a bug" CTA on error pages (404/500).
 export const REPORT_BUG_LINK =
   "https://github.com/Code-the-Dream-School/summer-26-js-practicum-team2/issues/new?template=bug_report.md";
 
 const TITLES = {
-  [ROUTES.HOME]: "Sprout — Counting Cents and Making Sense",
-  [ROUTES.LOGIN]: "Log in — Sprout",
-  [ROUTES.REGISTER]: "Create an account — Sprout",
-  [ROUTES.VERIFY_EMAIL]: "Verify your email — Sprout",
-  [ROUTES.OAUTH_CALLBACK]: "Signing you in — Sprout",
-  [ROUTES.PASSWORD_RESET]: "Reset your password — Sprout",
-  [ROUTES.DASHBOARD]: "Dashboard — Sprout",
-  [ROUTES.PROFILE]: "Profile — Sprout",
-  [ROUTES.LEARN]: "Learning path — Sprout",
-  [ROUTES.PRIVACY]: "Privacy policy — Sprout",
-  [ROUTES.TERMS]: "Terms of service — Sprout",
-  [ROUTES.ADMIN_DASHBOARD]: "Admin Dashboard - Sprout",
+  [ROUTES.LOGIN]: "Log in",
+  [ROUTES.REGISTER]: "Create an account",
+  [ROUTES.VERIFY_EMAIL]: "Verify your email",
+  [ROUTES.OAUTH_CALLBACK]: "Signing you in",
+  [ROUTES.PASSWORD_RESET]: "Reset your password",
+  [ROUTES.DASHBOARD]: "Dashboard",
+  [ROUTES.PROFILE]: "Profile",
+  [ROUTES.LEARN]: "Learning path",
+  [ROUTES.PRIVACY]: "Privacy policy",
+  [ROUTES.TERMS]: "Terms of service",
+  [ROUTES.ADMIN_DASHBOARD]: "Admin dashboard",
 };
 
-export function getRouteTitle(pathname) {
-  return (
-    TITLES[pathname] ?? (pathname.startsWith("/learn/") ? "Lesson — Sprout" : "Not found — Sprout")
-  );
+export function getRouteTitle(pathname, appName = getAppName()) {
+  if (pathname === ROUTES.HOME) return appName;
+  const page = TITLES[pathname] ?? (pathname.startsWith("/learn/") ? "Lesson" : "Not found");
+  return `${page} — ${appName}`;
 }

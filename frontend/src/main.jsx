@@ -6,6 +6,8 @@ import App from "./App";
 import ErrorBoundary from "./app/ErrorBoundary";
 import { AuthProvider } from "./context/AuthContext";
 
+await import("./app/instanceTheme").then(({ applyInstanceTheme }) => applyInstanceTheme());
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>
