@@ -11,6 +11,7 @@ the core authentication, assessment, and progress services.
   module is installed automatically; other example curricula under `shared/content/examples`
   remain opt-in.
 - **Presentation:** the frontend accepts instance-level app-name and theme CSS overrides.
+- **Dark mode:** every theme has a light and a dark palette. Administrators pick the default (light, dark, or follow the device) and whether learners get a light/dark toggle, and where it sits. See [dark mode](docs/themes.md#dark-mode).
 - **Portable experiences:** administrators can import and export `.openquiz.json` packages containing a runtime theme and optional canonical lesson modules. See [portable package documentation](docs/themes.md).
 
 ## 🤝 Community Standards
