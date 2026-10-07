@@ -70,7 +70,15 @@ const morganConfig = process.env.NODE_ENV === "production" ? "combined" : "dev";
 
 // Top-level middleware
 app.set("trust proxy", 1);
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "img-src": ["'self'", "data:", "https:"],
+      },
+    },
+  }),
+);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());

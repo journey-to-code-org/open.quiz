@@ -11,6 +11,7 @@ the core authentication, assessment, and progress services.
   module is installed automatically; other example curricula under `shared/content/examples`
   remain opt-in.
 - **Presentation:** the frontend accepts instance-level app-name and theme CSS overrides.
+  Administrators can also customize the site name, landing page, and theme at runtime.
 - **Dark mode:** every theme has a light and a dark palette. Administrators pick the default (light, dark, or follow the device) and whether learners get a light/dark toggle, and where it sits. See [dark mode](docs/themes.md#dark-mode).
 - **Portable experiences:** administrators can import and export `.openquiz.json` packages containing a runtime theme and optional canonical lesson modules. See [portable package documentation](docs/themes.md).
 
@@ -34,19 +35,15 @@ can import their own content packages.
 
 ## 🎯 Features
 
-- User authentication (register, login, logout)
-- CRUD operations for core resources
-- Protected routes and authorization
-- Responsive UI (mobile & desktop)
-- Form validation and error handling
-- RESTful API integration
-- XP, badges, and streak rewards
+- Password authentication with email verification, plus optional Google and GitHub sign-in
+- Structured lesson modules, guided learning paths, interactive quizzes, and glossary entries
+- Learner dashboards, progress tracking, XP, badges, streaks, and leaderboards
 - Public weekly leaderboard at `/leaderboard`, showing only opted-in learners
-
-<!--
-## 📸 Screenshots
-
-<!-- Add screenshots or GIFs of key features here. -->
+- Administrator tools for managing users, editing lessons, importing content, and customizing themes
+- Portable `.openquiz.json` packages for sharing themes and lesson modules
+- Customizable branding, landing pages, character artwork, and light/dark palettes
+- Responsive layouts for mobile and desktop
+- Optional public demo mode with administrator access for visitors and a daily reset
 
 ## 🛠 Tech Stack
 
@@ -75,17 +72,24 @@ can import their own content packages.
 - Git & GitHub
 - dotenv
 - ESLint / Prettier
+- Playwright for end-to-end, throttled-network, and latency tests
 
 ## 📁 Project Structure
 
 ```text
-summer-26-js-practicum-team2/
+open.quiz/
 ├── .github/              # GitHub configuration and community policies
 ├── backend/              # Node.js/Express API
 ├── docs/                 # Documentation and Postman resources
 ├── frontend/             # React application
-├── shared/               # Content shared across applications
+├── e2e/                  # Playwright end-to-end and latency tests
+├── instances/            # Instance-specific configuration and branding
+├── scripts/              # Instance launcher and example package tools
+├── shared/               # Content, portable packages, and JSON schemas
 ├── package.json          # Root scripts and project metadata
+├── playwright.config.js  # Browser test projects and server configuration
+├── render.yaml           # Single-service Render deployment Blueprint
+├── setup.sh              # Creates missing local environment files
 ├── CHANGELOG.md          # Record of project changes
 ├── CONTRIBUTORS.md       # Project contributors
 └── README.md             # Project overview and setup instructions
@@ -119,8 +123,21 @@ can sign in as an admin and the site resets daily, see
 
 ### Quick Start
 
+Prerequisites: **Node.js 24+**, npm, and a local or hosted MongoDB database.
+The setup script requires Bash; on Windows, run it from Git Bash or WSL.
+
 ```bash
+git clone https://github.com/journey-to-code-org/open.quiz.git
+cd open.quiz
 npm run setup
+```
+
+Before starting the app, edit `backend/.env`: configure `MONGO_URI` and replace the
+example `JWT_SECRET` with a strong secret. Configure email delivery and OAuth providers
+as needed; never commit credentials. The setup script preserves existing environment files.
+See [environment setup](docs/development-setup.md#environment-setup) for details.
+
+```bash
 npm run dev
 ```
 
