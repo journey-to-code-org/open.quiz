@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- --- -->
 
+## [1.4.1] - 2026-10-06
+
+### Added
+
+- Added dark mode to the default theme, Learning Garden, and Sprout. Every theme now has a light and a dark palette; packages can include an optional `theme.darkTokens` section (colors only). Colors a theme leaves out use built-in dark defaults, and gray borders and muted text follow the dark palette.
+- Added **Light and dark mode** site settings under **Theming → Site name and landing page**. Administrators choose the default (light, dark, or each visitor's device setting), whether learners see a light/dark toggle, and where it appears: header, footer, bottom right, or bottom left. A learner's choice is remembered in their browser. These are site settings, so they stay the same when the active theme changes. `/theme` and `/admin/site-settings` include `colorMode`.
+- Added a **Light mode colors / Dark mode colors** switch to the theme customizer. The preview shows the palette being edited, contrast warnings are labeled per mode, and saved or downloaded themes include the dark palette.
+- Bundled Sprout (v1.6.0) and Learning Garden (v1.3.0) now ship green dark palettes. Existing installs get them at startup.
+
+### Changed
+
+- New sites start in light mode with the learner toggle in the header.
+- In dark mode, logos are shown with their lightness flipped so dark logos (such as Sprout's) stay visible on dark headers.
+- Replaced hard-coded light colors in buttons, toasts, modals, onboarding, callouts, knowledge checks, and lesson text with theme colors so they adapt to dark mode.
+
+---
+
 ## [1.4.0] - 2026-10-06
 
 ### Added

@@ -40,9 +40,9 @@ PATCH  /api/v1/lessons/progress/restart
 ## Theme And Site Settings
 
 ```text
-GET    /api/v1/theme                         public: { theme, appName, landing }
-GET    /api/v1/admin/site-settings           { appName, landing }
-PATCH  /api/v1/admin/site-settings           partial: { appName?, landing? }; null resets
+GET    /api/v1/theme                         public: { theme, appName, landing, colorMode }
+GET    /api/v1/admin/site-settings           { appName, landing, colorMode }
+PATCH  /api/v1/admin/site-settings           partial: { appName?, landing?, colorMode? }; null resets
 PATCH  /api/v1/admin/packages/:id/activate   { includeContent?, applySiteContent? }
 GET    /api/v1/admin/packages/:id/export?mode=theme|content|all&includeSite=true
 GET    /api/v1/admin/site-export
@@ -52,6 +52,11 @@ GET    /api/v1/admin/site-export
 `landing` copies them into the site settings. `includeSite=true` embeds the site's current
 name and landing page in an exported theme. Limits are listed in
 [themes.md](themes.md#app-name-and-landing-page).
+
+`colorMode` is `{ default: "light" | "dark" | "system", showToggle: boolean,
+togglePosition: "header" | "footer" | "bottom-right" | "bottom-left" }`. The public theme
+includes the active package's `darkTokens` when it has them. See
+[themes.md](themes.md#dark-mode).
 
 ## Admin Status And Demo Mode
 
