@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
+import learningGarden from "../../../../../shared/packages/examples/learning-garden.openquiz.json";
+import sprout from "../../../../../shared/packages/examples/sprout.openquiz.json";
 import {
+  COLOR_TOKEN_NAMES,
+  DEFAULT_DARK_THEME_TOKENS,
   DEFAULT_THEME_TOKENS,
   PALETTES,
   SHAPE_PRESETS,
@@ -26,6 +30,33 @@ describe("themeBuilder", () => {
     expect(contrastWarnings({ ...DEFAULT_THEME_TOKENS, onPrimary: "#3060a0" })[0]).toMatch(
       /Text on primary buttons/,
     );
+  });
+
+  it("ships readable dark palettes for the default and bundled themes", () => {
+    expect(contrastWarnings(DEFAULT_DARK_THEME_TOKENS)).toEqual([]);
+    for (const pkg of [learningGarden, sprout]) {
+      expect(contrastWarnings({ ...DEFAULT_DARK_THEME_TOKENS, ...pkg.theme.darkTokens })).toEqual(
+        [],
+      );
+      expect(
+        Object.keys(pkg.theme.darkTokens).every((name) => COLOR_TOKEN_NAMES.includes(name)),
+      ).toBe(true);
+    }
+    expect(COLOR_TOKEN_NAMES.some((name) => name.startsWith("font"))).toBe(false);
+  });
+
+  it("packages only color tokens in the dark palette", () => {
+    const pkg = buildThemePackage({
+      id: "custom-dark",
+      name: "Dark",
+      tokens: DEFAULT_THEME_TOKENS,
+      darkTokens: { ...DEFAULT_DARK_THEME_TOKENS, fontBody: "serif" },
+      trail: { style: "dashed" },
+    });
+    expect(pkg.theme.darkTokens).toEqual(DEFAULT_DARK_THEME_TOKENS);
+    expect(
+      buildThemePackage({ id: "x", name: "x", tokens: DEFAULT_THEME_TOKENS }).theme,
+    ).not.toHaveProperty("darkTokens");
   });
 
   it("only uses supported palette tokens", () => {

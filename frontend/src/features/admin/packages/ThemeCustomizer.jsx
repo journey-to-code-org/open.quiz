@@ -7,6 +7,7 @@ import ThemePreview from "./ThemePreview";
 import {
   COLOR_GROUPS,
   DECORATION_SPEC,
+  DEFAULT_DARK_THEME_TOKENS,
   DEFAULT_THEME_TOKENS,
   FONT_PAIRS,
   FRAME_SPEC,
@@ -41,6 +42,7 @@ function initialState(site = {}) {
     landing: null,
     includeLanding: true,
     tokens: { ...DEFAULT_THEME_TOKENS },
+    darkTokens: { ...DEFAULT_DARK_THEME_TOKENS },
     trail: { style: "dashed", decorationCount: null },
     marker: { type: "builtin", preset: "star", src: null },
     decoration: { type: "none", preset: "leaf", src: null },
@@ -60,6 +62,7 @@ function stateFromInstalled(installed, site = {}) {
     appName: preview.appName || site.appName || "",
     landing: preview.landing || null,
     tokens: { ...DEFAULT_THEME_TOKENS, ...(preview.tokens || {}) },
+    darkTokens: { ...DEFAULT_DARK_THEME_TOKENS, ...(preview.darkTokens || {}) },
     trail: {
       style: preview.trail?.style || "dashed",
       decorationCount: Number.isInteger(preview.trail?.decorationCount)
@@ -165,14 +168,21 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
   const site = siteSettings || {};
   const [state, setState] = useState(() => initialState(site));
   const [baseId, setBaseId] = useState("default");
+  const [editMode, setEditMode] = useState("light");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
 
   const themePackages = packages.filter((item) => item.themePreview);
   const update = (patch) => setState((current) => ({ ...current, ...patch }));
+  const paletteKey = editMode === "dark" ? "darkTokens" : "tokens";
+  const paletteDefaults = editMode === "dark" ? DEFAULT_DARK_THEME_TOKENS : DEFAULT_THEME_TOKENS;
+  const editedTokens = state[paletteKey];
   const setToken = (token, value) =>
-    setState((current) => ({ ...current, tokens: { ...current.tokens, [token]: value } }));
+    setState((current) => ({
+      ...current,
+      [paletteKey]: { ...current[paletteKey], [token]: value },
+    }));
   const setImage = (slot, value) =>
     setState((current) => ({ ...current, images: { ...current.images, [slot]: value } }));
 
@@ -198,7 +208,15 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
       : state.decoration.type === "image"
         ? state.decoration.src
         : null;
-  const warnings = useMemo(() => contrastWarnings(state.tokens), [state.tokens]);
+  const warnings = useMemo(
+    () => [
+      ...contrastWarnings(state.tokens).map((warning) => `Light: ${warning}`),
+      ...contrastWarnings(state.darkTokens).map((warning) => `Dark: ${warning}`),
+    ],
+    [state.tokens, state.darkTokens],
+  );
+  const previewTokens =
+    editMode === "dark" ? { ...state.tokens, ...state.darkTokens } : state.tokens;
   const fontPair = FONT_PAIRS.find(
     (pair) =>
       pair.fontHeading === state.tokens.fontHeading && pair.fontBody === state.tokens.fontBody,
@@ -237,6 +255,7 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
       name: state.name,
       description: state.description,
       tokens: state.tokens,
+      darkTokens: state.darkTokens,
       trail: state.trail,
       images,
       avatars,
@@ -383,7 +402,45 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
             </label>
           </fieldset>
 
-          <fieldset className="space-y-3">
+          <div className="space-y-2">
+            <div
+              className="inline-flex rounded-md border border-neutral-300 p-1"
+              role="group"
+              aria-label="Palette to edit"
+            >
+              {[
+                ["light", "Light mode colors"],
+                ["dark", "Dark mode colors"],
+              ].map(([mode, label]) => (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={editMode === mode}
+                  onClick={() => setEditMode(mode)}
+                  className={`rounded px-3 py-1.5 text-sm font-semibold ${
+                    editMode === mode ? "bg-primary text-on-primary" : "text-heading"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="text-sm text-foreground">
+              Every theme has both palettes. Learners see the dark one when the site is in dark
+              mode; choose the default and the learner toggle under Site name and landing page.
+            </p>
+          </div>
+
+          {editMode === "dark" ? (
+            <Button
+              variant="secondary"
+              onClick={() => update({ darkTokens: { ...DEFAULT_DARK_THEME_TOKENS } })}
+            >
+              Reset dark colors to the defaults
+            </Button>
+          ) : null}
+
+          <fieldset className={editMode === "dark" ? "hidden" : "space-y-3"}>
             <legend className="mb-2 font-semibold text-heading">Palette</legend>
             <div className="flex flex-wrap gap-2">
               {PALETTES.map((palette) => {
@@ -412,7 +469,7 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
                       {["primary", "primaryAlt", "accent", "surfaceApp"].map((token) => (
                         <span
                           key={token}
-                          className="-ml-1 h-4 w-4 rounded-full border border-white first:ml-0"
+                          className="-ml-1 h-4 w-4 rounded-full border border-surface-raised first:ml-0"
                           style={{ backgroundColor: swatch[token] }}
                         />
                       ))}
@@ -429,7 +486,9 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
 
           {COLOR_GROUPS.map((group) => (
             <fieldset key={group.label} className="space-y-2">
-              <legend className="mb-2 font-semibold text-heading">{group.label} colors</legend>
+              <legend className="mb-2 font-semibold text-heading">
+                {group.label} colors{editMode === "dark" ? " (dark mode)" : ""}
+              </legend>
               <div className="grid gap-2 sm:grid-cols-2">
                 {group.tokens.map(([token, label]) => (
                   <label key={token} className="flex items-center gap-2 text-sm">
@@ -438,14 +497,14 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
                       aria-label={label}
                       className="h-8 w-10 cursor-pointer rounded border border-neutral-300"
                       value={
-                        /^#[\da-f]{6}$/i.test(state.tokens[token] || "")
-                          ? state.tokens[token]
-                          : DEFAULT_THEME_TOKENS[token]
+                        /^#[\da-f]{6}$/i.test(editedTokens[token] || "")
+                          ? editedTokens[token]
+                          : paletteDefaults[token]
                       }
                       onChange={(event) => setToken(token, event.target.value)}
                     />
                     <span>{label}</span>
-                    <code className="ml-auto text-xs text-foreground">{state.tokens[token]}</code>
+                    <code className="ml-auto text-xs text-foreground">{editedTokens[token]}</code>
                   </label>
                 ))}
               </div>
@@ -679,7 +738,8 @@ export default function ThemeCustomizer({ csrfToken, packages = [], siteSettings
         <div className="space-y-4 xl:sticky xl:top-4 xl:self-start">
           <ThemePreview
             name={state.name}
-            tokens={state.tokens}
+            tokens={previewTokens}
+            colorMode={editMode}
             trail={state.trail}
             logo={state.images.logo}
             progressBar={markerSrc}

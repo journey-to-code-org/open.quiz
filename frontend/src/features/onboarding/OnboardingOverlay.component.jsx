@@ -52,7 +52,7 @@ export default function OnboardingOverlay({
       )}
 
       {showTourPopup && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-sm rounded-xl border border-neutral-200 bg-white p-5 shadow-2xl animate-fade-in">
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm rounded-xl border border-neutral-200 bg-surface-raised p-5 shadow-2xl animate-fade-in">
           <div className="flex items-center gap-2">
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
               {currentStep + 1}

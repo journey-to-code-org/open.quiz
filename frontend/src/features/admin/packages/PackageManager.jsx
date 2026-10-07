@@ -460,7 +460,7 @@ export default function PackageManager({ csrfToken, modules = [], onModulesChang
                       <img
                         src={installed.themePreview.assets.logo}
                         alt=""
-                        className="h-10 max-w-32 object-contain"
+                        className="h-10 max-w-32 object-contain dark:hue-rotate-180 dark:invert"
                       />
                     ) : null}
                     <div className="flex gap-2" aria-label={`${installed.name} color preview`}>

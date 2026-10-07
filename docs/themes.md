@@ -115,6 +115,43 @@ changes. Activating a theme that includes `appName` or `landing` copies them int
 settings unless the administrator clears **Use this theme's app name and landing page**.
 Sprout ships its original name and landing copy this way.
 
+### Dark Mode
+
+Every theme, including the built-in default, has a light and a dark palette. A package can
+supply its dark palette in `theme.darkTokens`, which accepts the same color token names as
+`tokens` (colors only; fonts, sizes, and radii are shared with light mode):
+
+```json
+"theme": {
+  "tokens": { "primary": "#14866d", "surfaceApp": "#f2fbf8" },
+  "darkTokens": { "primary": "#3cc8a5", "surfaceApp": "#0b1a17", "heading": "#c8f2e4" }
+}
+```
+
+Colors missing from `darkTokens` fall back to the built-in dark defaults, so a theme with no
+`darkTokens` still gets a readable dark mode. Learning Garden and Sprout ship tuned green
+dark palettes; existing installations are backfilled at startup. Neutral grays are derived
+from the dark background and text colors, so gray borders and muted text follow the theme.
+
+In dark mode the header logo is shown with its lightness flipped (`invert` plus a 180°
+hue rotation), so a dark logo drawn for light backgrounds stays visible and brand hues are
+roughly preserved.
+
+The theme customizer has a **Light mode colors / Dark mode colors** switch. The preview
+shows whichever palette is being edited, and contrast warnings are labeled per mode.
+
+Whether visitors see light or dark is a site setting, not part of a theme, and it persists
+across theme changes. Under **Site name and landing page → Light and dark mode**, an
+administrator chooses:
+
+- the default: **Light**, **Dark**, or **Follow each visitor's device setting**;
+- whether learners get a light/dark toggle; and
+- where the toggle sits: the header next to the menu, the footer, or floating at the
+  bottom right or bottom left.
+
+A learner's toggle choice is saved in their browser and overrides the site default until
+they change it. When the toggle is hidden, everyone sees the site default.
+
 ### Image Slots And Authoring Specifications
 
 Use the [package JSON Schema](../shared/schemas/openquiz-package.schema.json) in your editor

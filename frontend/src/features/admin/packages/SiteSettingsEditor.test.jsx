@@ -55,6 +55,29 @@ describe("SiteSettingsEditor", () => {
     expect(landing.benefits.items).toEqual(DEFAULT_LANDING.benefits.items);
   });
 
+  it("saves the color mode default and learner toggle", async () => {
+    updateAdminSiteSettings.mockImplementation(async ({ colorMode }) => ({
+      appName: null,
+      landing: null,
+      colorMode,
+    }));
+    render(<SiteSettingsEditor csrfToken="csrf" settings={{ appName: null, landing: null }} />);
+    fireEvent.click(screen.getByLabelText("Follow each visitor's device setting"));
+    fireEvent.change(screen.getByLabelText("Toggle position"), {
+      target: { value: "bottom-left" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Save color mode" }));
+    await waitFor(() =>
+      expect(updateAdminSiteSettings).toHaveBeenCalledWith({
+        colorMode: { default: "system", showToggle: true, togglePosition: "bottom-left" },
+        csrfToken: "csrf",
+      }),
+    );
+    expect(await screen.findByRole("status")).toHaveTextContent("Color mode saved.");
+    fireEvent.click(screen.getByLabelText(/Show a light\/dark toggle/));
+    expect(screen.getByLabelText("Toggle position")).toBeDisabled();
+  });
+
   it("resets a customized landing page", async () => {
     render(
       <SiteSettingsEditor

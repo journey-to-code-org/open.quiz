@@ -15,6 +15,7 @@ useTestDb();
 
 const ADMIN = "/api/v1/admin";
 const frontendRoot = path.join(__dirname, "..", "..", "frontend");
+const defaultColorMode = { default: "light", showToggle: true, togglePosition: "header" };
 const landing = {
   hero: { heading: "Grow", body: "Line one\nLine two", showAvatars: false },
   faq: { heading: "Questions", items: [{ question: "Free?", answer: "Yes" }] },
@@ -58,7 +59,11 @@ beforeEach(async () => {
 
 describe("site settings", () => {
   test("start empty and validate updates", async () => {
-    expect((await get(`${ADMIN}/site-settings`)).body).toEqual({ appName: null, landing: null });
+    expect((await get(`${ADMIN}/site-settings`)).body).toEqual({
+      appName: null,
+      landing: null,
+      colorMode: defaultColorMode,
+    });
     const invalid = [
       {},
       { appName: "x".repeat(61) },
@@ -66,6 +71,11 @@ describe("site settings", () => {
       { landing: { hero: { heading: "x".repeat(121), body: "ok" } } },
       { landing: { hero: { heading: "Only a heading" } } },
       { landing: { unknown: {} } },
+      { colorMode: { default: "sepia" } },
+      { colorMode: { showToggle: "yes" } },
+      { colorMode: { togglePosition: "top" } },
+      { colorMode: { default: "dark", extra: true } },
+      { colorMode: "dark" },
       {
         landing: {
           faq: {
@@ -93,7 +103,43 @@ describe("site settings", () => {
     expect(theme.landing.faq.items[0].question).toBe("Free?");
 
     const reset = (await patch(`${ADMIN}/site-settings`, { appName: "", landing: null })).body;
-    expect(reset).toEqual({ appName: null, landing: null });
+    expect(reset).toEqual({ appName: null, landing: null, colorMode: defaultColorMode });
+  });
+
+  test("store the color mode default and learner toggle", async () => {
+    const saved = (
+      await patch(`${ADMIN}/site-settings`, {
+        colorMode: { default: "system", togglePosition: "bottom-left" },
+      })
+    ).body;
+    expect(saved.colorMode).toEqual({
+      default: "system",
+      showToggle: true,
+      togglePosition: "bottom-left",
+    });
+    expect((await request(app).get("/api/v1/theme")).body.colorMode).toEqual(saved.colorMode);
+
+    await patch(`${ADMIN}/packages/sprout/activate`);
+    const theme = (await request(app).get("/api/v1/theme")).body;
+    expect(theme.colorMode.default).toBe("system");
+    expect(theme.theme.darkTokens.surfaceApp).toMatch(/^#[\da-f]{6}$/i);
+    expect(theme.theme.darkTokens).not.toHaveProperty("fontBody");
+
+    const reset = (await patch(`${ADMIN}/site-settings`, { colorMode: null })).body;
+    expect(reset.colorMode).toEqual(defaultColorMode);
+  });
+
+  test("dark palettes accept colors only", () => {
+    const pkg = (darkTokens) => ({
+      schemaVersion: 1,
+      package: { id: "dark-test", name: "Dark test", version: "1.0.0" },
+      theme: { tokens: { primary: "#112233" }, darkTokens },
+    });
+    expect(() => validateOpenQuizPackage(pkg({ primary: "#3cc9a5" }))).not.toThrow();
+    expect(() => validateOpenQuizPackage(pkg({ fontBody: "serif" }))).toThrow();
+    expect(() => validateOpenQuizPackage(pkg({ primary: "red; background: url(x)" }))).toThrow();
+    expect(() => validateOpenQuizPackage(pkg({ unknown: "#ffffff" }))).toThrow();
+    expect(() => validateOpenQuizPackage(pkg([]))).toThrow();
   });
 
   test("theme activation applies packaged branding unless declined", async () => {
@@ -144,6 +190,11 @@ describe("site settings", () => {
     expect(sprout.theme.tokens.learningPathNodeCurrent).toBe("#18816a");
     expect(sprout.theme.tokens.learningPathMuted).toBe("#3f6b60");
     expect(sprout.theme.tokens.learningPathFooterSurface).toBe("#123456");
+
+    await OpenQuizPackage.updateOne({ packageId: "sprout" }, { $unset: { "theme.darkTokens": 1 } });
+    await ensureBundledThemes();
+    const restored = await OpenQuizPackage.findOne({ packageId: "sprout" }).lean();
+    expect(restored.theme.darkTokens.surfaceApp).toBe("#0b1a17");
   });
 
   test("exports carry site branding and round-trip through import", async () => {

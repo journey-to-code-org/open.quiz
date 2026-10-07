@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { applyInstanceTheme, DEFAULT_APP_NAME } from "../../../app/instanceTheme";
+import { normalizeColorModeSettings } from "../../../app/colorMode";
 import { DEFAULT_LANDING, LANDING_LIMITS, resolveLanding } from "../../../app/landingContent";
 import { updateAdminSiteSettings } from "../../../services/api";
 import Button from "../../../shared/Button/Button.component";
@@ -37,6 +38,18 @@ const LIST_SECTIONS = [
     ],
     empty: { question: "", answer: "" },
   },
+];
+
+const COLOR_MODE_OPTIONS = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "Follow each visitor's device setting" },
+];
+const TOGGLE_POSITION_OPTIONS = [
+  { value: "header", label: "Header, next to the menu" },
+  { value: "footer", label: "Footer" },
+  { value: "bottom-right", label: "Floating, bottom right" },
+  { value: "bottom-left", label: "Floating, bottom left" },
 ];
 
 let nextItemKey = 0;
@@ -191,6 +204,7 @@ function toPayload(landing) {
 export default function SiteSettingsEditor({ csrfToken, settings, onSaved }) {
   const [appName, setAppName] = useState(settings?.appName || "");
   const [landing, setLanding] = useState(() => editableLanding(settings?.landing));
+  const [colorMode, setColorMode] = useState(() => normalizeColorModeSettings(settings?.colorMode));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -203,6 +217,7 @@ export default function SiteSettingsEditor({ csrfToken, settings, onSaved }) {
       const saved = await updateAdminSiteSettings({ ...body, csrfToken });
       setAppName(saved.appName || "");
       setLanding(editableLanding(saved.landing));
+      setColorMode(normalizeColorModeSettings(saved.colorMode));
       await applyInstanceTheme();
       await onSaved?.(saved);
       setStatus(successMessage);
@@ -262,6 +277,66 @@ export default function SiteSettingsEditor({ csrfToken, settings, onSaved }) {
         </div>
         <Button type="submit" variant="primary" disabled={busy}>
           Save app name
+        </Button>
+      </form>
+
+      <form
+        className="space-y-3 rounded-md border border-neutral-200 p-3"
+        aria-labelledby="site-color-mode-heading"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void save({ colorMode }, "Color mode saved.");
+        }}
+      >
+        <div>
+          <h4 id="site-color-mode-heading" className="font-semibold text-heading">
+            Light and dark mode
+          </h4>
+          <p className="text-sm text-foreground">
+            Every theme has a light and a dark palette. Edit the dark palette in the theme
+            customizer.
+          </p>
+        </div>
+        <fieldset className="space-y-1 text-sm">
+          <legend className="font-semibold text-heading">Default appearance</legend>
+          {COLOR_MODE_OPTIONS.map((option) => (
+            <label key={option.value} className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="site-color-mode-default"
+                value={option.value}
+                checked={colorMode.default === option.value}
+                onChange={() => setColorMode({ ...colorMode, default: option.value })}
+              />
+              {option.label}
+            </label>
+          ))}
+        </fieldset>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={colorMode.showToggle}
+            onChange={(event) => setColorMode({ ...colorMode, showToggle: event.target.checked })}
+          />
+          Show a light/dark toggle so learners can choose for themselves
+        </label>
+        <label className="block max-w-sm space-y-1 text-sm">
+          <span className="block font-semibold text-heading">Toggle position</span>
+          <select
+            className={inputClass}
+            value={colorMode.togglePosition}
+            disabled={!colorMode.showToggle}
+            onChange={(event) => setColorMode({ ...colorMode, togglePosition: event.target.value })}
+          >
+            {TOGGLE_POSITION_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <Button type="submit" variant="primary" disabled={busy}>
+          Save color mode
         </Button>
       </form>
 

@@ -3,7 +3,7 @@ import { useEffect, useId, useRef } from "react";
 const variantStyles = {
   default: {
     dialog:
-      "max-w-xl rounded-3xl border border-neutral-200 bg-surface-app text-foreground shadow-xl backdrop:bg-neutral-800/50",
+      "max-w-xl rounded-3xl border border-neutral-200 bg-surface-app text-foreground shadow-xl backdrop:bg-black/50",
     header: "flex items-start justify-between gap-4 border-b border-neutral-200 px-6 py-6",
     title: "font-heading text-h4 font-bold text-heading",
     description: "mt-1 text-small text-neutral-600",
@@ -15,7 +15,7 @@ const variantStyles = {
   },
   postIt: {
     dialog:
-      "animate-post-it-pop max-w-sm -rotate-1 rounded-[0.25rem] border border-post-it-border bg-post-it text-post-it-text shadow-[var(--shadow-post-it)] backdrop:bg-neutral-800/40",
+      "animate-post-it-pop max-w-sm -rotate-1 rounded-[0.25rem] border border-post-it-border bg-post-it text-post-it-text shadow-[var(--shadow-post-it)] backdrop:bg-black/40",
     header: "flex items-start justify-between gap-3 px-5 pb-2 pt-8",
     title: "font-heading text-h4 font-bold text-post-it-text",
     description: "mt-1 text-small text-post-it-muted",

@@ -5,7 +5,7 @@ function Callout({ content }) {
         Key Takeaway
       </div>
 
-      <p className="text-lg font-medium text-slate-800">{content.text}</p>
+      <p className="text-lg font-medium text-heading">{content.text}</p>
     </div>
   );
 }

@@ -6,8 +6,10 @@ const OpenQuizPackage = require("../models/OpenQuizPackage.model");
 const ThemeConfiguration = require("../models/ThemeConfiguration.model");
 const { clearModuleCache } = require("../utils/content");
 const {
+  DEFAULT_COLOR_MODE,
   THEME_ASSET_SLOTS,
   normalizeAppName,
+  normalizeColorMode,
   normalizeLanding,
   validateOpenQuizPackage,
 } = require("../services/openQuizPackage");
@@ -18,6 +20,11 @@ const {
 
 const assetUrl = (assetId) => `/api/v1/assets/${encodeURIComponent(assetId)}`;
 const deepCopy = (value) => JSON.parse(JSON.stringify(value));
+const siteSettingsFrom = (configuration) => ({
+  appName: configuration?.appName || null,
+  landing: configuration?.landing || null,
+  colorMode: { ...DEFAULT_COLOR_MODE, ...(configuration?.colorMode || {}) },
+});
 
 function getPackageAssetKeys(pkg, includeTheme, includeContent) {
   const keys = new Set();
@@ -76,6 +83,7 @@ function toPublicTheme(installedPackage) {
       name: installedPackage.name,
       version: installedPackage.version,
       tokens: installedPackage.theme.tokens || {},
+      darkTokens: installedPackage.theme.darkTokens || {},
       trail: installedPackage.theme.trail || {},
       assets,
     },
@@ -85,7 +93,7 @@ function toPublicTheme(installedPackage) {
 exports.getPublicTheme = async (_req, res, next) => {
   try {
     const active = await ThemeConfiguration.findOne({ key: "active" }).lean();
-    const site = { appName: active?.appName || null, landing: active?.landing || null };
+    const site = siteSettingsFrom(active);
     if (!active?.activePackageId) return res.status(StatusCodes.OK).json({ theme: null, ...site });
     const installedPackage = await OpenQuizPackage.findOne({
       packageId: active.activePackageId,
@@ -99,9 +107,7 @@ exports.getPublicTheme = async (_req, res, next) => {
 exports.getSiteSettings = async (_req, res, next) => {
   try {
     const active = await ThemeConfiguration.findOne({ key: "active" }).lean();
-    return res
-      .status(StatusCodes.OK)
-      .json({ appName: active?.appName || null, landing: active?.landing || null });
+    return res.status(StatusCodes.OK).json(siteSettingsFrom(active));
   } catch (error) {
     return next(error);
   }
@@ -120,19 +126,20 @@ exports.updateSiteSettings = async (req, res, next) => {
     if (req.body && Object.hasOwn(req.body, "landing")) {
       update.landing = req.body.landing === null ? null : normalizeLanding(req.body.landing);
     }
+    if (req.body && Object.hasOwn(req.body, "colorMode")) {
+      update.colorMode =
+        req.body.colorMode === null ? null : normalizeColorMode(req.body.colorMode);
+    }
     if (!Object.keys(update).length)
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Provide an app name or landing page settings to update." });
+        .json({ message: "Provide an app name, landing page, or color mode settings to update." });
     const configuration = await ThemeConfiguration.findOneAndUpdate(
       { key: "active" },
       { $set: update },
       { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
     ).lean();
-    return res.status(StatusCodes.OK).json({
-      appName: configuration.appName || null,
-      landing: configuration.landing || null,
-    });
+    return res.status(StatusCodes.OK).json(siteSettingsFrom(configuration));
   } catch (error) {
     if (error.status === StatusCodes.BAD_REQUEST)
       return res.status(error.status).json({ message: error.message });
@@ -192,7 +199,11 @@ exports.inspectPackage = async (req, res, next) => {
       manifest: portable.manifest,
       conflicts: conflicts.map(({ id, title }) => ({ id, title })),
       theme: portable.theme
-        ? { tokens: portable.theme.tokens || {}, assets: portable.theme.assets || {} }
+        ? {
+            tokens: portable.theme.tokens || {},
+            darkTokens: portable.theme.darkTokens || {},
+            assets: portable.theme.assets || {},
+          }
         : null,
     });
   } catch (error) {

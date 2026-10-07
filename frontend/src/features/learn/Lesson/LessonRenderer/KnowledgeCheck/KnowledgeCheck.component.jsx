@@ -17,7 +17,7 @@ function KnowledgeCheck({ content }) {
           <button
             key={choice.key}
             className={`block w-full rounded-lg border p-3 text-left ${
-              selectedAnswer === choice.key ? "border-primary bg-primary/10" : "border-slate-300"
+              selectedAnswer === choice.key ? "border-primary bg-primary/10" : "border-neutral-300"
             }`}
             onClick={() => setSelectedAnswer(choice.key)}
           >
@@ -32,7 +32,7 @@ function KnowledgeCheck({ content }) {
         </Button>
       ) : (
         <div className="space-y-2">
-          <p className={isCorrect ? "text-green-600" : "text-red-600"}>
+          <p className={isCorrect ? "text-success" : "text-danger"}>
             {isCorrect ? "✅ Correct!" : "❌ Not quite."}
           </p>
 

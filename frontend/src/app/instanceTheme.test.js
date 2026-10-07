@@ -1,10 +1,19 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { applyInstanceTheme, getRuntimeTheme, resolveRuntimeAssetUrl } from "./instanceTheme";
+import {
+  applyInstanceTheme,
+  getColorModeState,
+  getRuntimeTheme,
+  resolveRuntimeAssetUrl,
+  setColorModePreference,
+} from "./instanceTheme";
 
 describe("runtime instance theme", () => {
   afterEach(() => {
     document.documentElement.removeAttribute("style");
+    document.documentElement.removeAttribute("data-color-mode");
     document.querySelector('link[rel="icon"]')?.remove();
+    localStorage.clear();
+    setColorModePreference(null);
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
@@ -56,5 +65,58 @@ describe("runtime instance theme", () => {
 
     expect(document.documentElement.style.getPropertyValue("--instance-primary")).toBe("#315f9e");
     expect(getRuntimeTheme()).toBeNull();
+  });
+
+  it("paints the dark palette and keeps fonts from the light tokens", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          colorMode: { default: "dark", showToggle: true, togglePosition: "footer" },
+          theme: {
+            tokens: { primary: "#18816a", fontBody: '"Poppins", sans-serif' },
+            darkTokens: { primary: "#3cc9a5", fontBody: "serif" },
+          },
+        }),
+      }),
+    );
+
+    await applyInstanceTheme();
+
+    const root = document.documentElement;
+    expect(root.dataset.colorMode).toBe("dark");
+    expect(root.style.colorScheme).toBe("dark");
+    expect(root.style.getPropertyValue("--instance-primary")).toBe("#3cc9a5");
+    expect(root.style.getPropertyValue("--instance-font-body")).toBe('"Poppins", sans-serif');
+    expect(getColorModeState()).toMatchObject({
+      mode: "dark",
+      settings: { default: "dark", togglePosition: "footer" },
+    });
+
+    setColorModePreference("light");
+    expect(root.dataset.colorMode).toBe("light");
+    expect(root.style.getPropertyValue("--instance-primary")).toBe("#18816a");
+    expect(localStorage.getItem("openquiz:color-mode")).toBe("light");
+
+    setColorModePreference(null);
+    expect(root.dataset.colorMode).toBe("dark");
+    expect(localStorage.getItem("openquiz:color-mode")).toBeNull();
+  });
+
+  it("ignores a learner preference when the admin hides the toggle", async () => {
+    localStorage.setItem("openquiz:color-mode", "dark");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ colorMode: { default: "light", showToggle: false }, theme: null }),
+      }),
+    );
+    setColorModePreference("dark");
+
+    await applyInstanceTheme();
+
+    expect(document.documentElement.dataset.colorMode).toBe("light");
   });
 });

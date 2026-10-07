@@ -1,5 +1,11 @@
 import { useMemo, useSyncExternalStore } from "react";
-import { DEFAULT_TRAIL, getAppName, getRuntimeLanding, getRuntimeTheme } from "./instanceTheme";
+import {
+  DEFAULT_TRAIL,
+  getAppName,
+  getColorModeState,
+  getRuntimeLanding,
+  getRuntimeTheme,
+} from "./instanceTheme";
 import { INSTANCE_THEME_UPDATED_EVENT } from "./instanceTheme";
 import { resolveLanding } from "./landingContent";
 
@@ -39,4 +45,8 @@ export function useAppName() {
 export function useLanding() {
   const landing = useSyncExternalStore(subscribeToTheme, getRuntimeLanding, getRuntimeLanding);
   return useMemo(() => resolveLanding(landing), [landing]);
+}
+
+export function useColorMode() {
+  return useSyncExternalStore(subscribeToTheme, getColorModeState, getColorModeState);
 }

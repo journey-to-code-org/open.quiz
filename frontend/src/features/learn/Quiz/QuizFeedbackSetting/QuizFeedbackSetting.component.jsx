@@ -21,7 +21,7 @@ export default function QuizFeedbackSetting({ onChange }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-gray-600">
+      <span className="text-sm text-neutral-600">
         Feedback: {feedbackPreference === "immediate" ? "Instant" : "At the end"}
       </span>
       <Button variant="quizSecondary" size="sm" onClick={toggleFeedbackPreference}>

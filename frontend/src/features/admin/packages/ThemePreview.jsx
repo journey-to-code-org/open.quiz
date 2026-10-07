@@ -4,7 +4,42 @@ import LessonGuideCharacter from "../../learn/LessonGuideCharacter/LessonGuideCh
 import LearningPathTrail from "../../learn/LearningPathTrail/LearningPathTrail.component";
 import AnswerMark from "../../learn/Quiz/AnswerMark/AnswerMark.component";
 import LearningPathNode from "../../learn/LearningPathNode/LearningPathNode.component";
-import { DEFAULT_THEME_TOKENS } from "./themeBuilder";
+import { DEFAULT_DARK_THEME_TOKENS, DEFAULT_THEME_TOKENS } from "./themeBuilder";
+
+const LIGHT_NEUTRALS = {
+  50: "#f4faf8",
+  100: "#e3ece9",
+  200: "#cedcd8",
+  300: "#b4c7c2",
+  400: "#91a9a3",
+  500: "#6a847e",
+  600: "#4e6660",
+  700: "#263e39",
+  800: "#061e19",
+};
+const DARK_NEUTRAL_MIX = {
+  50: 4,
+  100: 8,
+  200: 16,
+  300: 24,
+  400: 45,
+  500: 60,
+  600: 75,
+  700: 88,
+  800: 95,
+};
+
+// Mirrors the neutral scale in styles/theme.css so the preview matches the live site in either mode.
+function neutralVariables(tokens, dark) {
+  return Object.fromEntries(
+    Object.keys(LIGHT_NEUTRALS).map((step) => [
+      `--color-neutral-${step}`,
+      dark
+        ? `color-mix(in srgb, ${tokens.foreground} ${DARK_NEUTRAL_MIX[step]}%, ${tokens.surfaceApp})`
+        : LIGHT_NEUTRALS[step],
+    ]),
+  );
+}
 
 const previewProperties = {
   primary: "--preview-primary",
@@ -183,21 +218,26 @@ export default function ThemePreview({
   answerIncorrect = null,
   guideAvatar = null,
   guideName = "",
+  colorMode = "light",
 }) {
+  const dark = colorMode === "dark";
+  const defaults = dark
+    ? { ...DEFAULT_THEME_TOKENS, ...DEFAULT_DARK_THEME_TOKENS }
+    : DEFAULT_THEME_TOKENS;
   // Missing tokens fall back to the built-in defaults, which is what activation would show.
   const tokens = {
-    ...DEFAULT_THEME_TOKENS,
+    ...defaults,
     ...themeTokens,
     learningPathNodeCompleted:
       themeTokens.learningPathNodeCompleted ||
       themeTokens.surfaceApp ||
-      DEFAULT_THEME_TOKENS.learningPathNodeCompleted,
+      defaults.learningPathNodeCompleted,
     learningPathNodeCurrent:
       themeTokens.learningPathNodeCurrent ||
       themeTokens.primary ||
-      DEFAULT_THEME_TOKENS.learningPathNodeCurrent,
+      defaults.learningPathNodeCurrent,
   };
-  const style = {};
+  const style = { ...neutralVariables(tokens, dark), colorScheme: colorMode };
   for (const [token, property] of Object.entries(previewProperties)) {
     if (typeof tokens[token] === "string") style[property] = tokens[token];
   }
@@ -207,11 +247,18 @@ export default function ThemePreview({
   return (
     <div className="space-y-3 rounded-md border border-neutral-200 p-4" aria-label="Theme preview">
       <div className="flex items-center gap-3">
-        {logo ? <img src={logo} alt="" className="h-10 max-w-32 object-contain" /> : null}
+        {logo ? (
+          <img
+            src={logo}
+            alt=""
+            className={`h-10 max-w-32 object-contain ${dark ? "hue-rotate-180 invert" : ""}`}
+          />
+        ) : null}
         <h3 className="font-heading text-lg font-bold text-heading">{name}</h3>
       </div>
       <div
         className="space-y-6 rounded-md bg-[var(--preview-surface,#f5f7fa)] p-4 font-body"
+        data-color-mode={colorMode}
         style={style}
       >
         <ProgressBar

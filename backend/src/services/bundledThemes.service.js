@@ -152,12 +152,14 @@ async function ensureBundledThemes() {
           );
         }
         // Newer releases can add color tokens; fill only the ones the install does not have.
-        for (const [token, value] of Object.entries(pkg.theme.tokens || {})) {
-          if (Object.hasOwn(installed.theme.tokens || {}, token)) continue;
-          await OpenQuizPackage.updateOne(
-            { packageId: pkg.package.id, [`theme.tokens.${token}`]: { $exists: false } },
-            { $set: { [`theme.tokens.${token}`]: value } },
-          );
+        for (const section of ["tokens", "darkTokens"]) {
+          for (const [token, value] of Object.entries(pkg.theme[section] || {})) {
+            if (Object.hasOwn(installed.theme[section] || {}, token)) continue;
+            await OpenQuizPackage.updateOne(
+              { packageId: pkg.package.id, [`theme.${section}.${token}`]: { $exists: false } },
+              { $set: { [`theme.${section}.${token}`]: value } },
+            );
+          }
         }
       }
       if (pkg.package.id === "sprout") await repairSproutBeaver(pkg, installed);

@@ -9,6 +9,7 @@ import ConsentBanner from "../../features/legal/ConsentBanner/ConsentBanner.comp
 import { getOnboardingPageName } from "../../features/onboarding/onboarding.utils";
 import useRewardQueue from "../../hooks/useRewardQueue";
 import Toast from "../Toast/Toast.component";
+import ColorModeToggle from "../ColorModeToggle/ColorModeToggle.component";
 
 function OnboardingWrapper() {
   const { currentStep, hasCompleted, activePage, startOnboarding, skipOnboarding, handleNextStep } =
@@ -83,6 +84,8 @@ export default function MainLayout() {
           worksCited={currentModuleResources.worksCited}
         />
         <Toast isOpen={hasToasts} {...currentToast} onClose={closeToast} />
+        <ColorModeToggle placement="bottom-right" />
+        <ColorModeToggle placement="bottom-left" />
         <ConsentBanner />
       </div>
     </OnboardingProvider>

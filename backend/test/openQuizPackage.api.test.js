@@ -99,7 +99,12 @@ describe("open.quiz package API", () => {
   test("exposes a default public theme and restricts import to admins", async () => {
     const publicResponse = await request(app).get("/api/v1/theme");
     expect(publicResponse.status).toBe(200);
-    expect(publicResponse.body).toEqual({ theme: null, appName: null, landing: null });
+    expect(publicResponse.body).toEqual({
+      theme: null,
+      appName: null,
+      landing: null,
+      colorMode: { default: "light", showToggle: true, togglePosition: "header" },
+    });
 
     const learner = await createUser("learner");
     const denied = await request(app)

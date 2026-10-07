@@ -4,7 +4,7 @@ const variantClasses = {
   default: "border-neutral-300 bg-surface-input text-foreground",
   success: "border-primary bg-primary text-on-primary",
   badge: "border-primary-alt bg-surface-inset text-heading",
-  xp: "border-yellow-400 bg-yellow-100 text-yellow-900",
+  xp: "border-yellow-400 bg-yellow-100 text-yellow-900 dark:border-yellow-500/60 dark:bg-yellow-950 dark:text-yellow-100",
 };
 
 export default function Toast({
@@ -56,7 +56,7 @@ export default function Toast({
           type="button"
           aria-label="Dismiss notification"
           onClick={onClose}
-          className="h-11 w-11 shrink-0 rounded-md text-2xl text-current transition-colors hover:bg-neutral-800/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+          className="h-11 w-11 shrink-0 rounded-md text-2xl text-current transition-colors hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
         >
           ×
         </button>

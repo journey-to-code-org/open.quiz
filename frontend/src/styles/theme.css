@@ -130,6 +130,101 @@
   /* Default tailwind spacing can be used they are the same we dont need to add enything specific */
 }
 
+:root {
+  color-scheme: light;
+}
+
+/*
+ * Dark mode defaults. Theme packages may override any color with theme.darkTokens,
+ * which are applied as inline --instance-* properties and therefore win over these.
+ */
+:root[data-color-mode="dark"] {
+  color-scheme: dark;
+  --instance-primary: #6d9be0;
+  --instance-primary-hover: #8fb4ec;
+  --instance-primary-alt: #e8b34c;
+  --instance-accent: #e8907a;
+  --instance-success: #4fbf9f;
+  --instance-heading: #dce7f7;
+  --instance-foreground: #c9d4e3;
+  --instance-on-primary: #0d1828;
+  --instance-surface-app: #0f1724;
+  --instance-surface-raised: #172234;
+  --instance-surface-inset: #1f2c41;
+  --instance-surface-input: #121c2b;
+  --instance-focus: #8fb4ec;
+  --instance-learning-path-surface: #131d2c;
+  --instance-learning-path-text: #c9d4e3;
+  --instance-learning-path-heading: #dce7f7;
+  --instance-learning-path-line: #8fa3bf;
+  --instance-learning-path-muted: #9aabc2;
+  --instance-learning-path-label: #c3d3ea;
+  --instance-learning-path-divider: #3a4b63;
+  --instance-learning-path-footer-surface: #1a2537;
+  --instance-learning-path-footer-border: #2d3c53;
+  --instance-learning-path-node-completed: #1f2c41;
+  --instance-learning-path-node-current: var(--instance-primary);
+  --instance-learning-path-node-border: #4a5d78;
+  --instance-callout-surface: #3a2a1f;
+  --instance-callout-border: #7a5338;
+  --instance-callout-text: #f3d2b8;
+
+  --color-warning: #4a2522;
+  --color-danger: #f0605a;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --shadow-quiz: 0 8px 16px rgba(0, 0, 0, 0.45);
+  --shadow-quiz-secondary: 0 6px 12px rgba(0, 0, 0, 0.35);
+  --shadow-learning-path-button: 0 6px 14px rgba(0, 0, 0, 0.4);
+  --shadow-learning-path-callout: 0 10px 20px rgba(0, 0, 0, 0.4);
+
+  /* The neutral scale is derived from the active palette so borders and muted text stay legible. */
+  --color-neutral-50: color-mix(
+    in srgb,
+    var(--instance-foreground) 4%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-100: color-mix(
+    in srgb,
+    var(--instance-foreground) 8%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-200: color-mix(
+    in srgb,
+    var(--instance-foreground) 16%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-300: color-mix(
+    in srgb,
+    var(--instance-foreground) 24%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-400: color-mix(
+    in srgb,
+    var(--instance-foreground) 45%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-500: color-mix(
+    in srgb,
+    var(--instance-foreground) 60%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-600: color-mix(
+    in srgb,
+    var(--instance-foreground) 75%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-700: color-mix(
+    in srgb,
+    var(--instance-foreground) 88%,
+    var(--instance-surface-app)
+  );
+  --color-neutral-800: color-mix(
+    in srgb,
+    var(--instance-foreground) 95%,
+    var(--instance-surface-app)
+  );
+}
+
 @keyframes callout-pop {
   from {
     opacity: 0;

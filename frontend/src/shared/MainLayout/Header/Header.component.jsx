@@ -1,6 +1,7 @@
 import { NavLink } from "react-router";
 import NavBar from "./NavBar/NavBar.component";
 import { useAppName, useInstanceAssets } from "../../../app/instanceAssets";
+import ColorModeToggle from "../../ColorModeToggle/ColorModeToggle.component";
 
 function Header(props) {
   const { logo } = useInstanceAssets();
@@ -13,12 +14,19 @@ function Header(props) {
         className="flex min-h-10 items-center font-heading text-xl font-bold"
       >
         {logo ? (
-          <img src={logo} alt={appName} className="w-28 object-contain sm:w-32 lg:w-36" />
+          <img
+            src={logo}
+            alt={appName}
+            className="w-28 object-contain sm:w-32 lg:w-36 dark:hue-rotate-180 dark:invert"
+          />
         ) : (
           appName
         )}
       </NavLink>
-      <NavBar {...props} />
+      <div className="flex items-center gap-2">
+        <ColorModeToggle placement="header" />
+        <NavBar {...props} />
+      </div>
     </header>
   );
 }

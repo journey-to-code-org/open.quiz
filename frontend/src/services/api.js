@@ -401,10 +401,11 @@ export const downloadAdminSiteExport = () =>
 export const getAdminSiteSettings = () =>
   apiRequest("/site-settings", { method: "GET", basePath: ADMIN_BASE_PATH });
 
-export const updateAdminSiteSettings = ({ appName, landing, csrfToken }) => {
+export const updateAdminSiteSettings = ({ appName, landing, colorMode, csrfToken }) => {
   const body = {};
   if (appName !== undefined) body.appName = appName?.trim() ? appName.trim() : null;
   if (landing !== undefined) body.landing = landing;
+  if (colorMode !== undefined) body.colorMode = colorMode;
   return apiRequest("/site-settings", {
     method: "PATCH",
     csrfToken,

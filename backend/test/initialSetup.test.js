@@ -112,6 +112,7 @@ describe("initial installation setup", () => {
       theme: null,
       appName: null,
       landing: null,
+      colorMode: { default: "light", showToggle: true, togglePosition: "header" },
     });
     const sprout = await OpenQuizPackage.findOne({ packageId: "sprout" });
     expect(sprout.installedSections).toEqual(["theme"]);

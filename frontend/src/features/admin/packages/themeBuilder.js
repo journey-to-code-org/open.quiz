@@ -34,6 +34,41 @@ export const DEFAULT_THEME_TOKENS = Object.freeze({
   fontBody: '"Inter", sans-serif',
 });
 
+/** Matches the :root[data-color-mode="dark"] defaults in styles/theme.css. */
+export const DEFAULT_DARK_THEME_TOKENS = Object.freeze({
+  primary: "#6d9be0",
+  primaryHover: "#8fb4ec",
+  primaryAlt: "#e8b34c",
+  accent: "#e8907a",
+  success: "#4fbf9f",
+  heading: "#dce7f7",
+  foreground: "#c9d4e3",
+  onPrimary: "#0d1828",
+  surfaceApp: "#0f1724",
+  surfaceRaised: "#172234",
+  surfaceInset: "#1f2c41",
+  surfaceInput: "#121c2b",
+  focus: "#8fb4ec",
+  progressStart: "#ffbf1f",
+  progressEnd: "#ffd254",
+  progressNearStart: "#ffc618",
+  progressNearEnd: "#ffdd4f",
+  progressCompleteStart: "#ea6fee",
+  progressCompleteEnd: "#c989f7",
+  learningPathSurface: "#131d2c",
+  learningPathText: "#c9d4e3",
+  learningPathHeading: "#dce7f7",
+  learningPathLine: "#8fa3bf",
+  learningPathMuted: "#9aabc2",
+  learningPathLabel: "#c3d3ea",
+  learningPathDivider: "#3a4b63",
+  learningPathFooterSurface: "#1a2537",
+  learningPathFooterBorder: "#2d3c53",
+  learningPathNodeCompleted: "#1f2c41",
+  learningPathNodeCurrent: "#6d9be0",
+  learningPathNodeBorder: "#4a5d78",
+});
+
 export const COLOR_GROUPS = [
   {
     label: "Brand",
@@ -407,6 +442,17 @@ export function contrastWarnings(tokens) {
   });
 }
 
+export const COLOR_TOKEN_NAMES = Object.keys(DEFAULT_DARK_THEME_TOKENS);
+
+export function colorTokensOnly(tokens) {
+  return Object.fromEntries(
+    COLOR_TOKEN_NAMES.filter((name) => typeof tokens?.[name] === "string").map((name) => [
+      name,
+      tokens[name],
+    ]),
+  );
+}
+
 export function createThemeId(name, now = Date.now()) {
   const slug =
     String(name || "")
@@ -428,6 +474,7 @@ export function buildThemePackage({
   name,
   description = "",
   tokens,
+  darkTokens = null,
   trail,
   images = {},
   avatars = [],
@@ -472,6 +519,7 @@ export function buildThemePackage({
     theme: {
       ...(siteName ? { appName: siteName } : {}),
       tokens: { ...tokens },
+      ...(darkTokens ? { darkTokens: colorTokensOnly(darkTokens) } : {}),
       trail: trailSettings,
       ...(landing ? { landing } : {}),
       assets: themeAssets,

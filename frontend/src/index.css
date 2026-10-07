@@ -2,6 +2,8 @@
 @import "./styles/reset.css";
 @import "./styles/theme.css";
 
+@custom-variant dark (&:where([data-color-mode="dark"], [data-color-mode="dark"] *));
+
 html {
   min-width: 320px;
   min-height: 100%;
@@ -11,6 +13,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  background-color: var(--color-surface-app);
 }
 
 #root {

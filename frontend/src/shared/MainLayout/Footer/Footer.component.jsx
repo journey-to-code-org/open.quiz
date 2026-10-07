@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import { useAppName } from "../../../app/instanceAssets";
+import ColorModeToggle from "../../ColorModeToggle/ColorModeToggle.component";
 import GlossaryModal from "../../../features/learn/GlossaryModal/GlossaryModal.component.jsx";
 import glossaryIcon from "../../../assets/glossary_icon.svg";
 
@@ -78,6 +79,8 @@ export default function Footer({ glossary = [], worksCited = [] }) {
             worksCited={worksCitedList}
           />
         )}
+
+        <ColorModeToggle placement="footer" />
 
         <p className="text-xs text-neutral-400">
           &copy; {copyrightYear} {appName}

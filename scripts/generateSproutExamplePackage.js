@@ -105,6 +105,34 @@ const tokens = {
   radiusPill: "9999px",
 };
 
+const darkTokens = {
+  primary: "#3cc9a5",
+  primaryHover: "#6fdcbf",
+  primaryAlt: "#41e3c0",
+  accent: "#54dec0",
+  success: "#3cc9a5",
+  heading: "#c8f3e7",
+  foreground: "#d6ebe5",
+  onPrimary: "#06231c",
+  surfaceApp: "#0b1a17",
+  surfaceRaised: "#10241f",
+  surfaceInset: "#163029",
+  surfaceInput: "#0e1f1b",
+  focus: "#6fdcbf",
+  learningPathSurface: "#0e201c",
+  learningPathText: "#cfe8e0",
+  learningPathHeading: "#a8ecd9",
+  learningPathLine: "#7fcfb5",
+  learningPathMuted: "#93b8ad",
+  learningPathLabel: "#b5e6d8",
+  learningPathDivider: "#2b4a42",
+  learningPathFooterSurface: "#132a24",
+  learningPathFooterBorder: "#24423a",
+  learningPathNodeCompleted: "#163029",
+  learningPathNodeCurrent: "#3cc9a5",
+  learningPathNodeBorder: "#3b6a5e",
+};
+
 async function convertAsset(page, sourceAsset) {
   const buffer = execFileSync("git", [
     "show",
@@ -188,7 +216,7 @@ async function main() {
       package: {
         id: "sprout",
         name: "Sprout",
-        version: "1.5.0",
+        version: "1.6.0",
         description:
           "Historical Sprout visual identity using artwork recovered from repository history.",
         author: "open.quiz contributors",
@@ -197,6 +225,7 @@ async function main() {
       theme: {
         appName: sproutLanding.appName,
         tokens,
+        darkTokens,
         trail: { style: "vine", decorationCount: 2 },
         landing: sproutLanding.landing,
         assets: {

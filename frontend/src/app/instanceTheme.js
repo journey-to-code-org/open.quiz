@@ -1,3 +1,14 @@
+import {
+  cacheColorModeSettings,
+  DEFAULT_COLOR_MODE_SETTINGS,
+  normalizeColorModeSettings,
+  prefersDarkColorScheme,
+  readCachedColorModeSettings,
+  readColorModePreference,
+  resolveColorMode,
+  writeColorModePreference,
+} from "./colorMode";
+
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").trim().replace(/\/$/, "");
 const themeEnvironment = {
   VITE_THEME_PRIMARY: "--instance-primary",
@@ -70,6 +81,12 @@ const defaultFaviconUrl =
 let runtimeTheme = null;
 let runtimeAppName = null;
 let runtimeLanding = null;
+let lightTokens = {};
+let darkTokens = {};
+let colorModeSettings = readCachedColorModeSettings() || { ...DEFAULT_COLOR_MODE_SETTINGS };
+let colorModePreference = readColorModePreference();
+let colorModeState = null;
+let systemListenerInstalled = false;
 export const INSTANCE_THEME_UPDATED_EVENT = "openquiz:theme-updated";
 export const DEFAULT_APP_NAME = import.meta.env.VITE_APP_NAME?.trim() || "open.quiz";
 
@@ -87,10 +104,102 @@ export function getRuntimeLanding() {
   return runtimeLanding;
 }
 
-export function setRuntimeSiteSettings({ appName, landing } = {}) {
+export function setRuntimeSiteSettings({ appName, landing, colorMode } = {}) {
   runtimeAppName = normalizeAppName(appName);
   runtimeLanding = landing && typeof landing === "object" ? landing : null;
+  if (colorMode !== undefined) setColorModeSettings(colorMode);
+  if (typeof document !== "undefined") paint();
+  notify();
+}
+
+function notify() {
   if (typeof window !== "undefined") window.dispatchEvent(new Event(INSTANCE_THEME_UPDATED_EVENT));
+}
+
+function isColorProperty(property) {
+  return !/^--instance-(font|radius)/.test(property);
+}
+
+function safeTokens(tokens) {
+  if (!tokens || typeof tokens !== "object") return {};
+  return Object.fromEntries(
+    Object.entries(tokens).filter(
+      ([name, value]) => tokenProperties[name] && typeof value === "string" && value.length <= 120,
+    ),
+  );
+}
+
+function setColorModeSettings(value) {
+  colorModeSettings = normalizeColorModeSettings(value);
+  cacheColorModeSettings(colorModeSettings);
+}
+
+/** Applies the active palette for the resolved light/dark mode to <html>. */
+function paint() {
+  const root = document.documentElement;
+  const mode = resolveColorMode(colorModeSettings, colorModePreference, prefersDarkColorScheme());
+  const dark = mode === "dark";
+  for (const property of Object.values(tokenProperties)) root.style.removeProperty(property);
+  root.dataset.colorMode = mode;
+  root.style.colorScheme = mode;
+
+  for (const [environmentKey, cssProperty] of Object.entries(themeEnvironment)) {
+    if (dark && isColorProperty(cssProperty)) continue;
+    const value = import.meta.env[environmentKey]?.trim();
+    if (value) root.style.setProperty(cssProperty, value);
+  }
+  for (const [name, value] of Object.entries(lightTokens)) {
+    const property = tokenProperties[name];
+    if (dark && isColorProperty(property)) continue;
+    root.style.setProperty(property, value);
+  }
+  if (dark) {
+    for (const [name, value] of Object.entries(darkTokens)) {
+      const property = tokenProperties[name];
+      if (isColorProperty(property)) root.style.setProperty(property, value);
+    }
+  }
+  updateColorModeState(mode);
+}
+
+function updateColorModeState(mode) {
+  const next = { mode, preference: colorModePreference, settings: colorModeSettings };
+  if (
+    !colorModeState ||
+    colorModeState.mode !== next.mode ||
+    colorModeState.preference !== next.preference ||
+    colorModeState.settings !== next.settings
+  ) {
+    colorModeState = next;
+  }
+}
+
+function installSystemListener() {
+  if (systemListenerInstalled || typeof window?.matchMedia !== "function") return;
+  const query = window.matchMedia("(prefers-color-scheme: dark)");
+  if (typeof query?.addEventListener !== "function") return;
+  query.addEventListener("change", () => {
+    paint();
+    notify();
+  });
+  systemListenerInstalled = true;
+}
+
+export function getColorModeState() {
+  if (!colorModeState) {
+    updateColorModeState(
+      resolveColorMode(colorModeSettings, colorModePreference, prefersDarkColorScheme()),
+    );
+  }
+  return colorModeState;
+}
+
+/** Stores a learner's light/dark choice; pass null to follow the site default again. */
+export function setColorModePreference(mode) {
+  colorModePreference = mode === "light" || mode === "dark" ? mode : null;
+  writeColorModePreference(colorModePreference);
+  paint();
+  notify();
 }
 
 function setFavicon(url) {
@@ -110,14 +219,11 @@ export function resolveRuntimeAssetUrl(url, apiBaseUrl = API_BASE_URL) {
 }
 
 export async function applyInstanceTheme() {
-  const root = document.documentElement;
-  for (const property of Object.values(tokenProperties)) root.style.removeProperty(property);
   runtimeTheme = null;
-
-  for (const [environmentKey, cssProperty] of Object.entries(themeEnvironment)) {
-    const value = import.meta.env[environmentKey]?.trim();
-    if (value) root.style.setProperty(cssProperty, value);
-  }
+  lightTokens = {};
+  darkTokens = {};
+  installSystemListener();
+  paint();
 
   setFavicon(import.meta.env.VITE_APP_FAVICON_URL?.trim() || defaultFaviconUrl);
 
@@ -131,12 +237,11 @@ export async function applyInstanceTheme() {
     runtimeAppName = normalizeAppName(payload?.appName);
     runtimeLanding =
       payload?.landing && typeof payload.landing === "object" ? payload.landing : null;
+    setColorModeSettings(payload?.colorMode);
     const candidate = payload?.theme;
     if (!candidate || typeof candidate !== "object") return;
-    for (const [name, property] of Object.entries(tokenProperties)) {
-      const value = candidate.tokens?.[name];
-      if (typeof value === "string" && value.length <= 120) root.style.setProperty(property, value);
-    }
+    lightTokens = safeTokens(candidate.tokens);
+    darkTokens = safeTokens(candidate.darkTokens);
     const sourceAssets =
       candidate.assets && typeof candidate.assets === "object" ? candidate.assets : {};
     const assets = {
@@ -167,9 +272,8 @@ export async function applyInstanceTheme() {
   } catch {
     runtimeTheme = null;
   } finally {
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new Event(INSTANCE_THEME_UPDATED_EVENT));
-    }
+    paint();
+    notify();
   }
 }
 

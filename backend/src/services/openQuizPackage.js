@@ -63,6 +63,16 @@ const ALLOWED_TOKEN_NAMES = new Set([
   "radiusLg",
   "radiusPill",
 ]);
+const COLOR_TOKEN_NAMES = new Set(
+  [...ALLOWED_TOKEN_NAMES].filter((name) => !/^(?:font|radius)/.test(name)),
+);
+const COLOR_MODES = ["light", "dark", "system"];
+const COLOR_MODE_TOGGLE_POSITIONS = ["header", "footer", "bottom-right", "bottom-left"];
+const DEFAULT_COLOR_MODE = Object.freeze({
+  default: "light",
+  showToggle: true,
+  togglePosition: "header",
+});
 const SECRET_KEYS = new Set([
   "user",
   "users",
@@ -157,6 +167,41 @@ function validateTokens(tokens) {
       validateColor(value, name);
     }
   }
+}
+
+function validateDarkTokens(tokens) {
+  if (!tokens || typeof tokens !== "object" || Array.isArray(tokens)) {
+    fail("Theme darkTokens must be an object.");
+  }
+  for (const [name, value] of Object.entries(tokens)) {
+    if (!COLOR_TOKEN_NAMES.has(name)) fail(`Unrecognized dark theme color token: ${name}.`);
+    validateColor(value, `darkTokens.${name}`);
+  }
+}
+
+function normalizeColorMode(colorMode) {
+  if (!colorMode || typeof colorMode !== "object" || Array.isArray(colorMode))
+    fail("Color mode settings must be an object.");
+  for (const key of Object.keys(colorMode)) {
+    if (!Object.hasOwn(DEFAULT_COLOR_MODE, key)) fail(`Unrecognized color mode setting: ${key}.`);
+  }
+  const normalized = { ...DEFAULT_COLOR_MODE };
+  if (colorMode.default !== undefined) {
+    if (!COLOR_MODES.includes(colorMode.default))
+      fail(`Default color mode must be one of: ${COLOR_MODES.join(", ")}.`);
+    normalized.default = colorMode.default;
+  }
+  if (colorMode.showToggle !== undefined) {
+    if (typeof colorMode.showToggle !== "boolean")
+      fail("Color mode showToggle must be true or false.");
+    normalized.showToggle = colorMode.showToggle;
+  }
+  if (colorMode.togglePosition !== undefined) {
+    if (!COLOR_MODE_TOGGLE_POSITIONS.includes(colorMode.togglePosition))
+      fail(`Color mode toggle position must be one of: ${COLOR_MODE_TOGGLE_POSITIONS.join(", ")}.`);
+    normalized.togglePosition = colorMode.togglePosition;
+  }
+  return normalized;
 }
 
 function validateTrail(trail) {
@@ -480,11 +525,12 @@ function validateOpenQuizPackage(input) {
     if (!pkg.theme || typeof pkg.theme !== "object" || Array.isArray(pkg.theme))
       fail("theme must be an object.");
     if (pkg.theme.tokens !== undefined) validateTokens(pkg.theme.tokens);
+    if (pkg.theme.darkTokens !== undefined) validateDarkTokens(pkg.theme.darkTokens);
     if (pkg.theme.trail !== undefined) validateTrail(pkg.theme.trail);
     if (pkg.theme.appName !== undefined) pkg.theme.appName = normalizeAppName(pkg.theme.appName);
     if (pkg.theme.landing !== undefined) pkg.theme.landing = normalizeLanding(pkg.theme.landing);
     for (const key of Object.keys(pkg.theme)) {
-      if (!["tokens", "assets", "trail", "appName", "landing"].includes(key))
+      if (!["tokens", "darkTokens", "assets", "trail", "appName", "landing"].includes(key))
         fail(`Unrecognized theme section: ${key}.`);
     }
   }
@@ -558,7 +604,11 @@ module.exports = {
   PACKAGE_SCHEMA_VERSION,
   THEME_ASSET_SLOTS,
   TRAIL_STYLES,
+  COLOR_MODES,
+  COLOR_MODE_TOGGLE_POSITIONS,
+  DEFAULT_COLOR_MODE,
   normalizeAppName,
+  normalizeColorMode,
   normalizeLanding,
   validateOpenQuizPackage,
 };
