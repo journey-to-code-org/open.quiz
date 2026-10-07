@@ -102,6 +102,10 @@ cp backend/.env.example backend/.env
 `backend/.env` is ignored by Git. Keep all OAuth client secrets in that local file or in
 the deployment platform's secret store.
 
+Express serves a Content Security Policy that permits same-site, embedded (`data:`), and
+HTTPS images, including Google/GitHub OAuth avatars and custom avatar URLs. Use HTTPS for
+external image URLs in production; browsers block HTTP images on an HTTPS site.
+
 ## First Sign-In And Built-In Themes
 
 On an installation without an existing administrator or bootstrap record, the first
